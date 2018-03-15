@@ -1,0 +1,419 @@
+K 25
+svn:wc:ra_dav:version-url
+V 50
+/svn/sam/!svn/ver/28/trunk/WebContent/sam/reportes
+END
+rpt_listado_requisiciones_conOP.jrxml
+K 25
+svn:wc:ra_dav:version-url
+V 87
+/svn/sam/!svn/ver/4/trunk/WebContent/sam/reportes/rpt_listado_requisiciones_conOP.jrxml
+END
+ordendepago_anexo_anexos.jasper
+K 25
+svn:wc:ra_dav:version-url
+V 82
+/svn/sam/!svn/ver/23/trunk/WebContent/sam/reportes/ordendepago_anexo_anexos.jasper
+END
+ordendepago.jrxml
+K 25
+svn:wc:ra_dav:version-url
+V 68
+/svn/sam/!svn/ver/24/trunk/WebContent/sam/reportes/ordendepago.jrxml
+END
+rpt_listado_pedidos_conOP.jrxml
+K 25
+svn:wc:ra_dav:version-url
+V 81
+/svn/sam/!svn/ver/4/trunk/WebContent/sam/reportes/rpt_listado_pedidos_conOP.jrxml
+END
+ordenTrabajo2.jrxml
+K 25
+svn:wc:ra_dav:version-url
+V 70
+/svn/sam/!svn/ver/22/trunk/WebContent/sam/reportes/ordenTrabajo2.jrxml
+END
+avances_fisicos.jrxml
+K 25
+svn:wc:ra_dav:version-url
+V 71
+/svn/sam/!svn/ver/4/trunk/WebContent/sam/reportes/avances_fisicos.jrxml
+END
+ordenTrabajo.jasper
+K 25
+svn:wc:ra_dav:version-url
+V 70
+/svn/sam/!svn/ver/22/trunk/WebContent/sam/reportes/ordenTrabajo.jasper
+END
+ordendepago_CFE.jrxml
+K 25
+svn:wc:ra_dav:version-url
+V 72
+/svn/sam/!svn/ver/24/trunk/WebContent/sam/reportes/ordendepago_CFE.jrxml
+END
+rpt_listado_vales.jasper
+K 25
+svn:wc:ra_dav:version-url
+V 74
+/svn/sam/!svn/ver/4/trunk/WebContent/sam/reportes/rpt_listado_vales.jasper
+END
+rpt_listado_requisicionesExcel.jrxml
+K 25
+svn:wc:ra_dav:version-url
+V 86
+/svn/sam/!svn/ver/4/trunk/WebContent/sam/reportes/rpt_listado_requisicionesExcel.jrxml
+END
+rpt_relacion_devolucion.jrxml
+K 25
+svn:wc:ra_dav:version-url
+V 80
+/svn/sam/!svn/ver/25/trunk/WebContent/sam/reportes/rpt_relacion_devolucion.jrxml
+END
+ordenServicio.jrxml
+K 25
+svn:wc:ra_dav:version-url
+V 70
+/svn/sam/!svn/ver/22/trunk/WebContent/sam/reportes/ordenServicio.jrxml
+END
+rpt_listado_op.jrxml
+K 25
+svn:wc:ra_dav:version-url
+V 70
+/svn/sam/!svn/ver/4/trunk/WebContent/sam/reportes/rpt_listado_op.jrxml
+END
+rpt_listado_pedidos.jasper
+K 25
+svn:wc:ra_dav:version-url
+V 76
+/svn/sam/!svn/ver/4/trunk/WebContent/sam/reportes/rpt_listado_pedidos.jasper
+END
+rpt_avances_fisicos.jrxml
+K 25
+svn:wc:ra_dav:version-url
+V 76
+/svn/sam/!svn/ver/25/trunk/WebContent/sam/reportes/rpt_avances_fisicos.jrxml
+END
+rpt_listado_requisiciones.jrxml
+K 25
+svn:wc:ra_dav:version-url
+V 81
+/svn/sam/!svn/ver/4/trunk/WebContent/sam/reportes/rpt_listado_requisiciones.jrxml
+END
+ordendepago_subreport_vales.jrxml
+K 25
+svn:wc:ra_dav:version-url
+V 83
+/svn/sam/!svn/ver/4/trunk/WebContent/sam/reportes/ordendepago_subreport_vales.jrxml
+END
+rpt_contrato2.jasper
+K 25
+svn:wc:ra_dav:version-url
+V 70
+/svn/sam/!svn/ver/4/trunk/WebContent/sam/reportes/rpt_contrato2.jasper
+END
+pruebas.jasper
+K 25
+svn:wc:ra_dav:version-url
+V 64
+/svn/sam/!svn/ver/4/trunk/WebContent/sam/reportes/pruebas.jasper
+END
+rpt_presupuesto_calendarizado.jasper
+K 25
+svn:wc:ra_dav:version-url
+V 86
+/svn/sam/!svn/ver/4/trunk/WebContent/sam/reportes/rpt_presupuesto_calendarizado.jasper
+END
+ordendepago_detalles_nomina.jasper
+K 25
+svn:wc:ra_dav:version-url
+V 84
+/svn/sam/!svn/ver/4/trunk/WebContent/sam/reportes/ordendepago_detalles_nomina.jasper
+END
+rpt_InformeRequisicion.jrxml
+K 25
+svn:wc:ra_dav:version-url
+V 78
+/svn/sam/!svn/ver/4/trunk/WebContent/sam/reportes/rpt_InformeRequisicion.jrxml
+END
+rpt_relacion_envio.jrpxml
+K 25
+svn:wc:ra_dav:version-url
+V 75
+/svn/sam/!svn/ver/4/trunk/WebContent/sam/reportes/rpt_relacion_envio.jrpxml
+END
+ordendepago2.jasper
+K 25
+svn:wc:ra_dav:version-url
+V 70
+/svn/sam/!svn/ver/20/trunk/WebContent/sam/reportes/ordendepago2.jasper
+END
+ordendepago_detalles_nomina.jrxml
+K 25
+svn:wc:ra_dav:version-url
+V 83
+/svn/sam/!svn/ver/4/trunk/WebContent/sam/reportes/ordendepago_detalles_nomina.jrxml
+END
+rpt_presupuesto_mensual.jrxml
+K 25
+svn:wc:ra_dav:version-url
+V 79
+/svn/sam/!svn/ver/4/trunk/WebContent/sam/reportes/rpt_presupuesto_mensual.jrxml
+END
+rpt_relacion_envio.jasper
+K 25
+svn:wc:ra_dav:version-url
+V 75
+/svn/sam/!svn/ver/4/trunk/WebContent/sam/reportes/rpt_relacion_envio.jasper
+END
+ordendepago2.jrxml
+K 25
+svn:wc:ra_dav:version-url
+V 69
+/svn/sam/!svn/ver/19/trunk/WebContent/sam/reportes/ordendepago2.jrxml
+END
+rpt_listado_op.jasper
+K 25
+svn:wc:ra_dav:version-url
+V 71
+/svn/sam/!svn/ver/4/trunk/WebContent/sam/reportes/rpt_listado_op.jasper
+END
+ordendepago_anexo_vales.jrxml
+K 25
+svn:wc:ra_dav:version-url
+V 79
+/svn/sam/!svn/ver/4/trunk/WebContent/sam/reportes/ordendepago_anexo_vales.jrxml
+END
+formato_vale.jrxml
+K 25
+svn:wc:ra_dav:version-url
+V 68
+/svn/sam/!svn/ver/4/trunk/WebContent/sam/reportes/formato_vale.jrxml
+END
+rpt_contrato.jrxml
+K 25
+svn:wc:ra_dav:version-url
+V 69
+/svn/sam/!svn/ver/28/trunk/WebContent/sam/reportes/rpt_contrato.jrxml
+END
+rpt_listado_requisiciones.jasper
+K 25
+svn:wc:ra_dav:version-url
+V 82
+/svn/sam/!svn/ver/4/trunk/WebContent/sam/reportes/rpt_listado_requisiciones.jasper
+END
+ordendepago.jasper
+K 25
+svn:wc:ra_dav:version-url
+V 69
+/svn/sam/!svn/ver/23/trunk/WebContent/sam/reportes/ordendepago.jasper
+END
+rpt_relacion_envio.jrxml
+K 25
+svn:wc:ra_dav:version-url
+V 74
+/svn/sam/!svn/ver/4/trunk/WebContent/sam/reportes/rpt_relacion_envio.jrxml
+END
+rpt_vales_multiples.jasper
+K 25
+svn:wc:ra_dav:version-url
+V 77
+/svn/sam/!svn/ver/20/trunk/WebContent/sam/reportes/rpt_vales_multiples.jasper
+END
+ordenServicio2.jasper
+K 25
+svn:wc:ra_dav:version-url
+V 71
+/svn/sam/!svn/ver/4/trunk/WebContent/sam/reportes/ordenServicio2.jasper
+END
+avances_fisicos.jasper
+K 25
+svn:wc:ra_dav:version-url
+V 72
+/svn/sam/!svn/ver/4/trunk/WebContent/sam/reportes/avances_fisicos.jasper
+END
+requisicion.jrxml
+K 25
+svn:wc:ra_dav:version-url
+V 68
+/svn/sam/!svn/ver/22/trunk/WebContent/sam/reportes/requisicion.jrxml
+END
+ordenServicio2.jrxml
+K 25
+svn:wc:ra_dav:version-url
+V 71
+/svn/sam/!svn/ver/22/trunk/WebContent/sam/reportes/ordenServicio2.jrxml
+END
+rpt_vales_multiples.jrxml
+K 25
+svn:wc:ra_dav:version-url
+V 76
+/svn/sam/!svn/ver/24/trunk/WebContent/sam/reportes/rpt_vales_multiples.jrxml
+END
+rpt_listado_requisicionesExcel.jasper
+K 25
+svn:wc:ra_dav:version-url
+V 87
+/svn/sam/!svn/ver/4/trunk/WebContent/sam/reportes/rpt_listado_requisicionesExcel.jasper
+END
+rpt_devolucion_presupuestal.jasper
+K 25
+svn:wc:ra_dav:version-url
+V 84
+/svn/sam/!svn/ver/4/trunk/WebContent/sam/reportes/rpt_devolucion_presupuestal.jasper
+END
+ordenServicio.jasper
+K 25
+svn:wc:ra_dav:version-url
+V 70
+/svn/sam/!svn/ver/4/trunk/WebContent/sam/reportes/ordenServicio.jasper
+END
+formato_vale.jasper
+K 25
+svn:wc:ra_dav:version-url
+V 69
+/svn/sam/!svn/ver/4/trunk/WebContent/sam/reportes/formato_vale.jasper
+END
+rpt_contrato.jasper
+K 25
+svn:wc:ra_dav:version-url
+V 70
+/svn/sam/!svn/ver/28/trunk/WebContent/sam/reportes/rpt_contrato.jasper
+END
+rpt_relacion_vales.jrxml
+K 25
+svn:wc:ra_dav:version-url
+V 74
+/svn/sam/!svn/ver/4/trunk/WebContent/sam/reportes/rpt_relacion_vales.jrxml
+END
+rpt_listado_requisiciones_conOP.jasper
+K 25
+svn:wc:ra_dav:version-url
+V 88
+/svn/sam/!svn/ver/4/trunk/WebContent/sam/reportes/rpt_listado_requisiciones_conOP.jasper
+END
+rpt_pedido.jasper
+K 25
+svn:wc:ra_dav:version-url
+V 67
+/svn/sam/!svn/ver/4/trunk/WebContent/sam/reportes/rpt_pedido.jasper
+END
+ordendepago_anexo.jrxml
+K 25
+svn:wc:ra_dav:version-url
+V 73
+/svn/sam/!svn/ver/4/trunk/WebContent/sam/reportes/ordendepago_anexo.jrxml
+END
+requisicion.jasper
+K 25
+svn:wc:ra_dav:version-url
+V 69
+/svn/sam/!svn/ver/22/trunk/WebContent/sam/reportes/requisicion.jasper
+END
+ordenTrabajo2.jasper
+K 25
+svn:wc:ra_dav:version-url
+V 70
+/svn/sam/!svn/ver/4/trunk/WebContent/sam/reportes/ordenTrabajo2.jasper
+END
+rpt_InformeRequisicion.jasper
+K 25
+svn:wc:ra_dav:version-url
+V 79
+/svn/sam/!svn/ver/4/trunk/WebContent/sam/reportes/rpt_InformeRequisicion.jasper
+END
+rpt_relacion_devolucion.jrpxml
+K 25
+svn:wc:ra_dav:version-url
+V 80
+/svn/sam/!svn/ver/4/trunk/WebContent/sam/reportes/rpt_relacion_devolucion.jrpxml
+END
+rpt_pedido.jrxml
+K 25
+svn:wc:ra_dav:version-url
+V 67
+/svn/sam/!svn/ver/22/trunk/WebContent/sam/reportes/rpt_pedido.jrxml
+END
+rpt_avances_fisicos
+K 25
+svn:wc:ra_dav:version-url
+V 69
+/svn/sam/!svn/ver/4/trunk/WebContent/sam/reportes/rpt_avances_fisicos
+END
+rpt_listado_pedidos.jrxml
+K 25
+svn:wc:ra_dav:version-url
+V 75
+/svn/sam/!svn/ver/4/trunk/WebContent/sam/reportes/rpt_listado_pedidos.jrxml
+END
+ordendepago_CFE.jasper
+K 25
+svn:wc:ra_dav:version-url
+V 73
+/svn/sam/!svn/ver/24/trunk/WebContent/sam/reportes/ordendepago_CFE.jasper
+END
+ordendepago_anexo_anexos.jrxml
+K 25
+svn:wc:ra_dav:version-url
+V 80
+/svn/sam/!svn/ver/4/trunk/WebContent/sam/reportes/ordendepago_anexo_anexos.jrxml
+END
+rpt_presupuesto_mensual.jasper
+K 25
+svn:wc:ra_dav:version-url
+V 80
+/svn/sam/!svn/ver/4/trunk/WebContent/sam/reportes/rpt_presupuesto_mensual.jasper
+END
+rpt_relacion_devolucion.jasper
+K 25
+svn:wc:ra_dav:version-url
+V 81
+/svn/sam/!svn/ver/25/trunk/WebContent/sam/reportes/rpt_relacion_devolucion.jasper
+END
+rpt_presupuesto_calendarizado.jrxml
+K 25
+svn:wc:ra_dav:version-url
+V 85
+/svn/sam/!svn/ver/4/trunk/WebContent/sam/reportes/rpt_presupuesto_calendarizado.jrxml
+END
+ordendepago_anexo_vales.jasper
+K 25
+svn:wc:ra_dav:version-url
+V 80
+/svn/sam/!svn/ver/4/trunk/WebContent/sam/reportes/ordendepago_anexo_vales.jasper
+END
+rpt_devolucion_presupuestal.jrxml
+K 25
+svn:wc:ra_dav:version-url
+V 83
+/svn/sam/!svn/ver/4/trunk/WebContent/sam/reportes/rpt_devolucion_presupuestal.jrxml
+END
+ordenTrabajo.jrxml
+K 25
+svn:wc:ra_dav:version-url
+V 69
+/svn/sam/!svn/ver/22/trunk/WebContent/sam/reportes/ordenTrabajo.jrxml
+END
+rpt_avances_fisicos.jasper
+K 25
+svn:wc:ra_dav:version-url
+V 77
+/svn/sam/!svn/ver/25/trunk/WebContent/sam/reportes/rpt_avances_fisicos.jasper
+END
+rpt_listado_vales.jrxml
+K 25
+svn:wc:ra_dav:version-url
+V 73
+/svn/sam/!svn/ver/4/trunk/WebContent/sam/reportes/rpt_listado_vales.jrxml
+END
+ordendepago_anexo_anexos.jrpxml
+K 25
+svn:wc:ra_dav:version-url
+V 81
+/svn/sam/!svn/ver/4/trunk/WebContent/sam/reportes/ordendepago_anexo_anexos.jrpxml
+END
+rpt_listado_pedidos_conOP.jasper
+K 25
+svn:wc:ra_dav:version-url
+V 82
+/svn/sam/!svn/ver/4/trunk/WebContent/sam/reportes/rpt_listado_pedidos_conOP.jasper
+END
