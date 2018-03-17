@@ -8,6 +8,7 @@ import javax.servlet.http.HttpServletRequest;
 
 import net.sf.jasperreports.engine.data.JRMapCollectionDataSource;
 
+import org.jfree.util.Log;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -43,7 +44,9 @@ public class ControladorReporteRequisicionListadoExcel extends ControladorBase {
 		@SuppressWarnings("unchecked")
 		@RequestMapping(method = {RequestMethod.POST,RequestMethod.GET})     
 		public ModelAndView  requestGetControlador( Map modelo, HttpServletRequest request) {
-			String listadoReq=request.getParameter("txtlistado");
+			
+			
+			String listadoReq=request.getParameter("lst_cve_req");
 			String temp = "";
 			if(listadoReq!=null&&!listadoReq.equals("")){
 				String[] arreglo = listadoReq.split(",");
@@ -51,7 +54,7 @@ public class ControladorReporteRequisicionListadoExcel extends ControladorBase {
 					temp+="'"+item.trim()+"',";
 				}
 				temp = temp.substring(0, temp.length()-1)+")";
-
+				Log.info("Relacion de requisiciones a exportar: "+ temp);
 			}
 			
 			List <Map> listado = this.getJdbcTemplate().queryForList("SELECT SAM_REQ_MOVTOS.ID_REQ_MOVTO, SAM_REQ_MOVTOS.CVE_REQ, SAM_REQUISIC.NUM_REQ, SAM_REQ_MOVTOS.REQ_CONS, CANTIDAD_TEMP, CANTIDAD, NOTAS, SAM_REQ_MOVTOS.STATUS, SAM_CAT_ARTICULO.DESCRIPCION, SAM_CAT_ARTICULO.DESCRIPCION AS ARTICULO, CAT_UNIMED.UNIDMEDIDA AS UNIDAD, PRECIO_EST, (CANTIDAD*PRECIO_EST) AS IMPORTE, isnull(SAM_REQ_ANEXO.TEXTO, '') AS TEXTO  FROM SAM_REQ_MOVTOS " + 

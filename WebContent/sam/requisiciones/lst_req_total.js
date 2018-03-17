@@ -67,7 +67,22 @@ $("input[name=todos]").change(function(){
 
 $('#todos').click( function (event){ $('input[name=chkrequisiciones]').attr('checked', this.checked); });
 
+//Crea una lista con los check que son seleccionados...........................
+$('input[name=chkrequisiciones]', getCheckedBox).click( function (event){
+	getCheckedBox();
+});
 
+/*
+  
+  $('input:checkbox').change(function(){
+    if ($('input:checkbox:checked').length > 0) {
+      $('input:submit').prop({disabled: false}); 
+    } else {
+      $('input:submit').prop({disabled: true}); 
+    }
+  }); 
+ 
+ * */
 //-----------Revision del filtrado por fechas en el listado de requisiciones.............
 	
 		
@@ -93,52 +108,73 @@ $('#todos').click( function (event){ $('input[name=chkrequisiciones]').attr('che
 	  //---------------------Boton para imprimir el listado de Requisiciones    28-08-17    ------------------------------------------------------------------------
 	  $('#cmdpdf2').on('click', function() {
 		  
-		
-		  swal({
-			    title: 'Opciones de Reporte',
-			    html:
-			    	
-			    	'<table class="listas" border="0" align="center" cellpadding="1" cellspacing="2" width="405" >'+
-					'  <tr id="x1" onmouseover="color_over(\'x1\')" onmouseout="color_out(\'x1\')"> '+
-					'	<td width="33" height="27" align="center" style="cursor:pointer" onclick="getListadoRequisiciones()"> '+
-					'	  <img src="../../imagenes/pdf.gif"/></td>' +
-					'	<td width="362" height="27" align="left" style="cursor:pointer" onclick="getListadoRequisiciones()">&nbsp;Listado de OS/OT/REQ Nomal en PDF</td> '+
-					'  </tr> '+
-					
-					'  <tr id="x2" onmouseover="color_over(\'x2\')" onmouseout="color_out(\'x2\')" onclick=""> '+
-					'	  <td height="27" align="center"  style="cursor:pointer" onclick="getListadoReqConOp()"><img src="../../imagenes/pdf.gif" /></td> '+
-					'	  <td height="27" align="left" style="cursor:pointer" onclick="getListadoReqConOp()">&nbsp;Listado de OS/OT/REQ con Ordenes de Pago relacionadas en PDF</td> '+
-					'	</tr> ' +
-				'</table>'
-			       
-			   
-			  })
-	  });
-	  
+		  mostrarOpcionPDF2();
+	  	});
 });
 
 //IMPRIME EL LISTADO DE LAS REQUISICIONES
-function mostrarOpcionPDF(){
-	var html = '<table class="listas" border="0" align="center" cellpadding="1" cellspacing="2" width="405" >'+
-				'  <tr id="x1" onmouseover="color_over(\'x1\')" onmouseout="color_out(\'x1\')"> '+
-				'	<td width="33" height="27" align="center" style="cursor:pointer" onclick="getListadoRequisiciones()"> '+
-				'	  <img src="../../imagenes/pdf.gif"/></td>' +
-				'	<td width="362" height="27" align="left" style="cursor:pointer" onclick="getListadoRequisiciones()">&nbsp;Listado de OS/OT/REQ Nomal en PDF</td> '+
-				'  </tr> '+
-				
-				'  <tr id="x2" onmouseover="color_over(\'x2\')" onmouseout="color_out(\'x2\')" onclick=""> '+
-				'	  <td height="27" align="center"  style="cursor:pointer" onclick="getListadoReqConOp()"><img src="../../imagenes/pdf.gif" /></td> '+
-				'	  <td height="27" align="left" style="cursor:pointer" onclick="getListadoReqConOp()">&nbsp;Listado de OS/OT/REQ con Ordenes de Pago relacionadas en PDF</td> '+
+//DESDE EL BOTON IMPRIMIR
+function mostrarOpcionPDF2(){
+	 var html = '<table class="table table-striped table-hover table-condensed" border="0" align="center" cellpadding="1" cellspacing="2" width="405" >'+
+		'  <tr> '+
+		'	<td width="33" height="27" align="center" style="cursor:pointer" onclick="getListadoRequisiciones()"> '+
+		'	  <img src="../../imagenes/pdf.gif"/></td>' +
+		'	<td width="362" height="27" align="left" style="cursor:pointer" onclick="getListadoRequisiciones()">&nbsp;Listado de OS/OT/REQ Nomal en PDF</td> '+
+		'  </tr> '+
+		
+		'  <tr> '+
+		'	  <td height="27" align="center"  style="cursor:pointer" onclick="getListadoReqConOp()"><img src="../../imagenes/pdf.gif" /></td> '+
+		'	  <td height="27" align="left" style="cursor:pointer" onclick="getListadoReqConOp()">&nbsp;Listado de OS/OT/REQ con Ordenes de Pago relacionadas en PDF</td> '+
+		'	</tr> ';
+	if($('#REPORTE_ESPECIAL_2').val()=='1'){
+		html+=	'  <tr> '+
+				'	  <td height="27" align="center"  style="cursor:pointer" onclick="getListadoRequisicionExcel()"><img src="../../imagenes/excel.png"height="18"  /></td> '+
+				'	  <td height="27" align="left" style="cursor:pointer" onclick="getListadoRequisicionExcel()">&nbsp;Listado de Requisiciones con lotes relacionados en XLS</td> '+
 				'	</tr> ';
-			if($('#REPORTE_ESPECIAL_2').attr('value')=='1'){
-				html+=	'  <tr id="x3" onmouseover="color_over(\'x3\')" onmouseout="color_out(\'x3\')" onclick=""> '+
-						'	  <td height="27" align="center"  style="cursor:pointer" onclick="getListadoRequisicionExcel()"><img src="../../imagenes/excel.png"height="18"  /></td> '+
-						'	  <td height="27" align="left" style="cursor:pointer" onclick="getListadoRequisicionExcel()">&nbsp;Listado de Requisiciones con lotes relacionados en XLS</td> '+
-						'	</tr> ';
-			}
-			html+='</table>';
-	jWindow(html,'Opciones de Reporte', '','Cerrar',1);
+	}
+	html+='</table>';
+	  
+	  swal({
+		    title: 'Opciones de Reporte',
+		    html: html,
+		    confirmButtonText: 'Cerrar',
+		   })
+
 }
+
+function getCheckedBox() {
+	  
+	  var checkedBox = $.map($('input[name=chkrequisiciones]:checked'), 
+	                         function(val, i) {
+	                            return val.value;
+	                         });
+	 
+	  console.clear();
+	  console.log(checkedBox);
+}
+
+function getListadoRequisicionExcel(){
+	
+	
+	 
+	if($('#txtlistado').val()==''){jAlert('Es necesario agregar Requisiciones al listado para realizar esta operación','Advertencia'); return false;}
+	$('#forma').prop('target',"impresionlistadoExcel");
+	$('#forma').prop('action',"../reportes/rpt_listado_requisicionesExcel.xls");
+	$('#forma').submit();
+	$('#forma').prop('target',"");
+	$('#forma').prop('action',"lst_req_total.action");
+}
+
+function getListadoReqConOp(){
+	$('#forma').attr('target',"impresionlistadoConOP");
+	$('#forma').attr('action',"../reportes/rpt_listado_requisiciones.action");
+	$('#forma').submit();
+	$('#forma').attr('target',"");
+	$('#forma').attr('action',"lst_req_total.action");
+}
+
+
+/*
 
 //Checkbox para seleccionar toda la lista.... Abraham Gonzalez 12/07/2016
 $("input[name=todos]").change(function(){
@@ -150,7 +186,7 @@ $("input[name=todos]").change(function(){
 		}
 	});
 });
-
+*/
 function reembolsos(cve_req, modulo){
 	controladorListadoRequisicionesRemoto.getReembolsoRequisiciones(cve_req, {
 						callback:function(items) { 		
@@ -272,13 +308,33 @@ function _reembolsoRequisicion(cve_req){
 }
 
 function getListadoRequisicionExcel(){
-	var index=[];
-	$("input[name=todos]:checked").each(function(){
-		index.push($(this).val());
+	
+	var arr = [];
+
+	$("input:checkbox[name=chkrequisiciones]:checked").each(function(){
+	    arr.push($(this).val());
 	});
-	alert("demo " + index);
-	$('#claveRequisicion').attr('value',claveReq);
-	//if($('#txtlistado').attr('value')==''){jAlert('Es necesario agregar Requisiciones al listado para realizar esta operación','Advertencia'); return false;}
+
+	console.log('Array de seleccion: ' +arr); // print de los items add dentro de tu array...
+	
+	//alert('Lista de requisiciones: ' +arr);
+	if (arr.length>0){
+		for(items in arr){
+			
+			if($('#lst_cve_req').val()=='')
+				
+				$('#lst_cve_req').val($('#NUM_REQ'+arr[items]).val());
+			else
+				
+				$('#lst_cve_req').val($('#lst_cve_req').val()+', '+$('#NUM_REQ'+arr[items]).val());
+		}
+	}
+	else 
+		swal('','Es necesario seleccionar por lo menos una Requisicion del listado', 'warning');
+	
+		
+	if($('#lst_cve_req').val()==''){swal('','Es necesario agregar Requisiciones al listado para realizar esta operación','warning'); return false;}
+	
 	$('#forma').attr('target',"impresionlistadoExcel");
 	$('#forma').attr('action',"../reportes/rpt_listado_requisicionesExcel.xls");
 	$('#forma').submit();
@@ -300,16 +356,16 @@ function agregarReqLista(){
     $('input[name=chkrequisiciones]:checked').each(function() { checkClaves.push($(this).val());});	
 	if (checkClaves.length>0){
 		for(items in checkClaves){
-			if($('#txtlistado').attr('value')=='')
-				$('#txtlistado').attr('value', $('#NUM_REQ'+checkClaves[items]).attr('value'));
+			if($('#txtlistado').val()=='')
+				$('#txtlistado').val($('#NUM_REQ'+checkClaves[items]).val());
 			else
-				$('#txtlistado').attr('value', $('#txtlistado').attr('value')+', '+$('#NUM_REQ'+checkClaves[items]).attr('value'));
+				$('#txtlistado').val($('#txtlistado').val()+', '+$('#NUM_REQ'+checkClaves[items]).val());
 		}
 		CloseDelay('('+checkClaves.length+ ') Requisiciones agregadas en listado');
-		$("input[id=chkrequisiciones]:checked").attr('checked', false);
+		$("input[id=chkrequisiciones]:checked").prop('checked', false);
 	}
 	else 
-			jAlert('Es necesario seleccionar por lo menos una Requisicion del listado', 'Advertencia');
+			swal('','Es necesario seleccionar por lo menos una Requisicion del listado', 'warning');
 }
 
 function cancelarRequisicion(idReq){

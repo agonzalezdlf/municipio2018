@@ -62,6 +62,7 @@ public class GatewayContratos extends BaseGateway {
 															"ELSE " +
 																"ISNULL(REQ.NUM_REQ,'') " +
 														"END AS NUM_DOC," +
+														"TA.DESCRIPCION," +
 														 "CONVERT(varchar(10), A.FECHA_INICIO, 103) AS FECHA_INICIO, " +
 														 "CONVERT(varchar(10), A.FECHA_TERMINO, 103) AS FECHA_TERMINO, " +
 														 "CONVERT(varchar(10), A.FECHA_CERRADO, 103) AS FECHA_CERRADO, " +
@@ -74,6 +75,7 @@ public class GatewayContratos extends BaseGateway {
 														 "E.DESCRIPCION AS TIPO_CONTRATO, " +
 														 "(SELECT ISNULL(SUM(M.IMPORTE),0) FROM SAM_COMP_CONTRATO AS M WHERE M.CVE_CONTRATO = A.CVE_CONTRATO) AS IMPORTE "+
 												"FROM SAM_CONTRATOS AS A " +
+													"LEFT JOIN SAM_CAT_TIPO_CONTRATOS AS TA ON (TA.ID_TIPO=A.ID_TIPO) " +
 													"INNER JOIN CAT_BENEFI  AS B ON (B.CLV_BENEFI = A.CLV_BENEFI) " +
 													"INNER JOIN CAT_RECURSO AS C ON (C.ID = A.ID_RECURSO) " +
 													"INNER JOIN CAT_DEPENDENCIAS AS D ON (D.ID = A.ID_DEPENDENCIA) " +
@@ -484,35 +486,21 @@ public class GatewayContratos extends BaseGateway {
             this.getTransactionTemplate().execute(new TransactionCallbackWithoutResult(){
                 @Override
                 protected void   doInTransactionWithoutResult(TransactionStatus status) {
+                	
+                	
                 	for(Long cve_contrato: lst_contratos){
+                		
                 		Map documento = getContrato(cve_contrato);
 	    		      	
 	    		      	Date fechaCierre = new Date();
 	    		  		fechaCierre = (Date) documento.get("FECHA_CERRADO2");
 	    		  		Calendar c1 = Calendar.getInstance();
 	    		  		
-	    		  		//Buscar si existe el Super Privilegio para Cancelar Vales
-	    				boolean privilegio = getPrivilegioEn(cve_pers, 141);
-	    				
-	    				//Si el contrato no es del periodo y no tiene super-privilegio entonces no dejar cancelarlo
-	    		  		if(fechaCierre!=null&&privilegio==false)
-	    		  			if((c1.get(Calendar.MONTH)+1) != ((fechaCierre.getMonth())+1) && !documento.get("STATUS").toString().equals("0"))
-		    		  		{
-		    		  			throw new RuntimeException("No se puede cancelar el Contrato "+documento.get("NUM_CONTRATO").toString()+", el periodo del documento es diferente al actual, consulte a su administrador");
-		        		  	}
-                		
-                		if(getJdbcTemplate().queryForInt("SELECT COUNT(*) FROM SAM_FACTURAS WHERE CVE_CONTRATO =? AND STATUS IN (1,3)", new Object[]{cve_contrato})>0){
-	            			throw new RuntimeException("Imposible cancelar el contrato, este ya esta relacionado a una factura");
+	    		  		if(getJdbcTemplate().queryForInt("SELECT COUNT(*) FROM SAM_FACTURAS WHERE CVE_CONTRATO =? AND STATUS IN (1,3)", new Object[]{cve_contrato})>0){
+	            			throw new RuntimeException("Imposible cancelar el contrato, este ya esta en el momento del DEVENGADO ");
 	            		}
                 		
-                		if(getJdbcTemplate().queryForInt("SELECT COUNT(*) FROM SAM_ORD_PAGO WHERE CVE_CONTRATO =? AND STATUS IN (0, 1, 6)", new Object[]{cve_contrato})>0){
-	            			throw new RuntimeException("Imposible cancelar el contrato, este ya esta relacionado a una Orden de Pago");
-	            		}
-                		
-                		/*if(getJdbcTemplate().queryForInt("SELECT COUNT(*) FROM SAM_CONTRATOS AS C INNER JOIN SAM_COMP_CONTRATO AS M ON (M.CVE_CONTRATO = C.CVE_CONTRATO) WHERE C.CVE_CONTRATO =? AND M.PERIODO <> ?", new Object[]{cve_contrato, gatewayMeses.getMesActivo(ejercicio)})>0){
-	            			throw new RuntimeException("Imposible cancelar el contrato, el periodo ya no es válido, consulte a su administrador del sistema");
-	            		}*/
-                		
+                		                		
                 		//comprobar que realmente se puede aperturar
                 		Map contrato = getJdbcTemplate().queryForMap("SELECT  "+
 																			"(SELECT COUNT(*) FROM SAM_REQUISIC AS R WHERE R.CVE_CONTRATO = C.CVE_CONTRATO AND STATUS IN (1,2,5)) AS TOTAL_REQ, "+ 
@@ -521,51 +509,36 @@ public class GatewayContratos extends BaseGateway {
 																			"(SELECT COUNT(*) FROM SAM_FACTURAS AS F WHERE F.CVE_CONTRATO = C.CVE_CONTRATO AND F.STATUS IN (1,3)) AS TOTAL_FACTURA," + 
 																			"(SELECT COUNT(*) FROM SAM_VALES_EX AS V WHERE V.CVE_CONTRATO = C.CVE_CONTRATO AND STATUS IN (1,3,4)) AS TOTAL_VAL "+ 
 																		"FROM SAM_CONTRATOS AS C  WHERE C.CVE_CONTRATO = ?", new Object[]{cve_contrato}); 
-						if(contrato.get("TOTAL_REQ").toString().equals("0")&&contrato.get("TOTAL_PED").toString().equals("0")&&contrato.get("TOTAL_OP").toString().equals("0")&&contrato.get("TOTAL_FACTURA").toString().equals("0")&&contrato.get("TOTAL_VAL").toString().equals("0")){
+						
+                		if(contrato.get("TOTAL_REQ").toString().equals("0")&&contrato.get("TOTAL_PED").toString().equals("0")&&contrato.get("TOTAL_OP").toString().equals("0")&&contrato.get("TOTAL_FACTURA").toString().equals("0")&&contrato.get("TOTAL_VAL").toString().equals("0")){
 							
-							//Aperturar y quitar los movimientos comprometidos del contrato
-							if(documento.get("STATUS").toString().equals("0"))
-								getJdbcTemplate().update("UPDATE SAM_CONTRATOS SET STATUS = ? WHERE CVE_CONTRATO = ?", new Object[]{2, cve_contrato});
-							else
-								getJdbcTemplate().update("UPDATE SAM_CONTRATOS SET STATUS = ?, FECHA_CANCELADO=? WHERE CVE_CONTRATO = ?", new Object[]{2, new Date(), cve_contrato});
+							getJdbcTemplate().update("UPDATE SAM_CONTRATOS SET STATUS = ?, FECHA_CANCELADO=? WHERE CVE_CONTRATO = ?", new Object[]{2, new Date(), cve_contrato});
 							
-							//Eliminar el detalle de lado del Sr. Peredo
-							//Desactivada esta linea por instrucciones de peredo 04/Dic/2013
-							//getJdbcTemplate().update("DELETE FROM SAM_COMP_MOV WHERE TIPO_DOC = ? AND DOCUMENTO =?", new Object[]{7, cve_contrato});
-							
+							try {
+				        	   		StoreProcedureContratos sp = new StoreProcedureContratos(getJdbcTemplate().getDataSource());
+									Map result = sp.execute(cve_contrato, 0);
+										
+								} catch (Exception e) {
+									// TODO: handle exception
+									throw new RuntimeException("Error al contabilizar la cancelación del contrato: " +documento.get("NUM_CONTRATO").toString());
+								}	
+							/*
 							if(documento.get("ID_TIPO").equals("7"))
 								getJdbcTemplate().update("UPDATE SAM_PEDIDOS_EX SET STATUS = ? WHERE CVE_PED = ? ", new Object[]{4, contrato.get("CVE_DOC")});
 							else
 								getJdbcTemplate().update("UPDATE SAM_REQUISIC SET STATUS = ? WHERE CVE_REQ = ? ", new Object[]{2, contrato.get("CVE_DOC")});
-
-							//guardar en bitacora
-                			//Date fecha = new Date();
-                			//String num = rellenarCeros(cve_contrato.toString(), 6);
-                			//gatewayBitacora.guardarBitacora(gatewayBitacora.CON_APERTURO, ejercicio, cve_pers, cve_contrato, num, "CON", fecha, contrato.get("PROYECTO").toString(), contrato.get("CLV_PARTID").toString(), null, Double.parseDouble(contrato.get("IMPORTE").toString()));
-
-						}
+							*/
+							
+							               			
+                			gatewayBitacora.guardarBitacora(gatewayBitacora.CON_CANCELO, ejercicio, cve_pers, cve_contrato, documento.get("NUM_CONTRATO").toString(), "CON",fechaCierre, null, null, null, Double.parseDouble(documento.get("IMPORTE").toString()));
+                			
+                		}
 						else //No se puede aperturar, causas
 							throw new RuntimeException("No se puede cancelar el contrato "+documento.get("NUM_CONTRATO").toString()+" es posible que exista algun documento relacionado a este.");
                 	}
                 }
             });
-            try {
-        	   	
-          	  StoreProcedureContratos sp = new StoreProcedureContratos(getJdbcTemplate().getDataSource());
-				  Map result = sp.execute(cve_contrato, 0);
-					/*	
-          	   	Integer encom_mov=0;
- 					encom_mov =getJdbcTemplate().queryForInt("SELECT COUNT(DOCUMENTO) FROM SAM_COMP_MOV WHERE DOCUMENTO=?", new Object[]{cve_contrato});
- 					if (encom_mov<1){
- 						//SE AGREGA PROCEDIMIENTO ALMACENADO DE PEREDO PARA CONTABILIZAR MODIFICACION PEDIDOS 28/JUL/2013
- 						StoreProcedureContratos sp = new StoreProcedureContratos(getJdbcTemplate().getDataSource());
- 						Map result = sp.execute(cve_contrato, 1);
- 						//TERMINA PROCEDIMIENT0
- 					}*/
-				} catch (Exception e) {
-					// TODO: handle exception
-					throw new RuntimeException("Error al contabilizar el contrato: " +cve_contrato );
-				}	
+            	
             return ""; 
 		}catch (DataAccessException e) {                                
             throw new RuntimeException("Hay un problema con el contrato, no se pueden cancelar, consulte a su administrador: "+e.getMessage());

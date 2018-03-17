@@ -5,16 +5,21 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-<title>Muestra presupuesto</title>
+<title>Muestra prodcutos</title>
 <meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/>
 <link rel="stylesheet" href="../../include/css/estilosam.css" type="text/css"/>
-<script type="text/javascript" src="../../include/js/toolSam.js"></script>
+
 <script language="javascript">
 
 function regresaProducto(producto, ID_ARTICULO, GRUPO, SUBGRUPO, CLAVE, PRECIO, UNIDMEDIDA, CLV_UNIDAD) {
 	window.parent.__regresaProducto(producto, ID_ARTICULO, GRUPO, SUBGRUPO, CLAVE, PRECIO, UNIDMEDIDA, CLV_UNIDAD);
+	
 }
 
+function cerrar(){
+	window.parent.swal.close();
+	
+}
 </script>
 <style type="text/css">
 <!--

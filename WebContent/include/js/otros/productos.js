@@ -3,10 +3,11 @@
 function __listadoProductos(producto, partida){
 	swal({
 		  title: 'Catálogo de Productos',
-		  text: 'Muestra el catÃ¡logo de productos',
+		  text: 'Muestra el catálogo de productos',
 		  html:
 			  '<iframe width="600" height="400" frameborder="0" src="../../sam/consultas/muestra_productos.action?producto='+producto+'&partida='+partida+'"></iframe>',
 		  width: 800,
+		  confirmButtonText: 'Cerrar',
 		  padding: 10,
 		  animation: false
 		})
@@ -26,4 +27,5 @@ function __regresaProducto(producto, ID_ARTICULO , GRUPO, SUBGRUPO, CLAVE, PRECI
 	$('#CLAVE').attr('value',CLAVE);
 	$('#CVE_UNIDAD_MEDIDA').attr('value',CLV_UNIDAD);
 	$(".swal2-container.swal2-shown").remove();//Cierra la ventana modal.
+	
 }

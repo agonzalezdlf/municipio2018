@@ -10,6 +10,7 @@
 <link rel="stylesheet" href="../../include/css/estilosam.css" type="text/css">
     <link rel="stylesheet" href="../../include/js/componentes/jquery.alerts.css" type="text/css">
       <link rel="stylesheet" href="../../include/css/sweetalert2.min.css" type="text/css">
+      <link rel="stylesheet" href="../../include/css/bootstrap-3.3.7.css" type="text/css">
 	<script type="text/javascript" src="../../include/js/jquery-1.3.2.min.js"></script>
     <script type="text/javascript" src="../../include/js/jquery-impromptu.2.3.js"></script>
     <script type="text/javascript" src="../../include/js/jquery.form.js"></script>
@@ -21,6 +22,9 @@
     <script type="text/javascript" src="../../dwr/interface/autocompleteDiversosRemoto.js"> </script>   
     <script type="text/javascript" src="../../dwr/engine.js"> </script>
     <script type="text/javascript" src="../../include/js/jquery-ui-1.7.3.custom.min.js"></script>
+    
+    <script type="text/javascript" src="../../include/js/bootstrap-3.3.7.js"></script>
+    
     <script type="text/javascript" src="../../include/js/jquery.maxlength.js"></script>
     <script type="text/javascript" src="../../include/js/jquery.bestupper.min.js"></script>
     <script type="text/javascript" src="../../include/js/toolSam.js?x=<%=System.currentTimeMillis()%>"></script>
@@ -39,7 +43,11 @@
     <script type="text/javascript" src="../../include/js/jquery.tabs/jquery.history_remote.pack.js"></script>
     <script type="text/javascript" src="../../include/js/jquery.tabs/jquery.tabs.pack.js"></script>-->
     <link rel="stylesheet" href="../../include/js/jquery.tabs/jquery.tabs.css" type="text/css" media="print, projection, screen">
-    <link rel="stylesheet" href="../../include/css/sweetalert2.css" type="text/css">
+   	<link rel="stylesheet" href="../../include/css/boostrap-select/dist/css/bootstrap-select.css" type="text/css">
+	<script type="text/javascript" src="../../include/css/boostrap-select/dist/js/bootstrap-select.js"></script>
+	<script type="text/javascript" src="../../include/css/bootstrap-datetimepicker-master/js/moment-with-locales-2.9.0.js"></script>
+	<link rel="stylesheet" href="../../include/css/bootstrap-datetimepicker-master/css/bootstrap-datetimepicker-4.15.35.css" type="text/css">
+	<script type="text/javascript" src="../../include/css/bootstrap-datetimepicker-master/js/bootstrap-datetimepicker-4.15.35.js"></script>
     <!-- Additional IE/Win specific style sheet (Conditional Comments) -->
     <!--[if lte IE 7]>
     <link rel="stylesheet" href="../../include/js/jquery.tabs/jquery.tabs-ie.css" type="text/css" media="projection, screen">
@@ -136,6 +144,17 @@ a:active {
                     <th height="30">*Proveedor:</th>
                     <td><input name="txtbeneficiario" id="txtbeneficiario"  type="text" class="input" value="${Contrato.PROVEEDOR}" style="width:400px" maxlength="50" /> <input name="CLV_BENEFI" type="hidden"  id="CLV_BENEFI" size="8" maxlength="6" readonly="true" value="${Contrato.CLV_BENEFI}" /></td>
                   </tr>
+                  <tr>
+                    <th height="30">*Proveedor:</th>
+                    <td><select name="xBeneficiario" class="selectpicker form-control input-sm m-b" data-live-search="true" id="xBeneficiario" style="width:100%">
+                              <c:forEach items="${beneficiarios}" var="item" varStatus="status">
+                                    <option value='<c:out value="${item.CLV_BENEFI}"/>'
+                                    <c:if test='${item.CLV_BENEFI==xBeneficiario}'>selected</c:if>><c:out value='${item.NCOMERCIA}'/>
+                              </c:forEach>
+                            </select></td>
+                  </tr>
+                  
+                  
                   <tr>
                     <th height="30">Num. Documento:&nbsp;</th>
                     <td><input name="txtdocumento" type="text" class="input" id="txtdocumento" style="width:165px" value="${Contrato.NUM_DOC}" maxlength="25"/>

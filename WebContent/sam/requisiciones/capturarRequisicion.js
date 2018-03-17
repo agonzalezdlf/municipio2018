@@ -585,11 +585,11 @@ function guardarConceptoRequisicion(){
 	if($('#ID_ARTICULO').val()==''||$('#ID_ARTICULO').val()=='0') {swal('','Es necesario seleccionar un producto válido</br>','info'); return false;}
 	if($('#txtprecioestimado').val()=='') {swal('','Es necesario especificar un precio de producto valido</br>', 'info'); return false;}
 	//if($('txtprecioestimado').val()=='') {jError('Es necesario especificar un precio de producto valido','Error de validacion'); return false;}
-	if($('#cbounimed').selectpicker('val')=='') swal('','Es necesario especificar la unidad de medida del producto valido</br>','info');
+	if($('#cbounimed').selectpicker('val')=='') {swal('','Es necesario especificar la unidad de medida del producto valido</br>','info'); return false;}
 	if($('#txtcantidad').val()=='') {swal('','Es necesario especificar la cantidad de productos</br>', 'info'); return false;}
 //	if($('#txtdescripcion').val()=='') error += 'Es necesario una descripcion valida</br>';
 	if($('#txtproyecto').val()=='') {swal('','Es necesario establecer un Programa valido</br>','info'); return false;}
-	if($('#txtpartida').val()=='') {swal('','Es necesario establecer una partida valida</br>','info');}
+	if($('#txtpartida').val()=='') {swal('','Es necesario establecer una partida valida</br>','info'); return false;}
 	if($('#cbotipo').val()=='2'||$('#cbotipo').val()=='3'||$('#cbotipo').val()=='4'&&$('#cbotipo').val()=='5') {
 			if(parseInt($('#txtcantidad').val())>1) {swal('','Una Orden de Servicio/Trabajo no puede contener mas de una cantidad de producto</br>', 'info'); return false;}
 	}
@@ -689,7 +689,10 @@ function editarConcepto(ID_REQ_MOVTO){
 	});
 }
 /*funcion para mostrar el listado de productos*/
+/*Funcion que retorna los productos desde el jsp muestra productos*/
+/*Funcion relacionado al .js localizado en include/js/otro/producto.js*/
 function muestraProductos(){	
+	
 	__listadoProductos($('#txtproducto').val(), $('#txtpartida').val());
 	
 	

@@ -62,6 +62,7 @@ a:active {
 <input type="hidden" name="ejercicio" id="ejercicio" value="<c:out value='${ejercicio}'/>">
 <input type="hidden" name="claveRequisicion" id="claveRequisicion" >
 
+
  <div class="row col-md-offset-2">
           <h1 class="h1-encabezado"> Requisiciones - Listado de Requisiciones, Ordenes de Trabajo y Ordenes de Servicio</h1>
  </div>  
@@ -176,6 +177,8 @@ a:active {
 	      <label for="txtpartida" class="sr-only control-label">Partida:</label>
 	      <div class="col-sm-2">
 	      	<input placeholder="Partida" name="txtpartida" type="text" id="txtpartida" class="form-control input-sm" onKeyPress="return keyNumbero(event);" value="<c:out value='${txtpartida}'/>">
+	      	<input type="hidden" value="1" id="REPORTE_ESPECIAL_2">
+	      	<input type="hidden" name="lst_cve_req" id="lst_cve_req" >
 	      </div>
 	</div> 
 </div>

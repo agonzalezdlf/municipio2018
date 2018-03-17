@@ -1754,7 +1754,7 @@ function executeX(fn){
 	}
 
 function _closeDelay(){
-	 //swal.close();
+	 swal.close();
 	$(".swal2-container.swal2-shown").remove();//Cierra la ventana modal.
 	$(".swal2-container.swal2-fade.swal2-shown").remove();//Cierra la ventana modal.
 	

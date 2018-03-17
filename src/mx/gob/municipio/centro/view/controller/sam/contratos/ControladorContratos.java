@@ -11,6 +11,7 @@ import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 
+import mx.gob.municipio.centro.model.gateways.sam.GatewayBeneficiario;
 import mx.gob.municipio.centro.model.gateways.sam.GatewayContratos;
 import mx.gob.municipio.centro.model.gateways.sam.GatewayPlanArbit;
 import mx.gob.municipio.centro.model.gateways.sam.GatewayUnidadAdm;
@@ -41,6 +42,8 @@ public class ControladorContratos extends ControladorBase {
 	@Autowired
 	GatewayMeses gatewayMeses;
 	
+	@Autowired
+	private GatewayBeneficiario gatewayBeneficiario;
 	/**
 	 * @param args
 	 */
@@ -162,5 +165,10 @@ public class ControladorContratos extends ControladorBase {
 	public String getBeneficiarioContratos(String tipo_doc, Long cve_doc)
 	{
 		return gatewayContratos.getBeneficiarioContratos(tipo_doc, cve_doc);
+	}
+	
+	@ModelAttribute("beneficiarios")
+	public List<Map>getBeneficiarios(){
+		return gatewayBeneficiario.getListaBeneficiarios();
 	}
 }
