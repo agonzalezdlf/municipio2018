@@ -66,7 +66,7 @@ a:active {
 </style>
 </head>
 <body>
-<form name="forma" id="forma" class="form-horizontal" action="lst_reportetransferencia.action" method="post">
+<form name="forma" id="forma" class="form-horizontal" action="lst_reportetransferencia.action" method="post" style="margin:10px;">
 	<div class="row col-md-offset-2">
           <h1 class="h1-encabezado"> Reportes - Transferencias</h1>
     </div> 

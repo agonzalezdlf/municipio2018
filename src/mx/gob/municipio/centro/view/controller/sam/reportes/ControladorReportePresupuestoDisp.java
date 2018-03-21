@@ -25,7 +25,7 @@ public final static  int VER_TODAS_LAS_UNIDADES = 25;
 
 	@Autowired
 	GatewayUnidadAdm gatewayUnidadAdm;
-	
+
 	@Autowired
 	GatewayReportePresupestoDisp gatewayReportePresupestoDisp;
 	
@@ -50,12 +50,16 @@ public final static  int VER_TODAS_LAS_UNIDADES = 25;
 		//Integer clv_capitulo = request.getParameter("cbocapitulo")!= null ? Integer.parseInt(request.getParameter("cbocapitulo")): 0;
 		Integer clv_capitulo = request.getParameter("cbocapitulo")!= null ? Integer.parseInt(!request.getParameter("cbocapitulo").toString().equals("") ? request.getParameter("cbocapitulo").toString(): "0"): 0;
 		
+		Map MesActual = this.GetMesActual();
+		
 		modelo.put("idUnidad",idUnidad);
 		modelo.put("nombreUnidad",this.getSesion().getUnidad());
 		modelo.put("idtipogasto",tipogasto);
-		modelo.put("idproyecto",idproyecto);
+		modelo.put("idproyecto",(idproyecto == 0 ? "": idproyecto));
 		modelo.put("idpartida",idpartida);
 		modelo.put("idcapitulo", clv_capitulo);
+		
+		modelo.put("mesActivo", MesActual.get("DESCRIPCION"));
 		
 		//txtpartida
 		modelo.put("listadomovimientos",this.gatewayReportePresupestoDisp.getreparametros(modelo));

@@ -276,7 +276,7 @@ public class GatewayExcelReporte extends AbstractExcelView {
 		/*----------------------------*/
 		
 		for (Map p : NewModel) {
-			disponible = Double.parseDouble(p.get("PRESUPUESTO").toString()) - Double.parseDouble(p.get("COMPROMETIDO").toString())-Double.parseDouble(p.get("PRECOMPROMISO").toString());
+			disponible = Double.parseDouble(p.get("PRESUPUESTO_")!= null ? p.get("PRESUPUESTO_").toString(): "0") - Double.parseDouble(p.get("COMPROMETIDO_") != null ? p.get("COMPROMETIDO_").toString():"0") - Double.parseDouble(p.get("PRECOMPROMISO_") !=null  ? p.get("PRECOMPROMISO_").toString(): "0");
 			fila = excelSheet.createRow(numFila++); //La hoja debemos añadirle las filas que deseemos. La numeración empieza en cero.
 			
 			celda = (HSSFCell) fila.createCell((short)0);
@@ -320,23 +320,23 @@ public class GatewayExcelReporte extends AbstractExcelView {
 			celda.setCellStyle(rowStyle_08);
 			
 			celda = (HSSFCell) fila.createCell((short)8);
-			celda.setCellValue(Double.parseDouble(p.get("INICIAL").toString()));
+			celda.setCellValue(Double.parseDouble(p.get("INICIAL_").toString()));
 			celda.setCellStyle(rowStyle_09);
 			
 			celda = (HSSFCell) fila.createCell((short)9);
-			celda.setCellValue(Double.parseDouble(p.get("PRESUPUESTO").toString()));
+			celda.setCellValue(Double.parseDouble(p.get("PRESUPUESTO_").toString()));
 			celda.setCellStyle(rowStyle_10);
 			
 			celda = (HSSFCell) fila.createCell((short)10);
-			celda.setCellValue(Double.parseDouble(p.get("COMPROMETIDO").toString()));
+			celda.setCellValue(Double.parseDouble(p.get("COMPROMETIDO_").toString()));
 			celda.setCellStyle(rowStyle_11);
 			
 			celda = (HSSFCell) fila.createCell((short)11);
-			celda.setCellValue(Double.parseDouble(p.get("DEVENGADO").toString()));
+			celda.setCellValue(Double.parseDouble(p.get("DEVENGADO_").toString()));
 			celda.setCellStyle(rowStyle_12);
 			
 			celda = (HSSFCell) fila.createCell((short)12);
-			celda.setCellValue(Double.parseDouble(p.get("EJERCIDO").toString()));
+			celda.setCellValue(Double.parseDouble(p.get("EJERCIDO_").toString()));
 			celda.setCellStyle(rowStyle_13);
 		
 			celda = (HSSFCell) fila.createCell((short)13);

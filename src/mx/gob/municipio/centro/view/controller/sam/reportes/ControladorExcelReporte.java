@@ -51,16 +51,15 @@ public class ControladorExcelReporte extends ControladorBase {
 		boolean privilegio = this.getPrivilegioEn(this.getSesion().getIdUsuario(), VER_TODAS_LAS_UNIDADES);
 		
 		String idUnidad=request.getParameter("xidunidad")==null ?this.getSesion().getClaveUnidad() : request.getParameter("xidunidad");
-		Integer tipogasto = request.getParameter("xidgasto")== null ? Integer.parseInt(request.getParameter("xidgasto")): 0;
-		Integer clv_capitulo = request.getParameter("cbocapitulo")!= null ? Integer.parseInt(request.getParameter("cbocapitulo")): 0;
-		Integer idproyecto = request.getParameter("txtproyecto")!= null ? Integer.parseInt(request.getParameter("txtproyecto")): 0;
-		String idpartida= request.getParameter("txtpartida")== null ? request.getParameter("txtpartida"): "0";
-		
-		
+		Integer tipogasto = request.getParameter("xidgasto")!= null ? Integer.parseInt(request.getParameter("xidgasto")): 0;
+		Integer clv_capitulo = request.getParameter("xcapitulo")!= null ? Integer.parseInt(!request.getParameter("xcapitulo").toString().equals("") ? request.getParameter("xcapitulo").toString(): "0"): 0;
+		Integer idproyecto = request.getParameter("xproyecto")!= null ? Integer.parseInt(!request.getParameter("xproyecto").toString().equals("") ? request.getParameter("xproyecto").toString(): "0"): 0;
+		String idpartida= request.getParameter("xpartida")!= null ? request.getParameter("xpartida"): "";
+
 		modelo.put("idUnidad",idUnidad);
 		modelo.put("nombreUnidad",this.getSesion().getUnidad());
 		modelo.put("idtipogasto",tipogasto);
-		modelo.put("idproyecto",idproyecto);
+		modelo.put("idproyecto",(idproyecto == 0 ? "": idproyecto));
 		modelo.put("idpartida",idpartida);
 		modelo.put("idcapitulo", clv_capitulo);
 		
