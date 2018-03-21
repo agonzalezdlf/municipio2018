@@ -74,7 +74,7 @@ a:active {
     
     	<div class="form-group"><!-- Unidad -->
 	      <label class="control-label col-sm-1" for="dependencia">Unidad:</label>
-	      <div class="col-sm-4">
+	      <div class="col-sm-6">
 	       		<sec:authorize ifNotGranted="ROLE_Sam_PRIVILEGIOS_VER_TODAS_LAS_UNIDADES">
 	      			<c:out value="${nombreUnidad}"/><input type="hidden" name="cbUnidad" id="cbUnidad" value='<c:out value="${idUnidad}"/>' />
 	      		</sec:authorize>
@@ -89,13 +89,13 @@ a:active {
 	          		</select>
 	        	</sec:authorize>
        		</div>
-       		<div class="col-sm-4 col-md-offset-2">
-       			<input type="button" name="cmdBuscar" id="cmdBuscar" value="Buscar" class="btn btn-primary">
+       		<div class="col-sm-5">
+       			<input type="button" name="cmdBuscar" id="cmdBuscar" value="Buscar" class="btn btn-primary" style="width:150px;">
        		</div>
 		</div>
 		<div class="form-group"><!-- Tipo de gasto -->
 	      <label class="control-label col-sm-1" for="cbotipogasto">Tipo de gasto:</label>
-	      <div class="col-sm-4">          
+	      <div class="col-sm-6">          
 	        <select name="cbotipogasto" id="cbotipogasto " data-live-search="true" class="selectpicker form-control input-sm m-b">
 	      		<option value="0"> [Todos los tipos de gastos]
 	        		<c:forEach items="${tipodeGasto}" var="item" varStatus="status">
@@ -106,35 +106,55 @@ a:active {
 	      			</c:forEach>
 	    	</select>
 	      </div>
-	      <div class="col-sm-4 col-md-offset-2">
-       			<input type="button" name="cmdexportar" id="cmdexportar" value="Exporar a excel" data-toggle="tooltip" title="Exportar a excel" class="btn btn-sucess">
+	      <div class="col-sm-5">
+       			<input type="button" name="cmdexportar" id="cmdexportar" value="Exporar a excel" data-toggle="tooltip" title="Exportar a excel" class="btn btn-sucess" style="width:150px;">
        	  </div>
 	    </div>
 	    <div class="form-group"><!-- Capitulo -->
 	      <label class="control-label col-sm-1" for="cbotipogasto">Capitulo:</label>
-	      <div class="col-sm-4">          
-	        <select name="cbocapitulo" id="cbocapitulo " class="selectpicker form-control input-sm m-b" data-live-search="true">
-	      		<option value="0"> [Todos los capitulos]
-	        		<c:forEach items="${capitulos}" var="item" varStatus="status">
-	        		<option value='<c:out value="${CLV_CAPITU.ID}"/>'
-					<c:if test='${item.ID==cbocapitulo}'> selected </c:if>>
-	  				<c:out value='${item.CLV_CAPITU}'/>
-			          -
-			        <c:out value='${item.CAPITULO}'/>
-	        	</option>
-	      			</c:forEach>
-	    	</select>
+	      <div class="col-sm-6">          
+	        <select name="cbocapitulo" id="cbocapitulo" class="selectpicker form-control input-sm m-b" data-live-search="true">
+				<option value="0"> [Todos los capitulos]</option>
+				  <c:forEach items="${capitulos}" var="item" varStatus="status">
+					  <option value='<c:out value='${item.CLV_CAPITU}'/>' 
+						  <c:if test='${item.CLV_CAPITU==idcapitulo}'> selected </c:if>>
+							<c:out value='${item.CLV_CAPITU}'/>
+							-
+						  <c:out value='${item.CAPITULO}'/>
+					  </option>
+					</c:forEach>
+		  </select>
 	      </div>
 	    </div>
 	 	<div class="form-group">
-	      <label class="control-label col-sm-1" for="email">Proyecto:</label>
-	      <div class="col-sm-2">
-	      	<input placeholder="Proyecto" name="txtproyecto" type="text" id="txtproyecto" class="form-control input-sm" value="<c:out value='${txtproyecto}'/>">
+	      <label class="control-label col-sm-1">Proyecto:</label>
+		 
+		  <div class="col-sm-2">
+	      	<input placeholder="Proyecto" name="txtproyecto" type="text" id="txtproyecto" class="form-control input-sm" value="<c:out value='${idproyecto}'/>">
 	      </div>
 	      <label for="txtpartida" class="sr-only control-label">Partida:</label>
-	      <div class="col-sm-2">
-	      	<input placeholder="Partida" name="txtpartida" type="text" id="txtpartida" class="form-control input-sm" onKeyPress="return keyNumbero(event);" value="<c:out value='${txtpartida}'/>">
-	      </div>
+		  
+		  <div class="col-sm-2">
+	      	<input placeholder="Partida" name="txtpartida" type="text" id="txtpartida" class="form-control input-sm" onKeyPress="return keyNumbero(event);" value="<c:out value='${idpartida}'/>">
+		  </div>
+
+		  <div class="col-sm-2">
+			<select name="cbomes" id="cbomes" class="selectpicker form-control input-sm m-b" data-live-search="true">
+				<option value="0"> [Seleccione el mes]</option>
+				<option value="1" <c:if test="${1==mes}"> selected </c:if>>ENERO</option>
+				<option value="2" <c:if test="${2==mes}"> selected </c:if>>FEBRERO</option>
+				<option value="3" <c:if test="${3==mes}"> selected </c:if>>MARZO</option>
+				<option value="4" <c:if test="${4==mes}"> selected </c:if>>ABRIL</option>
+				<option value="5" <c:if test="${5==mes}"> selected </c:if>>MAYO</option>
+				<option value="6" <c:if test="${6==mes}"> selected </c:if>>JUNIO</option>
+				<option value="7" <c:if test="${7==mes}"> selected </c:if>>JULIO</option>
+				<option value="8" <c:if test="${8==mes}"> selected </c:if>>AGOSTO</option>
+				<option value="9" <c:if test="${9==mes}"> selected </c:if>>SEPTIEMBRE</option>
+				<option value="10" <c:if test="${10==mes}"> selected </c:if>>OCTUBRE</option>
+				<option value="11" <c:if test="${11==mes}"> selected </c:if>>NOVIEMBRE</option>
+				<option value="12" <c:if test="${12==mes}"> selected </c:if>>DICIEMBRE</option>
+		  </select>
+		  </div>
 		</div> 
     </div>
     
@@ -152,9 +172,8 @@ a:active {
 						  </tr>
 						  <tr>
 						  	<th width="5%">CLAVE PRE.</th>
-						  	<th width="5%">ADECUACION</th>
-						    <th width="5%">ID_PROYECTO</th>
-						    <th width="30%">DECRIPCION</th>
+						  	<th width="5%">PARTIDA</th>
+						    <th width="35%">PROYECTOS</th>
 						    <th width="40%">MOTIVO</th>
 						    <th width="5%">AMPLIADO</th>
 						    <th width="5%">REDUCIDO</th>
@@ -165,8 +184,6 @@ a:active {
 			  <c:when test="${cont == 1 && item.ID_RECURSO 	!= id_recurso}">
 			    <tbody>
 			   
-			    	
-			    
 			  </c:when>
 			  <c:otherwise>
 			  
@@ -177,10 +194,9 @@ a:active {
     	
     	<tr>
     		
-    		<td align="center" style="border-right:none"></td>
-	    	<td align="center" style="border-right:none"><c:out value='${item.ADECUACION}'/></td>
-	 		<td align="center" style="border-right:none"><c:out value='${item.ID_PROYECTO}'/></td>
-	 		<td align="left" style="border-right:none"><c:out value='${item.DECRIPCION}'/></td>	
+    		<td align="center" style="border-right:none"><c:out value='${item.ADECUACION}'/></td>
+	    	<td align="center" style="border-right:none"><c:out value='${item.CLV_PARTID}'/></td>
+	 		<td align="left" style="border-right:none">(<c:out value='${item.ID_PROYECTO}'/>) <c:out value='${item.DECRIPCION}'/></td>	
 	 		<td align="left" style="border-right:none"><c:out value='${item.MOTIVO}'/></td>
 		    <td style="border-right:none;text-align:right"><fmt:formatNumber value="${item.AMPLIADO}"  pattern="#,###,###,##0.00" /></td>
 			<td style="border-right:none; text-align:right"><fmt:formatNumber value="${item.REDUCIDO}"  pattern="#,###,###,##0.00" /></td>
