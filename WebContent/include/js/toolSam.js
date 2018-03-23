@@ -4,7 +4,8 @@ var izquierda = "text-align:left";
 
 var row_color = "";
 
-
+var resultData=["Mumbai","Delhi","Chennai","Goa"]
+var myselect = $('<select>');
 
 function mostrarOpcionPDF(cve_op){//Muestra la opcion de reportes desde el listado de ordenes de pago...
 	
@@ -1330,17 +1331,6 @@ function guardarMovimientoAjusteContrato(cve_doc, modulo, num_doc)
 	});
 }
 
-function reduccionAmpliacion2(cve_doc, modulo, num_doc)
-{
-	var proyectos = [];
-	var partidas = [];
-	var html = '';
-	if(modulo=='con'){
-		
-	}
-	
-}
-
 function reduccionAmpliacion(cve_doc, modulo, num_doc)
 {
 	var proyectos = [];
@@ -1352,7 +1342,7 @@ function reduccionAmpliacion(cve_doc, modulo, num_doc)
 						callback:function(items) {
 							html+= '<div id="divMovCaptura" style="display:none; position:absolute; top:15px; padding-bottom:10px">'
 								+'<h1>Capturar movimientos de contrato</h1>'
-								+'<table class="table table-striped table-condensed">'
+								+'<table>'
 									+'<tr><td><input id="ID_DETALLE" type="hidden" value="0"> <input id="CVE_CONTRATO" type="hidden" value="'+cve_doc+'"></td></tr>'
 									+'<tr><th height="20">Tipo de Movimiento:</th><td><select id="cboMovimiento" style="width:200px;"><option value="COMPROMISO">COMPROMISO</option></select></td></tr>'
 									+'<tr><th height="20">Proyecto:</th><td><select id="cboProyecto" style="width:200px;"></select></td></tr>'
@@ -1363,7 +1353,7 @@ function reduccionAmpliacion(cve_doc, modulo, num_doc)
 									+'<tr><th height="20"></th><td><input type="button" style="width:100px" class="botones" value="Guardar" id="cmdGuardarMovCon">&nbsp;<input type="button" style="width:100px" class="botones" value="Cancelar" id="cmdCancelarMovCon"></td></tr>'
 								+'</table>'
 								+'</div>';
-							html+= '<div id="divMovListado"><div style="padding-bottom:5px"><input id="cmdAgregarMovCon" style="width:160px;" type="button" value="Agregar Movimiento"></div><table class="table table-condensed table-striped" width="600"><tr><th height="20">PERIODO</th><th>PROYECTO</th><th>PARTIDA</th><th>MOVIMIENTO</th><th>IMPORTE</th><th>Opc.</th></tr>';
+							html+= '<div id="divMovListado"><div style="padding-bottom:5px"><input id="cmdAgregarMovCon" style="width:160px;" type="button" value="Agregar Movimiento"></div><table class="listas" width="450"><tr><th height="20">PERIODO</th><th>PROYECTO</th><th>PARTIDA</th><th>MOVIMIENTO</th><th>IMPORTE</th><th>Opc.</th></tr>';
 							jQuery.each(items,function(i) {
 								html += '<tr><td height="20" align="center">'+this.DESC_PERIODO+'</td><td align="center">'+this.ID_PROYECTO+ ' ['+this.N_PROGRAMA+']' +'</td><td align="center">'+this.CLV_PARTID+'</td><td>'+this.TIPO_MOV+'</td><td align="right">'+formatNumber(this.IMPORTE,'$')+'</td><td align="center"><img  src="../../imagenes/page_white_edit.png" width="16" height="16" style="cursor:pointer" OnClick="editarConceptoMovCon('+cve_doc+',\''+modulo+'\',\''+num_doc+'\','+this.ID_DETALLE_COMPROMISO+','+this.ID_PROYECTO+',\''+this.CLV_PARTID+'\','+this.PERIODO+',\''+this.TIPO_MOV+'\',\''+this.IMPORTE+'\')" > <img id="Remover" src="../../imagenes/cross.png" width="16" height="16" style="cursor:pointer" OnClick="eliminarConcepto('+cve_doc+',\''+modulo+'\',\''+num_doc+'\','+this.ID_DETALLE_COMPROMISO+')"></td></tr>'; 
 								if(proyectos.indexOf(this.ID_PROYECTO+ ' ['+this.N_PROGRAMA+']')==-1)
@@ -1371,13 +1361,10 @@ function reduccionAmpliacion(cve_doc, modulo, num_doc)
 								if(partidas.indexOf(this.CLV_PARTID)==-1)
 									partidas.push(this.CLV_PARTID);
 							});
-							$.each( proyectos, function( index, value ){
-								$('#cboProyecto').append('<option value='+value+'>'+value+'</option>');
-						});
-							$.each( partidas, function( index, value ){
-								$('#cboPartidas').append('<option value='+value+'>'+value+'</option>');
-						})
-						$('#cmdGuardarMovCon').click(function(event){
+							html+='</table></div>';
+							jWindow(html,'Reducción y Ampliación de Contrato: '+num_doc, '','Cerrar',1);
+							
+							$('#cmdGuardarMovCon').click(function(event){
 								if($('#txtimporteMovCon').val()=='')
 								{
 									alert('Es necesario escribir el importe');
@@ -1389,7 +1376,6 @@ function reduccionAmpliacion(cve_doc, modulo, num_doc)
 							$('#cmdCancelarMovCon').click(function(event){
 								$('#divMovListado').show();
 								$('#divMovCaptura').hide();
-								
 								reduccionAmpliacion(cve_doc, modulo, num_doc);
 							});
 							$('#cmdAgregarMovCon').click(function(event){
@@ -1400,28 +1386,20 @@ function reduccionAmpliacion(cve_doc, modulo, num_doc)
 								$('#cboPartidas').attr('disable', false);
 								$('#popup_message_window').css('height','300px');
 							});
-							html+='</table></div>';
-							swal({
-								  title: '<h3>Reducción y Ampliación de Contrato: '+'<br/>'+num_doc +'</h3>',
-								  html: html,
-								  width: 650,
-								  
-								})
-							/*
 							
-							
-							swal(html,'Reducción y Ampliación de Contrato: '+num_doc, '','Cerrar',1);
-							
-							
-							
-							;*/
+							$.each( proyectos, function( index, value ){
+									$('#cboProyecto').append('<option value='+value+'>'+value+'</option>');
+							});
+								$.each( partidas, function( index, value ){
+									$('#cboPartidas').append('<option value='+value+'>'+value+'</option>');
+							});
 						} 					   				
 					 ,
 					 errorHandler:function(errorString, exception) { 
-						swal(errorString, 'Error');          
+						jError(errorString, 'Error');          
 					 }
 		});
-	
+		
 	}
 }
 

@@ -12,7 +12,7 @@
 
 <link rel="stylesheet" href="../../include/css/bootstrap-3.3.7.css" type="text/css"/>
 <link rel="stylesheet" href="../../include/css/bootstrap-select.css" type="text/css"/>
-<link rel="stylesheet" href="../../include/css/bootstrap2.css" type="text/css"/>
+<link rel="stylesheet" href="../../include/css/bootstrap2.css?x=<%=System.currentTimeMillis()%>" type="text/css"/>
 <link rel="stylesheet" href="../../include/css/estilosam.css" type="text/css"/>
 <!-- 
 <link rel="stylesheet" href="../../include/js/componentes/jquery.alerts.css" type="text/css"/>
@@ -22,7 +22,7 @@
 <link rel="stylesheet" href="../../include/css/sweetalert2.css" type="text/css"/>
 
 <script type="text/javascript" src="../../include/js/jquery-1.8.3.min.js"></script>
-<script type="text/javascript" src="../../include/js/toolSam.js"></script>
+<script type="text/javascript" src="../../include/js/toolSam.js?x=<%=System.currentTimeMillis()%>"></script>
 
 
 <script type="text/javascript" src="../../include/js/sweetalert2.js"></script>
@@ -30,6 +30,7 @@
 <script type="text/javascript" src="../../include/js/utilsJquery/jquery-ui-1.7.1.custom.min.js"></script>
 <script type="text/javascript" src="../../dwr/interface/controladorListadoRequisicionesRemoto.js"> </script>
 <script type="text/javascript" src="../../dwr/engine.js"></script>
+<script type="text/javascript" src="../../dwr/util.js"></script>
 <script language="javascript">
 
 $(document).ready(function() {
@@ -157,29 +158,6 @@ function cambiarFecha2(cve_doc, modulo){
 		});
 	}
 }
-/*********************************************/
-/*
-function _cambiarFechaIngresoRequisicion(cve_doc){
-	var periodo = $('#cboperiodo').val();
-	var fecha = $('#txtfechaactual').attr('value');
-	alert("demo de cambio en requisicion..........");
-	jConfirm('¿Confirma que desea cambiar la fecha de ingreso del documento actual?','Confirmar', function(r){
-		if(r){
-			_closeDelay();
-			ShowDelay('Cambiando fecha de ingreso...','');
-			controladorListadoRequisicionesRemoto.cambiarFechaIngreso(cve_doc, fecha, {
-						callback:function(items) { 	
-								CloseDelay('Fecha de ingreso cambiados con éxito');
-						} 					   				
-					 ,
-					 errorHandler:function(errorString, exception) { 
-						jError(errorString, 'Error');          
-					 }
-		});	
-		}
-	});
-}
-*/
 
 </script>
 
@@ -208,9 +186,10 @@ a:active {
 </head>
 
 <body>
-<div align="center" style="height:20px"><strong>Opciones disponibles para el documento: 
-    <c:out value='${NUM_DOC}'/></strong><input type="hidden" id="HD_NUM_DOC" value="${NUM_DOC}" /></div>
-<table class="listas" border="0" align="center" cellpadding="1" cellspacing="2" width="333" >
+<div style="height:20px; text-align:center;"><strong>Opciones disponibles para el documento: 
+    <c:out value='${NUM_DOC}'/></strong><input type="hidden" id="HD_NUM_DOC" value="${NUM_DOC}" />
+</div>
+<table class="listas" border="0" align="center" cellpadding="1" cellspacing="2" width="380" >
 		<c:if test="${modulo!='con'}">
             <tr id='f1' onMouseOver="color_over('f1')" onMouseOut="color_out('f1')" onclick="adminFunction(<c:out value='${cve_doc}'/>, '<c:out value='${modulo}'/>', 'cambiarGrupoFirmas')">
             <td width="27" height="27" align="center" style="cursor:pointer"><c:out value='${item.NUM_DOC}'/>

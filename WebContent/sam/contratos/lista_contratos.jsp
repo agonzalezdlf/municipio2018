@@ -9,7 +9,7 @@
 <title>Listado de Pedidos</title>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
 <link rel="stylesheet" href="../../include/css/bootstrap-3.3.7.css" type="text/css"/>
-<link rel="stylesheet" href="../../include/css/bootstrap2.css" type="text/css"/>
+<link rel="stylesheet" href="../../include/css/bootstrap2.css?x=<%=System.currentTimeMillis()%>" type="text/css"/>
 <link rel="stylesheet" href="../../include/css/sweetalert2.css" type="text/css"/>
 <script type="text/javascript" src="../../include/js/sweetalert2.js"></script>
 
@@ -24,8 +24,9 @@
 <script type="text/javascript" src="../../dwr/interface/controladorListadoContratosRemoto.js"> </script>
 <script type="text/javascript" src="../../dwr/interface/ControladorContratosRemoto.js"> </script>
 <script type="text/javascript" src="../../dwr/engine.js"></script>
+<script type="text/javascript" src="../../dwr/util.js"></script>
 <script type="text/javascript" src="../../include/js/toolSam.js?x=<%=System.currentTimeMillis()%>"></script>
-<script type="text/javascript" src="../../dwr/engine.js"> </script>  
+
 <script type="text/javascript" src="../../include/js/componentes/jquery.alerts.js"></script>
 <script type="text/javascript" src="../../include/js/utilsJquery/jquery-ui-1.7.1.custom.min.js"></script>
 <script type="text/javascript" src="../../include/js/autocomplete/jquery.autocomplete.js"></script>
