@@ -33,10 +33,12 @@ private static Logger log = Logger.getLogger(GatewayReporteTransferencias.class.
 		int ejercicio = cal.get(Calendar.YEAR);
 		int mesActual = gatewayMeses.getMesActivo(ejercicio);
 		
-		String sql = " SELECT A.ADECUACION,CT.ID_DEPENDENCIA, A.CLV_PARTID, CP.CLV_CAPITU, A.ID_RECURSO,A.ID_PROYECTO,CT.DECRIPCION,AM.MOTIVO,SUM(A.AMPLIACION)AMPLIADO,SUM(A.REDUCCION)REDUCIDO FROM ADEC_MOV_A A " +
+		String sql = " SELECT dbo.getClaveProgramatica(A.ID_PROYECTO,A.CLV_PARTID) AS CLV_PROGRAMATICA, /*A.ADECUACION,*/ CT.ID_DEPENDENCIA, A.CLV_PARTID, CP.PARTIDA, CP.CLV_CAPITU, A.ID_RECURSO, VP.CLV_RECURSO, VP.RECURSO, A.ID_PROYECTO, VP.K_PROYECTO_T, CT.DECRIPCION, /*AM.MOTIVO,*/ SUM(A.AMPLIACION)AMPLIADO,SUM(A.REDUCCION)REDUCIDO " +
+					 " FROM ADEC_MOV_A A " +
 					 " 		INNER JOIN ADECUA_A AM ON AM.ADECUACION=A.ADECUACION AND A.ID_RECURSO=AM.ID_RECURSO " +
 					 " 		LEFT JOIN CEDULA_TEC CT ON CT.ID_PROYECTO=A.ID_PROYECTO " +
 					 "		LEFT JOIN CAT_PARTID CP ON CP.CLV_PARTID = A.CLV_PARTID	" +
+					 "		LEFT JOIN VPROYECTO VP ON VP.ID_PROYECTO = A.ID_PROYECTO " +
 					 " WHERE A.ADECUACION NOT LIKE 'CIE%' AND A.ADECUACION NOT LIKE 'MI%' AND A.ADECUACION NOT LIKE 'AL%' AND A.ADECUACION NOT LIKE 'RL%' AND REQ_AC=1 ";
 					
 		if(!modelo.get("mes").toString().equals("0"))
@@ -61,10 +63,8 @@ private static Logger log = Logger.getLogger(GatewayReporteTransferencias.class.
 			if(!modelo.get("idpartida").equals("") && !modelo.get("idpartida").equals("0"))
 				sql += " AND A.CLV_PARTID = :idpartida ";
 		
-		sql += "GROUP BY A.ID_RECURSO,CT.ID_DEPENDENCIA, A.CLV_PARTID, CP.CLV_CAPITU, A.ADECUACION,A.ID_PROYECTO,CT.DECRIPCION,AM.MOTIVO";
-		
-		
-		
+		sql += "GROUP BY A.ID_RECURSO,CT.ID_DEPENDENCIA, A.CLV_PARTID, CP.PARTIDA, VP.CLV_RECURSO, VP.RECURSO, CP.CLV_CAPITU, /*A.ADECUACION,*/ A.ID_PROYECTO, VP.K_PROYECTO_T, CT.DECRIPCION/*, AM.MOTIVO*/";
+			
 		return this.getNamedJdbcTemplate().queryForList(sql, modelo);
 		
 	}

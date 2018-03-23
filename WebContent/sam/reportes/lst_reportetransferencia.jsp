@@ -39,7 +39,7 @@
 <link rel="stylesheet" href="../../include/css/sweetalert2.css"
 	type="text/css">
 
-<script type="text/javascript" src="lst_reportepresupuestodis.js?x=<%=System.currentTimeMillis()%>"></script>
+<script type="text/javascript" src="lst_reportetransferencia.js?x=<%=System.currentTimeMillis()%>"></script>
 <script type = "text / javascript">
 
 </script>
@@ -160,21 +160,21 @@ a:active {
     
     <c:set var="cont" value="1" />
 	<c:set var="id_recurso" value="0" />
+	<c:set var="id_proyecto" value="0" />
     <c:forEach items="${listadotransferencias}"  var="item" varStatus="status"> 
     	<c:if test="${item.ID_RECURSO != id_recurso}">
-    	
 		    <table width="95%" class="table table-hover table-sm" align="center" id="listaMomentos" cellpadding="0" cellspacing="0">
 				<thead class="thead-inverse">
 						  <tr>
-						  <th colspan="7" style="text-align:center;">
-						  	<c:out value='${item.ID_RECURSO}'/>
+						  <th colspan="4" style="text-align:left;">
+						  	<c:out value='${item.CLV_RECURSO}'/> <c:out value='${item.RECURSO}'/>
 						  </th>
 						  </tr>
 						  <tr>
-						  	<th width="5%">CLAVE PRE.</th>
-						  	<th width="5%">PARTIDA</th>
-						    <th width="35%">PROYECTOS</th>
-						    <th width="40%">MOTIVO</th>
+						  	<th width="15%">CLAVE PRE.</th>
+						  	<!--<th width="5%">ADEC.</th>-->
+						    <th width="75%">PROYECTO / PARTIDA</th>
+						    <!--<th width="40%">MOTIVO</th>-->
 						    <th width="5%">AMPLIADO</th>
 						    <th width="5%">REDUCIDO</th>
 						  </tr>
@@ -193,16 +193,28 @@ a:active {
     	</c:if>
     	
     	<tr>
-    		
-    		<td align="center" style="border-right:none"><c:out value='${item.ADECUACION}'/></td>
-	    	<td align="center" style="border-right:none"><c:out value='${item.CLV_PARTID}'/></td>
-	 		<td align="left" style="border-right:none">(<c:out value='${item.ID_PROYECTO}'/>) <c:out value='${item.DECRIPCION}'/></td>	
-	 		<td align="left" style="border-right:none"><c:out value='${item.MOTIVO}'/></td>
-		    <td style="border-right:none;text-align:right"><fmt:formatNumber value="${item.AMPLIADO}"  pattern="#,###,###,##0.00" /></td>
-			<td style="border-right:none; text-align:right"><fmt:formatNumber value="${item.REDUCIDO}"  pattern="#,###,###,##0.00" /></td>
+			<c:if test="${item.ID_PROYECTO != id_proyecto}">
+				<!-- SE CONSTRUYE LA CABECERA DEL PROYECTO-->
+				<tr>
+					<td align="center" style="border-right:none"><strong><c:out value='${item.CLV_PROGRAMATICA}'/></strong></td>
+					<!--<td align="center" style="border-right:none"><strong><c:out value='${item.ADECUACION}'/></strong></td> -->
+					<td align="left" style="border-right:none"><strong>(<c:if test="${item.K_PROYECTO_T != null}"><c:out value='${item.K_PROYECTO_T}'/></c:if><c:if test="${item.K_PROYECTO_T == null}"><c:out value='${item.ID_PROYECTO}'/></c:if>) <c:out value='${item.DECRIPCION}'/></strong></td>	
+					<td style="border-right:none;text-align:right"><strong><div id="div_global_amp" data-idrecurso="<c:out value='${item.ID_RECURSO}'/>"></div></strong></td>
+					<td style="border-right:none; text-align:right"><strong><div id="div_global_red" data-idrecurso="<c:out value='${item.ID_RECURSO}'/>"></div></strong></td>
+				</tr>
+			</c:if>
+			  
+			<!-- SE CONSTRUYE EL DETALLE DE PARTIDAS-->
+			<td align="center" style="border-right:none"></td>
+			<!--<td align="center" style="border-right:none"></td> -->
+			<td align="left" style="border-right:none"><c:out value='${item.CLV_PARTID}'/> - <c:out value='${item.PARTIDA}'/></td>	
+	 		<!--<td align="left" style="border-right:none"><c:out value='${item.MOTIVO}'/></td>-->
+		    <td style="border-right:none;text-align:right"><input id="HTotal_amp" data-idrecurso="<c:out value='${item.ID_RECURSO}'/>" type="hidden" value="${item.AMPLIADO}"><fmt:formatNumber value="${item.AMPLIADO}"  pattern="#,###,###,##0.00" /></td>
+			<td style="border-right:none; text-align:right"><input id="HTotal_amp" data-idrecurso="<c:out value='${item.ID_RECURSO}'/>" type="hidden" value="${item.REDUCIDO}"><fmt:formatNumber value="${item.REDUCIDO}"  pattern="#,###,###,##0.00" /></td>
 	    </tr>
-						    
-    	<c:set var="id_recurso" value="${item.ID_RECURSO}" />
+		
+		<c:set var="id_proyecto" value="${item.ID_PROYECTO}" />
+		<c:set var="id_recurso" value="${item.ID_RECURSO}" />
     	<c:set var="cont" value="${cont + 1}" />
 
     </c:forEach>

@@ -7,7 +7,20 @@ $(document).ready(function(){
 		
 		GeneraExcel();
 	});
+
+	//Calcular();
 });
+	
+function Calcular()
+{
+	var total_amp = 0;
+	$('#div_global_amp').each(function(index, element){
+		alert('Recurso: ' + $(element).data('idrecurso'));
+    	$('input[id=HTotal_amp][data-idrecurso="' + $(element).data('idrecurso') + '"]').each(function(){
+			alert('Valor: ' + $(this).val());
+		});
+	});
+}
 
 function Buscar()
 {
