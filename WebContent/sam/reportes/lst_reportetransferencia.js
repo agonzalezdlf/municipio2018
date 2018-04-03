@@ -4,22 +4,37 @@ $(document).ready(function(){
 	});
 	
 	$('#cmdexportar').on('click', function(){
-		
-		GeneraExcel();
+		//Calcular();
+		//GeneraExcel();
 	});
 
-	//Calcular();
+	Calcular();
 });
-	
+
 function Calcular()
 {
 	var total_amp = 0;
-	$('#div_global_amp').each(function(index, element){
-		alert('Recurso: ' + $(element).data('idrecurso'));
-    	$('input[id=HTotal_amp][data-idrecurso="' + $(element).data('idrecurso') + '"]').each(function(){
-			alert('Valor: ' + $(this).val());
+	$('[id=div_global_amp]').each(function(index, element){
+		total_amp = 0;
+		//alert('Tipo: ' +  $(element).data('tipoadec') + ', Recurso: ' + $(element).data('idrecurso'));
+    	$('input[id=HTotal_amp][data-idrecurso="' + $(element).data('idrecurso') + '"][data-tipoadec="' + $(element).data('tipoadec') + '"]').each(function(){
+			total_amp += parseFloat($(this).val());
+			//alert('Valor: ' + $(this).val() + ', Suma: ' + total_amp);
 		});
+		$(this).html(total_amp.toFixed(2).replace(/(\d)(?=(\d{3})+\.)/g, '$1,'));
 	});
+
+	var total_red = 0;
+	$('[id=div_global_red]').each(function(index, element){
+		total_red = 0;
+		//alert('Recurso: ' + $(element).data('idrecurso'));
+    	$('input[id=HTotal_red][data-idrecurso="' + $(element).data('idrecurso') + '"][data-tipoadec="' + $(element).data('tipoadec') + '"]').each(function(){
+			total_red += parseFloat($(this).val());
+			//alert('Valor: ' + $(this).val() + ', Suma: ' + total_amp);
+		});
+		$(this).html(total_red.toFixed(2).replace(/(\d)(?=(\d{3})+\.)/g, '$1,'));
+	});
+
 }
 
 function Buscar()

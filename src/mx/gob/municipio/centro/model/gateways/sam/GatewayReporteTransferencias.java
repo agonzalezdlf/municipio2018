@@ -32,21 +32,26 @@ private static Logger log = Logger.getLogger(GatewayReporteTransferencias.class.
 		cal.setTime(fecha);
 		int ejercicio = cal.get(Calendar.YEAR);
 		int mesActual = gatewayMeses.getMesActivo(ejercicio);
-		
-		String sql = " SELECT dbo.getClaveProgramatica(A.ID_PROYECTO,A.CLV_PARTID) AS CLV_PROGRAMATICA, /*A.ADECUACION,*/ CT.ID_DEPENDENCIA, A.CLV_PARTID, CP.PARTIDA, CP.CLV_CAPITU, A.ID_RECURSO, VP.CLV_RECURSO, VP.RECURSO, A.ID_PROYECTO, VP.K_PROYECTO_T, CT.DECRIPCION, /*AM.MOTIVO,*/ SUM(A.AMPLIACION)AMPLIADO,SUM(A.REDUCCION)REDUCIDO " +
-					 " FROM ADEC_MOV_A A " +
-					 " 		INNER JOIN ADECUA_A AM ON AM.ADECUACION=A.ADECUACION AND A.ID_RECURSO=AM.ID_RECURSO " +
-					 " 		LEFT JOIN CEDULA_TEC CT ON CT.ID_PROYECTO=A.ID_PROYECTO " +
-					 "		LEFT JOIN CAT_PARTID CP ON CP.CLV_PARTID = A.CLV_PARTID	" +
-					 "		LEFT JOIN VPROYECTO VP ON VP.ID_PROYECTO = A.ID_PROYECTO " +
-					 " WHERE A.ADECUACION NOT LIKE 'CIE%' AND A.ADECUACION NOT LIKE 'MI%' AND A.ADECUACION NOT LIKE 'AL%' AND A.ADECUACION NOT LIKE 'RL%' AND REQ_AC=1 ";
-					
+		String sql = "SELECT * FROM VT_SAM_ADECUACIONES WHERE 0 = 0 ";
+
 		if(!modelo.get("mes").toString().equals("0"))
-			sql += " AND MONTH(AM.FE_ADECUAC) = :mes ";
+			sql += " AND MES = :mes ";
 		
 		if(!modelo.get("idtipogasto").toString().equals("0"))
-			sql += " AND A.ID_RECURSO = :idtipogasto ";
+			sql += " AND ID_RECURSO = :idtipogasto ";
 		
+		//AMPLIACIONES
+		if(modelo.get("tipoAdecuacion").toString().equals("1"))
+			sql += " AND TIPO = 'AMPLIACION LIQUIDA' ";
+		
+		//REDUUCCIONES
+		if(modelo.get("tipoAdecuacion").toString().equals("2"))
+			sql += " AND TIPO = 'REDUCCION LIQUIDA' ";
+		
+		//TRANSFERENCIA
+		if(modelo.get("tipoAdecuacion").toString().equals("3"))
+			sql += " AND TIPO = 'TRANSFERENCIA' ";
+		/*
 		if(modelo.get("idUnidad")!=null)
 			if(!modelo.get("idUnidad").toString().equals("0"))
 				sql += " AND CT.ID_DEPENDENCIA = :idUnidad ";
@@ -62,9 +67,9 @@ private static Logger log = Logger.getLogger(GatewayReporteTransferencias.class.
 		if(modelo.get("idpartida")!=null)
 			if(!modelo.get("idpartida").equals("") && !modelo.get("idpartida").equals("0"))
 				sql += " AND A.CLV_PARTID = :idpartida ";
-		
-		sql += "GROUP BY A.ID_RECURSO,CT.ID_DEPENDENCIA, A.CLV_PARTID, CP.PARTIDA, VP.CLV_RECURSO, VP.RECURSO, CP.CLV_CAPITU, /*A.ADECUACION,*/ A.ID_PROYECTO, VP.K_PROYECTO_T, CT.DECRIPCION/*, AM.MOTIVO*/";
-			
+
+		*/
+		sql += " ORDER BY RECURSO, TIPO ASC ";
 		return this.getNamedJdbcTemplate().queryForList(sql, modelo);
 		
 	}

@@ -40,9 +40,9 @@ public class ControladorReporteTransferencias extends ControladorBase {
 	public String requestGetControlador(Map modelo, HttpServletRequest request, HttpServletResponse response) {
 		String idUnidad=request.getParameter("cbUnidad")==null ?this.getSesion().getClaveUnidad() : request.getParameter("cbUnidad");
 		Integer tipogasto = request.getParameter("cbotipogasto") != null ? Integer.parseInt(request.getParameter("cbotipogasto")): 0;
-		Integer idproyecto = request.getParameter("txtproyecto")!= null ? Integer.parseInt(!request.getParameter("txtproyecto").toString().equals("") ? request.getParameter("txtproyecto").toString(): "0"): 0;
-		String idpartida = request.getParameter("txtpartida")!= null ? request.getParameter("txtpartida"): "";
-		Integer clv_capitulo = request.getParameter("cbocapitulo")!= null ? Integer.parseInt(!request.getParameter("cbocapitulo").toString().equals("") ? request.getParameter("cbocapitulo").toString(): "0"): 0;
+		Integer tipoAdecuacion = request.getParameter("cboadecuacion")!= null ? Integer.parseInt(request.getParameter("cboadecuacion")): 0;
+		//String idpartida = request.getParameter("txtpartida")!= null ? request.getParameter("txtpartida"): "";
+		//Integer clv_capitulo = request.getParameter("cbocapitulo")!= null ? Integer.parseInt(!request.getParameter("cbocapitulo").toString().equals("") ? request.getParameter("cbocapitulo").toString(): "0"): 0;
 		Integer NumMesAct = request.getParameter("cbomes")!= null ? Integer.parseInt(!request.getParameter("cbomes").toString().equals("") ? request.getParameter("cbomes").toString(): "0"): 0;
 		
 		Map MesActual = this.GetMesActual();
@@ -51,9 +51,10 @@ public class ControladorReporteTransferencias extends ControladorBase {
 		modelo.put("idUnidad",idUnidad);
 		modelo.put("nombreUnidad",this.getSesion().getUnidad());
 		modelo.put("idtipogasto",tipogasto);
-		modelo.put("idproyecto",(idproyecto == 0 ? "": idproyecto));
-		modelo.put("idpartida",idpartida);
-		modelo.put("idcapitulo", clv_capitulo);
+		modelo.put("tipoAdecuacion", tipoAdecuacion);
+		//modelo.put("idproyecto",(idproyecto == 0 ? "": idproyecto));
+		//modelo.put("idpartida",idpartida);
+		//modelo.put("idcapitulo", clv_capitulo);
 		
 		modelo.put("listadotransferencias",this.gatewayReporteTransferencias.getreparametros(modelo));
 		

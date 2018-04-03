@@ -68,12 +68,12 @@ a:active {
 <body>
 <form name="forma" id="forma" class="form-horizontal" action="lst_reportetransferencia.action" method="post" style="margin:10px;">
 	<div class="row col-md-offset-2">
-          <h1 class="h1-encabezado"> Reportes - Transferencias</h1>
+          <h1 class="h1-encabezado"> Reportes - Transferencias, Ampliaciones y Reducciones Liquidas</h1>
     </div> 
     <div class="well">
     
     	<div class="form-group"><!-- Unidad -->
-	      <label class="control-label col-sm-1" for="dependencia">Unidad:</label>
+	      <label class="control-label col-sm-2" for="dependencia">Unidad:</label>
 	      <div class="col-sm-6">
 	       		<sec:authorize ifNotGranted="ROLE_Sam_PRIVILEGIOS_VER_TODAS_LAS_UNIDADES">
 	      			<c:out value="${nombreUnidad}"/><input type="hidden" name="cbUnidad" id="cbUnidad" value='<c:out value="${idUnidad}"/>' />
@@ -89,12 +89,12 @@ a:active {
 	          		</select>
 	        	</sec:authorize>
        		</div>
-       		<div class="col-sm-5">
+       		<div class="col-sm-4">
        			<input type="button" name="cmdBuscar" id="cmdBuscar" value="Buscar" class="btn btn-primary" style="width:150px;">
        		</div>
 		</div>
 		<div class="form-group"><!-- Tipo de gasto -->
-	      <label class="control-label col-sm-1" for="cbotipogasto">Tipo de gasto:</label>
+	      <label class="control-label col-sm-2" for="cbotipogasto">Tipo de gasto:</label>
 	      <div class="col-sm-6">          
 	        <select name="cbotipogasto" id="cbotipogasto " data-live-search="true" class="selectpicker form-control input-sm m-b">
 	      		<option value="0"> [Todos los tipos de gastos]
@@ -106,38 +106,24 @@ a:active {
 	      			</c:forEach>
 	    	</select>
 	      </div>
-	      <div class="col-sm-5">
+	      <div class="col-sm-4">
        			<input type="button" name="cmdexportar" id="cmdexportar" value="Exporar a excel" data-toggle="tooltip" title="Exportar a excel" class="btn btn-sucess" style="width:150px;">
        	  </div>
 	    </div>
-	    <div class="form-group"><!-- Capitulo -->
-	      <label class="control-label col-sm-1" for="cbotipogasto">Capitulo:</label>
-	      <div class="col-sm-6">          
-	        <select name="cbocapitulo" id="cbocapitulo" class="selectpicker form-control input-sm m-b" data-live-search="true">
-				<option value="0"> [Todos los capitulos]</option>
-				  <c:forEach items="${capitulos}" var="item" varStatus="status">
-					  <option value='<c:out value='${item.CLV_CAPITU}'/>' 
-						  <c:if test='${item.CLV_CAPITU==idcapitulo}'> selected </c:if>>
-							<c:out value='${item.CLV_CAPITU}'/>
-							-
-						  <c:out value='${item.CAPITULO}'/>
-					  </option>
-					</c:forEach>
-		  </select>
-	      </div>
-	    </div>
+	    
 	 	<div class="form-group">
-	      <label class="control-label col-sm-1">Proyecto:</label>
-		 
-		  <div class="col-sm-2">
-	      	<input placeholder="Proyecto" name="txtproyecto" type="text" id="txtproyecto" class="form-control input-sm" value="<c:out value='${idproyecto}'/>">
+	      <label class="control-label col-sm-2">Tipo de adecuación:</label>
+		  <div class="col-sm-3">
+				<select name="cboadecuacion" id="cboadecuacion" class="selectpicker form-control input-sm m-b" data-live-search="true">
+						<option value="0" <c:if test="${0==tipoAdecuacion}"> selected </c:if>> [Todas las opciones]</option>
+						<option value="1" <c:if test="${1==tipoAdecuacion}"> selected </c:if>>AMPLIACIONES</option>
+						<option value="2" <c:if test="${2==tipoAdecuacion}"> selected </c:if>>REDUCCIONES</option>
+						<option value="3" <c:if test="${3==tipoAdecuacion}"> selected </c:if>>TRANSFERENCIAS</option>
+						
+				  </select>
 	      </div>
-	      <label for="txtpartida" class="sr-only control-label">Partida:</label>
-		  
-		  <div class="col-sm-2">
-	      	<input placeholder="Partida" name="txtpartida" type="text" id="txtpartida" class="form-control input-sm" onKeyPress="return keyNumbero(event);" value="<c:out value='${idpartida}'/>">
-		  </div>
-
+	      
+		  <label class="control-label col-sm-1">Mes:</label>
 		  <div class="col-sm-2">
 			<select name="cbomes" id="cbomes" class="selectpicker form-control input-sm m-b" data-live-search="true">
 				<option value="0"> [Seleccione el mes]</option>
@@ -161,64 +147,65 @@ a:active {
     <c:set var="cont" value="1" />
 	<c:set var="id_recurso" value="0" />
 	<c:set var="id_proyecto" value="0" />
+	<c:set var="tipo_adecuacion" value="" />
     <c:forEach items="${listadotransferencias}"  var="item" varStatus="status"> 
-    	<c:if test="${item.ID_RECURSO != id_recurso}">
-		    <table width="95%" class="table table-hover table-sm" align="center" id="listaMomentos" cellpadding="0" cellspacing="0">
-				<thead class="thead-inverse">
-						  <tr>
-						  <th colspan="4" style="text-align:left;">
-						  	<c:out value='${item.CLV_RECURSO}'/> <c:out value='${item.RECURSO}'/>
-						  </th>
-						  </tr>
-						  <tr>
-						  	<th width="15%">CLAVE PRE.</th>
-						  	<!--<th width="5%">ADEC.</th>-->
-						    <th width="75%">PROYECTO / PARTIDA</th>
-						    <!--<th width="40%">MOTIVO</th>-->
-						    <th width="5%">AMPLIADO</th>
-						    <th width="5%">REDUCIDO</th>
-						  </tr>
-				</thead>
 
-    		<c:choose>
-			  <c:when test="${cont == 1 && item.ID_RECURSO 	!= id_recurso}">
-			    <tbody>
-			   
-			  </c:when>
-			  <c:otherwise>
-			  
-			    </tbody>
-			  </c:otherwise>
-			</c:choose>
-    	</c:if>
-    	
-    	<tr>
-			<c:if test="${item.ID_PROYECTO != id_proyecto}">
-				<!-- SE CONSTRUYE LA CABECERA DEL PROYECTO-->
-				<tr>
-					<td align="center" style="border-right:none"><strong><c:out value='${item.CLV_PROGRAMATICA}'/></strong></td>
-					<!--<td align="center" style="border-right:none"><strong><c:out value='${item.ADECUACION}'/></strong></td> -->
-					<td align="left" style="border-right:none"><strong>(<c:if test="${item.K_PROYECTO_T != null}"><c:out value='${item.K_PROYECTO_T}'/></c:if><c:if test="${item.K_PROYECTO_T == null}"><c:out value='${item.ID_PROYECTO}'/></c:if>) <c:out value='${item.DECRIPCION}'/></strong></td>	
-					<td style="border-right:none;text-align:right"><strong><div id="div_global_amp" data-idrecurso="<c:out value='${item.ID_RECURSO}'/>"></div></strong></td>
-					<td style="border-right:none; text-align:right"><strong><div id="div_global_red" data-idrecurso="<c:out value='${item.ID_RECURSO}'/>"></div></strong></td>
-				</tr>
+			<c:if test="${item.ID_RECURSO != id_recurso}">				
+				<table width="95%" class="table table-hover table-sm" align="center" id="listaMomentos" cellpadding="0" cellspacing="0">
+					<thead class="thead-inverse">
+							<tr>
+								<th colspan="666" style="text-align:left;">
+										<c:out value='${item.CLV_RECURSO}'/> <c:out value='${item.RECURSO}'/>
+								</th>
+							</tr>
+							<tr>
+								<th width="5%" style="background-color:#777676"></th>
+								<th width="15%" style="background-color:#777676">TIPO</th>
+								<th width="5%" style="background-color:#777676">ADECUACION</th>
+								<th width="70%" style="background-color:#777676">PROYECTO / PARTIDA</th>
+								<!--<th width="40%">MOTIVO</th>-->
+								<th width="5%" style="background-color:#777676">AMPLIADO</th>
+								<th width="5%" style="background-color:#777676">REDUCIDO</th>
+							</tr>
+					</thead>
+					<c:set var="tipo_adecuacion" value="" />
 			</c:if>
-			  
-			<!-- SE CONSTRUYE EL DETALLE DE PARTIDAS-->
-			<td align="center" style="border-right:none"></td>
-			<!--<td align="center" style="border-right:none"></td> -->
-			<td align="left" style="border-right:none"><c:out value='${item.CLV_PARTID}'/> - <c:out value='${item.PARTIDA}'/></td>	
-	 		<!--<td align="left" style="border-right:none"><c:out value='${item.MOTIVO}'/></td>-->
-		    <td style="border-right:none;text-align:right"><input id="HTotal_amp" data-idrecurso="<c:out value='${item.ID_RECURSO}'/>" type="hidden" value="${item.AMPLIADO}"><fmt:formatNumber value="${item.AMPLIADO}"  pattern="#,###,###,##0.00" /></td>
-			<td style="border-right:none; text-align:right"><input id="HTotal_amp" data-idrecurso="<c:out value='${item.ID_RECURSO}'/>" type="hidden" value="${item.REDUCIDO}"><fmt:formatNumber value="${item.REDUCIDO}"  pattern="#,###,###,##0.00" /></td>
-	    </tr>
-		
-		<c:set var="id_proyecto" value="${item.ID_PROYECTO}" />
-		<c:set var="id_recurso" value="${item.ID_RECURSO}" />
-    	<c:set var="cont" value="${cont + 1}" />
+
+				<tr>
+					<c:if test="${item.TIPO != tipo_adecuacion}">
+						<!-- SE CONSTRUYE LA CABECERA DEL TIPO DE ADECUACION-->
+						<tr>
+							<td align="center" colspan="4" style="border-right:none; background-color: #cccccc"><strong><c:out value='${item.TIPO}'/></strong></td>
+							<td style="border-right:none;text-align:right;background-color: #cccccc"><strong><div id="div_global_amp" data-tipoadec="<c:out value='${item.TIPO}'/>" data-idrecurso="<c:out value='${item.ID_RECURSO}'/>"></div></strong></td>
+							<td style="border-right:none; text-align:right;background-color: #cccccc"><strong><div id="div_global_red" data-tipoadec="<c:out value='${item.TIPO}'/>" data-idrecurso="<c:out value='${item.ID_RECURSO}'/>"></div></strong></td>
+						</tr>
+					</c:if>
+
+					<c:if test="${item.ID_PROYECTO != id_proyecto}">
+						<!-- SE CONSTRUYE LA CABECERA DEL PROYECTO-->
+						<tr>
+							<td align="center" style="border-right:none"></td>
+							<td align="left" colspan="5" style="border-right:none"><strong>(<c:if test="${item.K_PROYECTO_T != null}"><c:out value='${item.K_PROYECTO_T}'/></c:if><c:if test="${item.K_PROYECTO_T == null}"><c:out value='${item.ID_PROYECTO}'/></c:if>) <c:out value='${item.PROYECTO}'/></strong></td>	
+						</tr>
+					</c:if>
+						
+					<!-- SE CONSTRUYE EL DETALLE-->
+					<td align="center" style="border-right:none"></td>
+					<td align="center" style="border-right:none"><c:out value='${item.DEPENDENCIA}'/></td>
+					<td align="center" style="border-right:none"><c:out value='${item.ADECUACION}'/></td>
+					<td align="left" style="border-right:none"><c:out value='${item.CLV_PARTID}'/> - <c:out value='${item.PARTIDA}'/></td>	
+						<!--<td align="left" style="border-right:none"><c:out value='${item.MOTIVO}'/></td>-->
+					<td style="border-right:none;text-align:right"><input id="HTotal_amp" data-tipoadec="<c:out value='${item.TIPO}'/>" data-idrecurso="<c:out value='${item.ID_RECURSO}'/>" type="hidden" value="${item.AMPLIACION}"><fmt:formatNumber value="${item.AMPLIACION}"  pattern="#,###,###,##0.00" /></td>
+					<td style="border-right:none; text-align:right"><input id="HTotal_red" data-tipoadec="<c:out value='${item.TIPO}'/>" data-idrecurso="<c:out value='${item.ID_RECURSO}'/>" type="hidden" value="${item.REDUCCION}"><fmt:formatNumber value="${item.REDUCCION}"  pattern="#,###,###,##0.00" /></td>
+				</tr>
+					
+				<c:set var="id_proyecto" value="${item.ID_PROYECTO}" />
+				<c:set var="id_recurso" value="${item.ID_RECURSO}" />
+				<c:set var="tipo_adecuacion" value="${item.TIPO}" />
+				<c:set var="cont" value="${cont + 1}" />
 
     </c:forEach>
-    	
+	</table>    	
      
 	
 </form>
