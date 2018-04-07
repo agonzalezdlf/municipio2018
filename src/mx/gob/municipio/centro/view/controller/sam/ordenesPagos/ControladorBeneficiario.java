@@ -71,9 +71,16 @@ public class ControladorBeneficiario extends ControladorBase  {
 	                }	
 	}
 	
+	
+	public Map<String, String> getBeneficiario (Long idBeneficiario){
+		return gatewayBeneficiario.getBeneficiario(idBeneficiario);
+		
+	}
+	
+	/*
 	public  Map getBeneficiario(Long idBeneficiario){
 		return gatewayBeneficiario.getBeneficiario(idBeneficiario);
-	}
+	}*/
 	
 	public  List getBeneficiariosHijos(String idBeneficiario){
 		return gatewayBeneficiario.getBeneficiariosTodosHijos(idBeneficiario);
@@ -95,7 +102,7 @@ public class ControladorBeneficiario extends ControladorBase  {
 
 	@ModelAttribute("beneficiarios")
 	public List<Map>getBeneficiarios(){
-		return gatewayBeneficiario.getListaBeneficiarios();
+		return  gatewayBeneficiario.getListaBeneficiarios();
 	}
 	
 }

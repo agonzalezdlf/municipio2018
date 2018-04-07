@@ -547,9 +547,8 @@ public class GatewayPedidos extends BaseGateway {
 				//Buscar si existe el Super Privilegio para Cancelar Requisiciones
 				boolean privilegio = getPrivilegioEn(cve_pers, 137);
 		
-				/*Valida aqui si el documento esta en el periodo actual para permitir aperturar*/
+				/*Valida aqui si el documento esta en el periodo actual para permitir cancelar*/
 		      	Map pedido = getPedido(cve_ped);
-		      	
 		      	Date fechaCierre = new Date();
 		  		fechaCierre = (Date) pedido.get("FECHA_CIERRE2");
 		  		Calendar c1 = Calendar.getInstance();
@@ -1147,4 +1146,5 @@ public class GatewayPedidos extends BaseGateway {
           throw new RuntimeException("La operacion ha fallado, no se han podido eliminar los conceptos "+e.getMessage());
       }  
 	}
+	
 }

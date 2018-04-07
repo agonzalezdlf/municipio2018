@@ -79,12 +79,23 @@ public class GatewayMovimientosRequisicion extends BaseGateway {
 		}
 		
 		/*Metodo para obtener todos los conceptos de una requisicion*/
+		@SuppressWarnings({ "unchecked", "rawtypes" })
 		public List <Map> getConceptos(Long cve_req){
 			return this.getJdbcTemplate().queryForList("SELECT SAM_REQ_MOVTOS.ID_REQ_MOVTO, SAM_REQ_MOVTOS.CVE_REQ, REQ_CONS, CANTIDAD_TEMP, CANTIDAD, NOTAS, SAM_REQ_MOVTOS.STATUS, SAM_CAT_ARTICULO.DESCRIPCION, SAM_CAT_ARTICULO.DESCRIPCION AS ARTICULO, CAT_UNIMED.UNIDMEDIDA AS UNIDAD, PRECIO_EST, (CANTIDAD*PRECIO_EST) AS IMPORTE, isnull(SAM_REQ_ANEXO.TEXTO, '') AS TEXTO  FROM SAM_REQ_MOVTOS " + 
 															"LEFT JOIN SAM_CAT_PROD ON (SAM_CAT_PROD.ID_ARTICULO = SAM_REQ_MOVTOS.ID_ARTICULO)"+
 															"LEFT JOIN SAM_REQ_ANEXO ON (SAM_REQ_ANEXO.ID_REQ_MOVTO = SAM_REQ_MOVTOS.ID_REQ_MOVTO) "+
 															"LEFT JOIN SAM_CAT_ARTICULO ON (SAM_CAT_ARTICULO.ID_CAT_ARTICULO = SAM_CAT_PROD.ID_CAT_ARTICULO)"+ 
-															"INNER JOIN CAT_UNIMED ON (CAT_UNIMED.CLV_UNIMED = SAM_REQ_MOVTOS.CLV_UNIMED) where SAM_REQ_MOVTOS.CVE_REQ=? ORDER BY REQ_CONS ASC", new Object [] {cve_req});
+															"INNER JOIN CAT_UNIMED ON (CAT_UNIMED.CLV_UNIMED = SAM_REQ_MOVTOS.CLV_UNIMED) where STATUS=1 AND SAM_REQ_MOVTOS.CVE_REQ=? ORDER BY REQ_CONS ASC", new Object [] {cve_req});
+		}
+		
+		/*Metodo para obtener todos los conceptos de una requisicion para sincronizar al eliminar los lotes del pedido*/
+		@SuppressWarnings({ "unchecked", "rawtypes" })
+		public List <Map> getConceptos_sincro(Long cve_req){
+			return this.getJdbcTemplate().queryForList("SELECT SAM_REQ_MOVTOS.ID_REQ_MOVTO, SAM_REQ_MOVTOS.CVE_REQ, REQ_CONS, CANTIDAD_TEMP, CANTIDAD, NOTAS, SAM_REQ_MOVTOS.STATUS, SAM_CAT_ARTICULO.DESCRIPCION, SAM_CAT_ARTICULO.DESCRIPCION AS ARTICULO, CAT_UNIMED.UNIDMEDIDA AS UNIDAD, PRECIO_EST, (CANTIDAD*PRECIO_EST) AS IMPORTE, isnull(SAM_REQ_ANEXO.TEXTO, '') AS TEXTO  FROM SAM_REQ_MOVTOS " + 
+															"LEFT JOIN SAM_CAT_PROD ON (SAM_CAT_PROD.ID_ARTICULO = SAM_REQ_MOVTOS.ID_ARTICULO)"+
+															"LEFT JOIN SAM_REQ_ANEXO ON (SAM_REQ_ANEXO.ID_REQ_MOVTO = SAM_REQ_MOVTOS.ID_REQ_MOVTO) "+
+															"LEFT JOIN SAM_CAT_ARTICULO ON (SAM_CAT_ARTICULO.ID_CAT_ARTICULO = SAM_CAT_PROD.ID_CAT_ARTICULO)"+ 
+															"INNER JOIN CAT_UNIMED ON (CAT_UNIMED.CLV_UNIMED = SAM_REQ_MOVTOS.CLV_UNIMED) where STATUS=1 AND SAM_REQ_MOVTOS.CVE_REQ=? ORDER BY REQ_CONS ASC", new Object [] {cve_req});
 		}
 		
 		/*Metodo para obtener todos los conceptos de una requisicion normal y validar si existen conceptos que pueden mostrarse en el pedido*/

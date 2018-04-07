@@ -5,7 +5,7 @@ $(document).ready(function() {
   var formatFecha="dd/mm/yy";	
   $("#fechaInicial").datepicker({showOn: 'button', buttonImage:imagen , buttonImageOnly: true,dateFormat: formatFecha});  
   $("#fechaFinal").datepicker({showOn: 'button', buttonImage: imagen, buttonImageOnly: true,dateFormat: formatFecha});  
-  getBeneficiarios('txtprestadorservicio','CVE_BENEFI','');  
+  //getBeneficiarios('txtprestadorservicio','CVE_BENEFI','');  
    $('#cmdpdf').click(function (event){mostrarOpcionPDF();});  
    
    $('#ui-datepicker-div').hide(); 

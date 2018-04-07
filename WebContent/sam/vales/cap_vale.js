@@ -132,6 +132,24 @@ $(document).ready(function(){
   if ($('#txtproyecto').attr('value')!="" && $('#txtpartida').attr('value')!="" )
      __getPresupuesto($('#ID_PROYECTO').attr('value'),$('#txtproyecto').attr('value'),$('#txtpartida').attr('value'), $('#cbomes').attr('value'),  'txtpresupuesto','txtdisponible','');
 
+  $('#w-input-search').autocomplete({
+	 
+	  serviceUrl: '${pageContext.request.contextPath}/getBeneficiarios',
+	  paramName: "ncomercia",
+	  delimiter: ",",
+	  transformResult: function(response){
+		  
+		  return{
+			  
+			  	  suggestions: $.map($.parseJSON(response), function(item){
+				  alert('Demo: ' +item);
+				  return { value:	item.ncomercia, data:	item.id};
+			  })
+		  };
+	  }
+	  
+  });
+  
 });
 
 

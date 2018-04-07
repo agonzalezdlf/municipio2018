@@ -3,113 +3,217 @@ var subtotal =0;
 var total =0;
 var indices = [];
 $(document).ready(function() {
-	$('#checkall').click(function (event){setCheckAll('chkconcepto');});
-	$('#cmdguardarPedido').click(function (event){guardarPedido();});
-	$('#cmdguardarPedido2').click(function (event){guardarPedido();});
-	$('#cmdborrarConceptos').click(function (event){borrarLotes()});
-	$('#cmdcerrar').click(function(event){cerrarPedido();});
-	$('#cmdenviarPedido').click(function(event){enviarLotesPedido();});
-	$('#cmdsincronizar').click(function(event){_muestraImportarLotes();});
+	
+	$('.selectpicker').selectpicker();
+	
+	$('#txtfecha').datetimepicker({
+		format: 'DD/MM/YYYY',
+		defaultDate: new Date()
+	});
+	
+	$('#checkall').on('click', function(){setCheckAll('chkconcepto');});
+	$('#checkall').prop('checked',true);
+	setCheckAll('chkconcepto');
+	
+	$("#checkall").on('click', function() {
+		$('input:checkbox').not(this).prop('checked', this.checked);
+	 });
 	
 	
-	$("#txtfecha").datepicker({showOn: 'button', buttonImage:"../../imagenes/cal.gif" , buttonImageOnly: true,dateFormat: "dd/mm/yy"});
+	$('#cmdguardarPedido').on('click', function(){guardarPedido();});
+	$('#cmdguardarPedido2').on('click', function(){guardarPedido();});
+	$('#cmdborrarConceptos').on('click', function(){borrarLotes()});
+	$('#cmdcerrar').on('click', function(){cerrarPedido();});
+	$('#cmdenviarPedido').on('click', function(){enviarLotesPedido();});
+	$('#cmdsincronizar').on('click', function(){_muestraImportarLotes();});
+	
+	
 	 
-	 getBeneficiarios('txtprestadorservicio','CVE_BENEFI',$('#tipoBeneficiario').attr('value'));
-	 $('#checkall').attr('checked', true);
-	 setCheckAll('chkconcepto');
+	 //$("input:checkbox[name='one']")
+	 if($('#CVE_PED').val()=='0'||$('#CVE_PED').val()=='') $('#cboiva').val(1);
+	 $('#txtcontrato').focus();
+	 
+	 
+	 /*
+		
 	 //Configura los tabuladores
 	 $('#tabuladores').tabs();
 	 $('#tabuladores').tabs('enable',0);
-	 if($('#CVE_PED').attr('value')=='0'||$('#CVE_PED').attr('value')=='') $('#cboiva').val(1);
-	 $('#txtcontrato').focus();
 	 
-	 $('#ui-datepicker-div').hide();
+	  $('#ui-datepicker-div').hide();
+	 */
+	 
+	$('[data-unitprice=precio]').on('blur', function(){
+		getTotales();
+	});
+	$('[data-unitprice=precio]').on('focus', function(){
+		getTotales();
+	});
 	
-			$('#w-input-search').autocomplete({
-			serviceUrl: '${pageContext.request.contextPatch}/getListaBeneficiarios',
-			paramName: "NCOMERCIA",
-			delimiter: ",",
-			transformResult: function (response ){
+	$('[data-unitprice=precio]').on('keypress', function(event){
+		if(event.keyCode == 13)
+		{
+			getEnter($(this).data('idmovto'), event);
+		}
+		event.keyCode =0;
+	});
+	
+	$('[data-chkconcepto="concepto"]').on('click', function(){
+		habilitarConcepto($(this).is(':checked'), $(this).data('idmovto'));
+	});
+	
+	$('#txtieps').on('blur', function(){
+		getTotales();
+	});
+	
+	$('#txtdescuento').on('blur', function(){
+		getTotales();
+	});
+	
+	$('#w-input-search').autocomplete({
+		serviceUrl: '${pageContext.request.contextPatch}/getListaBeneficiarios',
+		paramName: "NCOMERCIA",
+		delimiter: ",",
+		transformResult: function (response ){
 				
-				return {
-					suggestions: $.map($.parseJSON(response), function(item){
-						return {value:item.NCOMERCIA, data:item.CLV_BENEFI};
-					})
-				};
+			return {
+				suggestions: $.map($.parseJSON(response), function(item){
+					return {value:item.NCOMERCIA, data:item.CLV_BENEFI};
+				})
+			};
 				
 		}
 	});
 	
 });
+
 //**********************************************************************************************************************
 //*********************  PROCESO PARA GUARDAR EL PEDIDO  ***************************************************************
 /*funcion para guardar el pedido*/
 function guardarPedido(){
 	var error="";
- 	var titulo ='Advertencia - Informacion no válida';
-	if($('#CVE_REQ').attr('value')==''||$('#CVE_REQ').attr('value')=='0') error=error+'No hay ninguna requisicion para el pedido actual</br>';
-	if($('#txtfecha').attr('value')=='') error=error+'Es necesario establecer la fecha del pedido</br>','Advertencia</br>';
-	if($('#txtfechaentrega').attr('value')=='') error=error+'Es necesario establecer la fecha de entrega</br>';
-	if($('#CVE_BENEFI').attr('value')==0||$('#CVE_BENEFI').attr('value')=="") error=error+'Es necesario selecionar el beneficiario</br>';
-	if($('#txtcondicionespago').attr('value')=='') error=error+'Es necesario escribir las condiciones de pago</br>';
-	var checks = [];
+	var checks = []; 
+	
+ 	if ($('#CVE_REQ').val()=='') { 
+ 		   swal({title: 'Error!',text: 'No hay ninguna requisicion para el pedido actual',type: 'error',confirmButtonText: 'Cerrar'});return false;
+ 	}
+		
+ 	if ($('#txtfecha').val()==''){ 
+		   swal({title: 'Error!',text: 'Es necesario establecer la fecha del pedido',type: 'error',confirmButtonText: 'Cerrar'});return false;
+		   }
+	
+
+ 	if ($('#txtfechaentrega').val()=='') { 
+		   swal({title: 'Error!',text: 'Es necesario establecer el tiempo de entrega',type: 'error',confirmButtonText: 'Cerrar'});return false;
+	}
+	
+ 	if ($('#xBeneficiario').selectpicker('val')=='') { 
+ 		 swal({title: 'Error!',text: 'Es necesario selecionar el beneficiario',type: 'error',confirmButtonText: 'Cerrar'});return false;
+	}
+	
+ 	if ($('#txtcondicionespago').val()=='') { 
+ 		swal({title: 'Error!',text: 'Es necesario escribir las condiciones de pago',type: 'error',confirmButtonText: 'Cerrar'});return false;
+	}
+ 	
+ 	var checks = [];
 	$('input[id=chkconcepto]:checked').each(function() 
 		{ 
 			checks.push($(this).val()); 
-			if($('#txtpreciounit'+$(this).val()).attr('value')==''||$('#txtpreciounit'+$(this).val()).attr('value')=='0')
-			{error=error+"El precio de algún lote en el pedido no es válido, verifique y vuelva a intentar esta operación</br>";}
+			if($('#txtpreciounit'+$(this).val()).val()==''||$('#txtpreciounit'+$(this).val()).val()=='0')
+			{error="El precio de algún lote en el pedido no es válido, verifique y vuelva a intentar esta operación";}
 			
 	});	
-	
-	if(checks.length==0 ) error=error+'Es necesario seleccionar un lote de la requisición</br>';	
-	if (error == ""){
-		jConfirm('¿Confirma que desea guardar la informacion del pedido?','Confirmar', function(r){
-			if(r){
-				_guardarPedido();
-			}
-		});
-	} else
-	 jAlert(error,titulo);	
-	return false;
+ 	
+ 	
+ 	
+ 	
+	if(checks.length==0 ){
+		swal({title: 'Error!',text: 'Es necesario seleccionar un lote de la requisición',type: 'error',confirmButtonText: 'Cerrar'});return false;
+  	}
+	 if (error!=""){
+		 swal({title: 'Error!',text: error,type: 'error',confirmButtonText: 'Cerrar'});return false;
+	 }
+	swal({
+		  title: 'Es seguro?',
+		  text: '¿Confirma que desea guardar la informacion del pedido?',
+		  type: 'warning',
+		  showCancelButton: true,
+		  confirmButtonText: 'Sí, gaurdar!',
+		  cancelButtonText: 'No, abortar!'
+		}).then((result) => {
+		  if (result.value  ) {
+			 
+			   _guardarPedido();
+		  // For more information about handling dismissals please visit
+		  // https://sweetalert2.github.io/#handling-dismissals
+		  } else if (result.dismiss === swal.DismissReason.cancel) {
+		    swal(
+		      'Cancelado',
+		      'El pedido no se guardo',
+		      'error'
+		    )
+		  }
+		})
 }
 
 
 /*funcion que permite guardar fisicamente el pedido*/
 function _guardarPedido(){
+	
 	var checks = [];
 	var notas = [];
 	var precio_unit = [];
 	var cantidad = [];
-	var num_ped = $('#cve_pedido_text').attr('value');
+	var num_ped = $('#cve_pedido_text').val();
+	
+	
+	
+	
+	
 	$('input[id=chkconcepto]:checked').each(function() { 
+					
 		checks.push($(this).val());
-		notas.push($('#txtnota'+$(this).val()).attr('value'));
-		precio_unit.push($('#txtpreciounit'+$(this).val()).attr('value'));
-		cantidad.push($('#txtcantidad'+$(this).val()).attr('value'));
+		notas.push($('#txtnota'+$(this).val()).val());
+		precio_unit.push($('#txtpreciounit'+$(this).val()).val());
+		cantidad.push($('#txtcantidad'+$(this).val()).val());
 	});
-	swal({type: 'success',title: 'Guardando pedido',showConfirmButton: false,width:400});
-	//swal('Guardando pedido','');
-	controladorPedidos.guardarPedido($('#CVE_PED').attr('value'), $('#CVE_REQ').attr('value'), $('#txtfecha').attr('value'), $('#txtcontrato').attr('value'), $('#txtconcurso').attr('value'), $('#txtfechaentrega').attr('value'), $('#CVE_BENEFI').attr('value'), $('#txtcondicionespago').attr('value'), $('#txtlugarentrega').attr('value'),$('#txtdescripcion').attr('value'), checks, cantidad, notas, precio_unit, $('#txtiva').attr('value'), $('#cboiva').val(), $('#txtdescuento').attr('value'),{
+		
+	
+	controladorPedidos.guardarPedido($('#CVE_PED').val(), $('#CVE_REQ').val(), $('#txtfecha').val(), $('#txtcontrato').val(), $('#txtfechaentrega').val(), $('#xBeneficiario').selectpicker('val'), $('#txtcondicionespago').val(), $('#txtlugarentrega').val(),$('#txtdescripcion').val(), checks, cantidad, notas, precio_unit, $('#txtiva').val(), $('#cboiva').val(), $('#txtdescuento').val(),{
 			  callback:function(items){
 				  		if(items.EVENT==true){
-							$('#CVE_PED').attr('value',items.CVE_PED);
+							$('#CVE_PED').val(items.CVE_PED);
 						  	$('#cve_pedido_text').text(items.NUM_PED);
 							var cve = items.CVE_PED;
-							setTimeout(function(){
-							    swal({text:"Pedido guardado con éxito!",timer:2000,type: 'success'});
-							    document.location='capturarPedidos.action?cve_ped='+$('#CVE_PED').attr('value');
-							  },3000);
+							swal({
+								  title: 'Guardando',
+								  //text: 'Pedido guardado con éxito!',
+								  type: 'success',
+								  timer: 4000,
+								  onOpen: () => {
+								    swal.showLoading()
+								  }
+								}).then((result) => {
+								  if (
+								   
+								    result.dismiss === swal.DismissReason.timer
+								  ) {
+									document.location='capturarPedidos.action?cve_ped='+$('#CVE_PED').val();  
+								   
+								  }
+								})
+							
 						}
 		} 					   				
 		,
 		errorHandler:function(errorString, exception) { 
-			jError('Fallo la operacion:<br>Error::'+errorString+'-message::'+exception.message+'-JavaClass::'+exception.javaClassName+'.<br><strong>Consulte a su administrador</strong>', 'Error al guardar Pedido');   
+			swal('','Fallo la operacion:<br>Error::'+errorString+'-message::'+exception.message+'-JavaClass::'+exception.javaClassName+'.<br><strong>Consulte a su administrador</strong>', 'error');   
 			return false;
 		}
 	});	
 }
 //**********************************************************************************************************************
-//*********************  PROCESO PARA GUARDAR EL PEDIDO  ***************************************************************
+//********************* TERMINA PROCESO PARA GUARDAR EL PEDIDO  ***************************************************************
 function getEnter(n, e){
 	var j=0;
 	if(e.keyCode == 13)	{
@@ -132,39 +236,66 @@ function cerrarPedido(){
 	var contador = 0;
 	$('input[id=chkconcepto]:checked').each(function() 
 		{ contador++;});	
-	if(contador==0) {jAlert('Para poder cerrar el pedido es necesario que exista por lo menos un lote', 'Advertencia'); return false;}
-	if(isNaN($('#txtiva').attr('value'))) {jAlert('La cantidad especificada en el IVA no es válida', 'Advertencia'); return false;} 
+	if(contador==0) {swal('','Para poder cerrar el pedido es necesario que exista por lo menos un lote', 'warning'); return false;}
+	if(isNaN($('#txtiva').val())) {swal('','La cantidad especificada en el IVA no es válida', 'warning'); return false;} 
+	
+	swal({
+		  title: 'Es seguro?',
+		  text: '¿Confirma que desea cerrar el pedido?',
+		  type: 'warning',
+		  showCancelButton: true,
+		  confirmButtonText: 'Sí, gaurdar!',
+		  cancelButtonText: 'No, abortar!'
+		}).then((result) => {
+		  if (result.value  ) {
+			  _cerrarPedido($('#CVE_PED').val(), $('#txtiva').val());
+		  // For more information about handling dismissals please visit
+		  // https://sweetalert2.github.io/#handling-dismissals
+		  } else if (result.dismiss === swal.DismissReason.cancel) {
+		    swal(
+		      'Cancelado',
+		      'El pedido no se guardo',
+		      'error'
+		    )
+		  }
+		})
+		/*
 	jConfirm('¿Confirma que desea cerrar el pedido?', 'Confirmar', function (r){
 				if(r){
-					_cerrarPedido($('#CVE_PED').attr('value'), $('#txtiva').attr('value'));
+					_cerrarPedido($('#CVE_PED').val(), $('#txtiva').val());
 				}
-			});
+			});*/
 }
 
 /*Metodo interno para el cierra del pedido*/
 function _cerrarPedido(cve_ped, iva){
 	//ShowDelay('Cerrando pedido','');
-	swal({title:'Cerrando pedido',text:'demo',width:400,timer:1000});
-	controladorPedidos.cerrarPedido(cve_ped, $('#TIPO_REQ').attr('value'), iva,{
+	//swal({title:'Cerrando pedido',text:'demo',width:400,timer:1000});
+	alert('Entro aqui _cerrarPedido');
+	controladorPedidos.cerrarPedido(cve_ped, $('#TIPO_REQ').val(), iva,{
 						callback:function(items){
-							
-							setTimeout(function(){
-							    swal("Pedido cerrado con éxito!");
-							    $('#cmdcerrar').attr('disabled', true);
-								$('#cmdguardarPedido').attr('disabled', true);
-								getReportePedido($('#CVE_PED').attr('value'));
-								document.location='lst_pedidos.action';
-							  }, 2000);
-								/*CloseDelay('Pedido cerrado con éxito', 2000, function(){
-										$('#cmdcerrar').attr('disabled', true);
-										$('#cmdguardarPedido').attr('disabled', true);
-										getReportePedido($('#CVE_PED').attr('value'));
-										document.location='lst_pedidos.action';
-									});*/
-							
+							swal({
+								  title: 'Cerrando',
+								  //text: 'Pedido guardado con éxito!',
+								  type: 'success',
+								  timer: 4000,
+								  onOpen: () => {
+								    swal.showLoading()
+								  }
+								}).then((result) => {
+								  if ( result.dismiss === swal.DismissReason.timer  ) {
+									  swal("Pedido cerrado con éxito!");
+									    $('#cmdcerrar').prop('disabled', true);
+										$('#cmdguardarPedido').prop('disabled', true);
+										getReportePedido($('#CVE_PED').val());
+										document.location='lst_pedidos.action';  
+								   
+								  }
+								})
+						
 						},
 						errorHandler:function(errorString, exception) { 
-							swal(errorString, 'Error');   
+							swal('',errorString, 'error');   
 							return false;
 						}
 					});
@@ -268,12 +399,12 @@ function enviaLotesalPedido(){
 
 function _muestraImportarLotes(){
 	var cve_requisicion = $('#CVE_REQ').val();
-	alert('Clave de requesiscion: ' +cve_requisicion);
+	
 	swal({
 		  title: '',
 		  text: 'Importar lotes desde una Requisición existente',
 		  html:
-			  '<iframe width="850" height="400" id="ventanaImportar" frameborder="0" src="../../sam/pedidos/muestraImportarp.action?'+'"></iframe>',//cve_req="'+'cve_requisicion+
+			  '<iframe width="850" height="400" id="ventanaImportar" frameborder="0" src="../../sam/pedidos/muestraImportarp.action?cve_req='+cve_requisicion+'"></iframe>',//cve_req="'+'cve_requisicion+idVale='+$('#CVE_VALE').val()
 		  width: 800,
 		  confirmButtonText: 'Cerrar',
 		  padding: 10,
@@ -283,24 +414,27 @@ function _muestraImportarLotes(){
 
 /*----------------------- Carga los lotes seleccionados a otra requisicion ----------------------------------------------------*/
 //----------------------  Viene de la pagina muestraImportarp del frame cargarLotes () -------------------------------------
-function CargarLotesNuevos(lotes, cve_req){
+function CargarLotesNuevos(lotes){
 	
-	cve_ped = $('#CVE_PED').attr('value');
-	cve_req = $('#CVE_REQ').attr('value');
+	cve_ped = $('#CVE_PED').val();
+	cve_req = $('#CVE_REQ').val();
+	iva = $('#txtiva').val();
 	
-	ShowDelay('Agregando nuevos lotes','');
-	controladorPedidos.moverLotes_reqaped(lotes, cve_req,cve_ped, {
+	alert('El iva es: ' +iva);
+	//swal('Agregando nuevos lotes');
+	
+	controladorPedidos.sincronizaPedidos(lotes, cve_req, cve_ped,iva, {
 				callback:function(items) {
 					if(items) {
-												
-						CloseDelay('Lotes importados con éxito');	
+											
+						swal('Lotes importados con éxito');	
 					}
 					else
 						swal('','La operacion ha fallado al importar lotes','error');
 			} 					   				
 			,
 			errorHandler:function(errorString, exception) { 
-				swal("Fallo la operacion:<br>Error::"+errorString+"-message::"+exception.message+"-JavaClass::"+exception.javaClassName+".<br>Consulte a su administrador");          
+				swal('',"Fallo la operacion:<br>Error::"+errorString+"-message::"+exception.message+"-JavaClass::"+exception.javaClassName+".<br>Consulte a su administrador",'error');          
 			}
 	});
 }
@@ -308,7 +442,7 @@ function CargarLotesNuevos(lotes, cve_req){
 
 /*Metodo para mostrar el reporte PDF del pedido*/
 function getReportePedido(clavePed) {
-	$('#clavePedido').attr('value',clavePed);
+	$('#clavePedido').val(clavePed);
 	$('#forma').attr('target',"impresion");
 	$('#forma').submit();
 	$('#forma').attr('target',"");
@@ -317,47 +451,52 @@ function getReportePedido(clavePed) {
 
 
 /*funcion para habilitar los elementos del concepto*/
+
 function habilitarConcepto(checked, id, bol){
 	var valor =0;
-	$('#cmdenviarPedido').attr('disabled', !checked);
-	$('#txtenviarpedido').attr('disabled', !checked);
-	$('#cmdguardarPedido').attr('disabled', false);
-	$('#txtcantidad'+id).attr('disabled', !checked);
-	$('#txtnota'+id).attr('disabled', !checked);
-	$('#txtpreciounit'+id).attr('disabled', !checked);
+	$('#cmdenviarPedido').prop('disabled', !checked);
+	$('#txtenviarpedido').prop('disabled', !checked);
+	$('#cmdguardarPedido').prop('disabled', false);
+	$('#txtcantidad'+id).prop('disabled', !checked);
+	$('#txtnota'+id).prop('disabled', !checked);
+	$('#txtpreciounit'+id).prop('disabled', !checked);
 	
-	$("INPUT[@id='chkconcepto'][type='checkbox']").each(function(){ if($(this).val()!=0){ 														   
-					if($(this).attr('checked')){
+	$("INPUT[id='chkconcepto'][type='checkbox']").each(function(){ if($(this).val()!=0){ 														   
+					if($(this).prop('checked')){
 						valor++;
 					}
 				}
 			});
 	
 	if(valor>=1) {
-		$('#cmdenviarPedido').attr('disabled', false);
-		$('#txtenviarpedido').attr('disabled', false);
+		$('#cmdenviarPedido').prop('disabled', false);
+		$('#txtenviarpedido').prop('disabled', false);
 	}
 	else
 	{
-		$('#cmdenviarPedido').attr('disabled', true);
-		$('#txtenviarpedido').attr('disabled', true);
+		$('#cmdenviarPedido').prop('disabled', true);
+		$('#txtenviarpedido').prop('disabled', true);
 	}
 	
-	calculatTotal(id, $('#txtcantidad'+id).attr('value'), $('#txtpreciounit'+id).attr('value'), checked); 
+	calculatTotal(id, $('#txtcantidad'+id).attr('value'), $('#txtpreciounit'+id).prop('value'), checked); 
 	
 	if(!bol) getTotales();
 }
 
 /*Funcion para eleccionar todos los check del listado*/
 function setCheckAll(check){	
-	$("INPUT[@name='"+check+"'][type='checkbox']").attr('checked', $('#checkall').is(':checked'));
-	$("INPUT[@id='"+check+"'][type='checkbox']").each(function(){ if($(this).val()!=0){															 
-					habilitarConcepto($('#checkall').attr('checked'), $(this).val(), true);
+	
+	
+	$("input[name='"+check+"'][type='checkbox']").prop('checked', $('#checkall').is(':checked'));
+	$("input[id='"+check+"'][type='checkbox']").each(function(){ if($(this).val()!=0){															 
+					habilitarConcepto($('#checkall').prop('checked'), $(this).val(), true);
 				}
 			});
-	if(!$('#checkall').attr('checked')) {subtotal =0; $('#cmdguardarPedido').attr('disabled', true);}
+		
+	if(!$('#checkall').prop('checked')) {subtotal =0; $('#cmdguardarPedido').prop('disabled', true);}
 	getTotales();
 }
+
 
 /*funcion para calcular el total del concepto*/
 function calculatTotal(id, cantidad, precio, check){
@@ -371,30 +510,32 @@ function calculatTotal(id, cantidad, precio, check){
 
 /*funcion para calucar subtotales y totales*/
 function getTotales(){
+	ieps =0;
 	subtotal =0;
+	subtotalsieps=0;
 	total = 0;
 	var valor = 0;
 	var i =0;
 	var tablita = "";
-	$("INPUT[@id='chkconcepto'][type='checkbox']").each(function(){ if($(this).val()!=0){ 														   
-					if($(this).attr('checked')){
+	$("input[id='chkconcepto'][type='checkbox']").each(function(){ if($(this).val()!=0){ 														   
+					if($(this).prop('checked')){
 						
-						subtotal = subtotal + ($('#txtcantidad'+$(this).val()).attr('value')*$('#txtpreciounit'+$(this).val()).attr('value'));
-						$('#divcosto'+$(this).val()).text('$'+formatNumber($('#txtcantidad'+$(this).val()).attr('value')*$('#txtpreciounit'+$(this).val()).attr('value')));
-						if(isNaN($('#txtpreciounit'+$(this).val()).attr('value'))) valor++;
+						subtotalsieps =  subtotalsieps + ($('#txtcantidad'+$(this).val()).val()*$('#txtpreciounit'+$(this).val()).val());
+						$('#divcosto'+$(this).val()).text('$'+formatNumber($('#txtcantidad'+$(this).val()).val()*$('#txtpreciounit'+$(this).val()).val()));
+						if(isNaN($('#txtpreciounit'+$(this).val()).val())) valor++;
 					}
 				}
 			});
 	/*Comprueba valores numericos*/
-	$("INPUT[@id='chkconcepto'][type='checkbox']").each(function(){ if($(this).val()!=0){ 														   
-					if($(this).attr('checked')){
-						if(isNaN($('#txtpreciounit'+$(this).val()).attr('value'))) {
+	$("input[id='chkconcepto'][type='checkbox']").each(function(){ if($(this).val()!=0){ 														   
+					if($(this).prop('checked')){
+						if(isNaN($('#txtpreciounit'+$(this).val()).val())) {
 							tablita = tablita +   '<tr>'+
-													'<td align="center">'+$('#Lote'+$(this).val()).attr('value')+'</td>'+
-													'<td align="right">'+$('#txtpreciounit'+$(this).val()).attr('value')+'&nbsp;</td>'+
+													'<td align="center">'+$('#Lote'+$(this).val()).val()+'</td>'+
+													'<td align="right">'+$('#txtpreciounit'+$(this).val()).val()+'&nbsp;</td>'+
 												  '</tr>';
 							i++;
-							$('#txtpreciounit'+$(this).val()).attr('value', '');				
+							$('#txtpreciounit'+$(this).val()).prop('val','');				
 						}
 						if(valor==i&&valor!=0) 
 							jAlert("Hay valores numericos no válidos en precios unitarios, quite los separadores de Miles(<strong>,</strong>) o simbolos especiales(¿?-/*@#$%&_;:<>{}...) .Los lotes afectados son los siguientes:<br><br><table align='center' height='22' class='listas' width='243' border='0' cellspacing='0' cellpadding='0'><tr><th width='89' align='center'>Lote</td><th width='154' align='right'>Precio Unitario&nbsp;</td>  </tr>"+tablita+"</table>","Advertencia");	
@@ -403,44 +544,49 @@ function getTotales(){
 				}
 			});
 	
-	$('#divsubtotal').text('$'+formatNumber(subtotal));
 	
-	if(isNaN($('#txtdescuento').attr('value'))){jAlert('El valor númerico del descuento no es valido, vuelva a escribirlo', 'Advertencia'); return false;}
-	var descuento = $('#txtdescuento').attr('value');
+	var ieps = $('#txtieps').val();
+	
+	if(isNaN($('#txtieps').val())){jAlert('El valor númerico del <strong>IEPS</strong> no es valido, vuelva a escribirlo', 'Advertencia'); return false;}
+	if($('#txtieps').val()=='') $('#txtieps').prop('value', '0');
+	
+	subtotal = subtotalsieps +Number($('#txtieps').val());
+	
+	
+	$('#divsubtotal').text('$'+formatNumber(subtotal+Number(ieps)));
+	
+	
+	
+	
+	if(isNaN($('#txtdescuento').val())){jAlert('El valor númerico del <strong>descuento</strong> no es valido, vuelva a escribirlo', 'Advertencia'); return false;}
+	
+	var descuento = $('#txtdescuento').val();
 	
 	/*Aplicacion del Iva si lo requiere*/
 	var iva = 0.0;
-	if($('#cboiva').attr('value')==0) $('#txtiva').attr('value', '0');
-	if($('#cboiva').attr('value')==1) {
-		//if($('#CVE_PED').attr('value')=='') {
+	if($('#cboiva').val()==0) $('#txtiva').prop('value', '0');
+	if($('#cboiva').val()==1) {
+		
 			iva = redondeo(subtotal*0.16);
-			$('#txtiva').attr('value', iva);
-		//}
-		/*else if($('#txtiva').attr('value')=='0'||$('#txtiva').attr('value')==''&&$('#CVE_PED').attr('value')!='') {
-			iva = redondeo(subtotal*0.16);
-			$('#txtiva').attr('value', iva);
-		}
-		else{
-			iva = ($('#txtiva').attr('value')*1);
-			$('#txtiva').attr('value', iva);
-		}*/
+			$('#txtiva').prop('value', iva);
+		
 	}
-	if($('#cboiva').attr('value')==2){
-		iva = ($('#txtiva').attr('value')*1);
-		$('#txtiva').attr('value', iva);
+	if($('#cboiva').val()==2){
+		iva = ($('#txtiva').val()*1);
+		$('#txtiva').prop('value', iva);
 	}
 		
 	
 	
 	/*Aplicar descuento si es requerido*/
-	if($('#txtdescuento').attr('value')=='') $('#txtdescuento').attr('value', '0');
-	if($('#txtdescuento').attr('value')!=''){
-		if((subtotal - descuento) < 0 ) {jAlert('El monto del descuento no puede ser mayor al subtotal, vuelva a escribirlo','Advertencia'); $('#txtdescuento').attr('value', ''); $('#txtdescuento').focus(); return false;}
-		subtotal = subtotal - descuento;
+	if($('#txtdescuento').val()=='') $('#txtdescuento').prop('value', '0');
+	if($('#txtdescuento').val()!=''){
+		if((subtotal - descuento) < 0 ) {jAlert('El monto del descuento no puede ser mayor al subtotal, vuelva a escribirlo','Advertencia'); $('#txtdescuento').prop('value', ''); $('#txtdescuento').focus(); return false;}
+		subtotal = subtotal - descuento ;
 		total = subtotal + iva;
 	}
 	else 
-		total = subtotal + iva;
+		total = (subtotal)  + iva ;
 		
 	$('#divtotal').text('$'+formatNumber(redondeo(total)));
 	/*
@@ -451,9 +597,9 @@ function getTotales(){
 
 function getTotalesMasIva(){
 	var iva_temp = 0.00;
-	if($('#cboiva').attr('value')==1||$('#cboiva').attr('value')==2) {
+	if($('#cboiva').val()==1||$('#cboiva').val()==2) {
 		//if($('#txtiva').attr('value')=='0'||$('#txtiva').attr('value')=='') 
-			iva_temp = (1* $('#txtiva').attr('value'));
+			iva_temp = (1* $('#txtiva').val());
 		//else 
 		//	iva_temp = ($('#txtiva').attr('value')*1)+subtotal;
 	}
@@ -464,40 +610,73 @@ function getTotalesMasIva(){
 /*funcion para obtener un arreglo de los ids seleccionados*/
 function getCheckValues(check){
 	var values = Array();
-	$("INPUT[@id='"+check+"']:checked").each(function(){ if($(this).val()!=0) values.push($(this).val());});
+	$("INPUT[id='"+check+"']:checked").each(function(){ if($(this).val()!=0) values.push($(this).val());});
 	return values.join(",");
 }
 
-
+/******************************   FUNCIONES ADICIONALES DE LOS PEDIDOS   ****************************************************/
+/****************************************************************************************************************************/
 /*funcion para borrar los conceptos seleccionados*/
 function borrarLotes(){
 	var checkConceptos = [];
      $('input[name=chkconcepto]:checked').each(function() {checkConceptos.push($(this).val());});	
-  	 var cve_ped = $('#CVE_PED').attr('value');
-	 var cve_req = $('#CVE_REQ').attr('value');
+  	 var cve_ped = $('#CVE_PED').val();
+	 var cve_req = $('#CVE_REQ').val();
 	 if (checkConceptos.length>0){
-		jConfirm('¿Confirma que desea eliminar los lotes seleccionados del pedido?','Confirmar', function(r){
-				if(r){
-				 ShowDelay('Eliminando lotes del pedido','');
-				 controladorPedidos.eliminarLotesPedido(checkConceptos, cve_ped, $('#txtdescuento').attr('value'), {
-					callback:function(items) {
-						CloseDelay('Lotes eliminados con éxito', 2000, function(){
-								 mostrarTablaLotes($('#CVE_PED').attr('value'));
-							});
-		
-					} 					   				
-					,
-					errorHandler:function(errorString, exception) { 
-						jError("Fallo la operacion:<br>Error::"+errorString+"-message::"+exception.message+"-JavaClass::"+exception.javaClassName+".<br>Consulte a su administrador");          
-					}
-				});
-	   }});
-	 } 
-	else 
-	    jAlert('Es necesario que seleccione por lo menos un lote del listado', 'Advertencia');
+		 swal({
+			  title: 'Es seguro?',
+			  text: '¿Confirma que desea cerrar el pedido?',
+			  type: 'warning',
+			  showCancelButton: true,
+			  confirmButtonText: 'Sí, gaurdar!',
+			  cancelButtonText: 'No, abortar!',
+			  timer: 4000,
+			  showLoaderOnConfirm: true,
+			  preConfirm: function(email) {
+				    return new Promise(function(resolve, reject) {
+				      setTimeout(function() {
+				        if (email === 'taken@example.com') {
+				          reject('This email is already taken.');
+				        } else {
+				          resolve();
+				          controladorPedidos.eliminarLotesPedido(checkConceptos, cve_ped, $('#txtdescuento').val(), {
+								callback:function(items) {
+									
+									setTimeout(function(){
+									    swal("Lotes eliminados con éxito!");
+									    mostrarTablaLotes($('#CVE_PED').val());
+									  }, 2000);
+								} 					   				
+								,
+								errorHandler:function(errorString, exception) { 
+									swal('',"Fallo la operacion:<br>Error::"+errorString+"-message::"+exception.message+"-JavaClass::"+exception.javaClassName+".<br>Consulte a su administrador",'error');          
+								}
+							});  
+				        }
+				      }, 2000);
+				    });
+				  },
+				  allowOutsideClick: false
+				
+			}).then((result) => {
+				  
+			  if (result.value  ) {
+				
+							
+			  
+			  } else if (result.dismiss === swal.DismissReason.cancel) {
+				  		swal('Cancelado','Proceso cancelado','error')
+			  }
+			});
+		 
+				
+	 }else 
+	    swal('','Es necesario que seleccione por lo menos un lote del listado', 'warning');
 		
 }
 
+/****************************************************************************************************************************/
+/****************************************************************************************************************************/
 /*funcion para mostrar el listado de conceptos*/
 function mostrarTablaLotes(cve_ped){
 	var cont =0;
@@ -531,7 +710,7 @@ function pintaTablaLotes(table, obj){
 						 Td(obj.UNIDMEDIDA, centro , '', ''),
 						 Td('', centro , '', '<textarea rows="3" class="textarea" maxlength="300" style="width:99%" disabled id="txtnota'+obj.ID_PED_MOVTO+'">'+obj.DESCRIP+'</textarea>'),
 						 Td('$ '+obj.PRECIO_EST, derecha, '', ''),
-						 Td('', centro , '', '<input type="text" onBlur="getTotales()" class="input" style="width:95%; text-align:right; padding-right:5px" disabled value="'+formatNumber(obj.PRECIO_ULT, '')+'" id="txtpreciounit'+obj.ID_PED_MOVTO+'">'),
+						 Td('', centro , '', '<input type="text" onBlur="getTotales()" class="input" style="width:95%; text-align:right; padding-right:5px" disabled value="'+formatNumber(obj.PRECIO_ULT, '')+'" data-txtpreciounit="'+obj.ID_PED_MOVTO+'" id="txtpreciounit'+obj.ID_PED_MOVTO+'">'),
 						 Td('', derecha, '', '<div align="right" id="divcosto'+obj.ID_PED_MOVTO+'">'+formatNumber((obj.CANTIDAD*obj.PRECIO_ULT), '$')+'</div>')]);
 }
 

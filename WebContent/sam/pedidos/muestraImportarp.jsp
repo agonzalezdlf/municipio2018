@@ -3,24 +3,24 @@
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <%@ taglib prefix="sec" uri="http://www.springframework.org/security/tags" %>
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<!DOCTYPE html>
 <html>
 <head>
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title></title>
-<meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/>
+
 <link rel="stylesheet" href="../../include/css/estilosam.css" type="text/css"/>
 <link rel="stylesheet" href="../../include/js/componentes/jquery.alerts.css" type="text/css">
 <script type="text/javascript" src="../../include/js/jquery-2.1.3.min.js"></script>
 <script type="text/javascript" src="../../include/js/toolSam.js"></script>
 <script type="text/javascript" src="../../include/js/componentes/jquery.alerts.js"></script>
-
 <link rel="stylesheet" href="../../include/css/bootstrap-3.3.7.css" type="text/css">
 <link rel="stylesheet" href="../../include/css/bootstrap-select.css" type="text/css">
 <link rel="stylesheet" href="../../include/css/bootstrap2.css" type="text/css">
-<script type="text/javascript" src="../../include/js/sweetalert2.js"></script>
+<script type="text/javascript" src="../../include/js/sweetalert2/7.0/sweetalert2.all.js"></script>
 
-<link rel="stylesheet" href="../../include/css/sweetalert2.css" type="text/css">
+<link rel="stylesheet" href="../../include/js/sweetalert2/7.0/sweetalert2.min.css" type="text/css">
 <script type="text/javascript" src="../../include/js/bootstrap-3.3.7.js"></script>
 <script type="text/javascript" src="../../include/js/bootstrap-select.js"></script>
 
@@ -46,8 +46,8 @@ a:active {
 }
 -->
 </style>
-<script language="javascript">
-	
+<script>
+	//alert('Clave de la requisicion cargada desde Captura de pedidos: '+cve_req);
 	/*$("#checkall").change(function () {
       $("input:checkbox").prop('checked', $(this).prop("checked"));
   	});*/
@@ -55,6 +55,7 @@ a:active {
   
   	//Checkbox para seleccionar toda la lista.... Abraham Gonzalez 12/07/2016
   	$(document).ready(function() {
+  		
   		$("input[name=checkall]").change(function(){
   			$('input[type=chklotes]').each( function() {			
   				if($("input[name=checkall]:checked").length == 1){
@@ -71,42 +72,56 @@ a:active {
 	
 	
 function cargar(){
-	var checkStatus = [];
-     $('input[name=status]:checked').each(function() {checkStatus.push($(this).val());});	 
-	 if (checkStatus.length==0 ) {jAlert('Es nercesario seleccionar un estatus'); return false;}
-	 document.location = "muestraImportarp.action?num_req="+$('#txtrequisicion').val()+"&status="+checkStatus+"&idUnidad="+$('#cbodependencia').val();
+	//alert('Clave de la requisicion cargada desde Captura de pedidos: '+cve_req);
+	 //var checkStatus = [];
+     //$('input[name=status]:checked').each(function() {checkStatus.push($(this).val());});	 
+	 //if (checkStatus.length==0 ) {swal('','Es nercesario seleccionar un estatus','error'); return false;}
+	 document.location = "muestraImportarp.action?"// num_req="+$('#txtrequisicion').val()+"&status="+checkStatus+"&idUnidad="+$('#cbodependencia').val();
 }
 
 /*
 function setCheckAll(check){	
-	$("input[@name='"+check+"'][type='checkbox']").prop('checked', $('#checkall').is(':checked'));
+	$("input[name='"+check+"'][type='checkbox']").prop('checked', $('#checkall').is(':checked'));
 	//$("input:checkbox").prop('checked', $(this).prop("checked"));
 }*/
 
 function cargarLotes(){
+	
 	var checkLotes = [];
      $('input[name=chklotes]:checked').each(function() {checkLotes.push($(this).val());});	
-	 if (checkLotes.length==0 ) {jAlert('Es nercesario seleccionar por lo menos un lote para continuar'); return false;}
-	jConfirm('¿Confirma que desea cargar nuevos lotes a la requisicion actual?','Confirmar', function(r){
-				if(r){
-					window.parent.CargarLotesNuevos(checkLotes,<c:out value='${cve_req}'/>);
-				}
-		});
+	 if (checkLotes.length==0 ) {swal('','Es nercesario seleccionar por lo menos un lote para continuar','error'); return false;}
+	 
+	 swal({
+		  title: 'Es seguro?',
+		  text: '¿Confirma que desea cargar nuevos lotes al pedido actual?',
+		  showCancelButton: true,
+		  confirmButtonText: 'Sí, gaurdar!',
+		  cancelButtonText: 'No, abortar!'
+		}).then((result) => {
+		  if (result.value  ) {
+			  
+			  window.parent.CargarLotesNuevos(checkLotes);
+		
+		  } else if (result.dismiss === swal.DismissReason.cancel) {
+		    swal('Cancelado','Los lotes no se sincronizaron','error');
+		  }
+		})
 }
 
 </script>
 </head>
 <body> 
 <form  action="muestraImportarp.action" method="post" id="forma" name="forma"> 
+<!--  
 <c:if test='${accion==null}'>
-<table width="95%" align="center">
+<table style="width:95%; align:center">
   <tr>
     <td><h1>Listado de  Requisiciones
       <c:out value='${desMes}'/>
     de la Unidad</h1></td>
   </tr>
 </table>
-<table class="listas" border="0" align="center" cellpadding="1" cellspacing="2" width="95%">
+<table class="listas" style="width:95%; cellspacing:2; cellpadding:1;align:center;border:0; ">
   <tr bgcolor="#889FC9">
     <td height="32" colspan="4" align="left">Unidad Administrativa: <sec:authorize ifNotGranted="ROLE_Sam_PRIVILEGIOS_VER_TODAS_LAS_UNIDADES">
       <c:out value="${nombreUnidad}"/> 
@@ -156,7 +171,9 @@ function cargarLotes(){
   </c:forEach>
 </table>
 </c:if>
-<c:if test='${accion!=null}'>
+-->
+
+
   <table width="95%" align="center">
     <tr>
     <td><h1>Lotes de la Requisición <strong>
@@ -196,15 +213,8 @@ function cargarLotes(){
       <c:set var="cont" value="${cont+1}" /> 
   </c:forEach>
   </table>
-  </c:if>
-  <c:if test='${cont>9&&accion!=null}'>
-<table width="95%" align="center">
-  <tr>
-    <td><input type="button" value="Regresar" id="cmdregresar2" class="botones" onClick="history.go(-1)" />
-      <input type="button" value="Cargar lotes" id="cmdcargar2" class="botones" onClick="cargarLotes()" /></td>
-  </tr>
-</table>
-</c:if>
+
+
 </form>
 </body>
 </html>

@@ -323,6 +323,11 @@
 			<dwr:include method="getProyectoPartidaPedido" />
 			<dwr:include method="guardarAjustePedidoPeredo" />
 			<dwr:include method="eliminarConceptoAjustePedido" />
+			<dwr:include method="CargarLotesNuevos" />
+			<dwr:include method="moverLotes_reqaped" />
+			<dwr:include method="sincronizaPedidos" />
+			
+			
 			
 		</dwr:remote>
 	</bean>

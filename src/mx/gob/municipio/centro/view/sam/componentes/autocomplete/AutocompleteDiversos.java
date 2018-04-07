@@ -49,7 +49,7 @@ public class AutocompleteDiversos  extends ControladorBase  {
 
 	
 	public List<Map> getBeneficiariosTodos(Integer tipo){		
-		return gatewayBeneficiario.getBeneficiariosTodos(tipo);
+		return (List<Map>) gatewayBeneficiario.getBeneficiariosTodos(tipo);
 	}
  
 

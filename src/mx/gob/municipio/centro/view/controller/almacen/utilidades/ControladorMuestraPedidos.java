@@ -35,9 +35,14 @@ public class ControladorMuestraPedidos extends ControladorBaseAlmacen {
 	
 	
 	
+	@SuppressWarnings({ "unchecked", "rawtypes" })
 	public List<Map> getListaPedidos(int idDependencia){
 		
-		List<Map> LstPedidos = new ArrayList();
+		
+		List<Map> LstPedidos = new ArrayList<Map>(); 
+		
+		//List<Map> LstPedidos = new ArrayList();
+		
 		List<Map> Pedidos = this.getJdbcTemplate().queryForList("SELECT  DISTINCT SAM_PEDIDOS_EX.CVE_PED, "+
 																"NUM_PED,  "+
 																"SAM_PEDIDOS_EX.CVE_REQ, "+ 

@@ -19,6 +19,7 @@
 <script type="text/javascript" src="../../include/js/bootstrap-3.3.7.js"></script>
 <script type="text/javascript" src="../../include/js/bootstrap-select.js"></script>
 
+<script type="text/javascript" src="../../include/js/jquery.autocomplete.min.js"></script>
 
 <link rel="stylesheet" href="../../include/js/sweetalert2/7.0/sweetalert2.min.css" type="text/css">
 <script type="text/javascript" src="../../include/js/sweetalert2/7.0/sweetalert2.all.js"></script>
@@ -181,6 +182,15 @@
 									      	</option>
 											</c:forEach>    
 										</select>
+										<input type="hidden" id="CVE_BENEFI" value="0" />
+									</div>	  
+								</div>
+			                  </div>   
+			                   <div class="row">
+			                    <div class="form-group">
+			                     	<div class="control-label col-sm-3 ">Prestador del servicio:</div>
+			                        <div class="form-group col-sm-5">
+			                        	<input name="w-input-search" type="text" class="form-control sm" id="w-input-search"  value='<c:out value="${vale.CVE_BENEFI}"/>' maxlength="400" onBlur="upperCase(this)">
 										<input type="hidden" id="CVE_BENEFI" value="0" />
 									</div>	  
 								</div>

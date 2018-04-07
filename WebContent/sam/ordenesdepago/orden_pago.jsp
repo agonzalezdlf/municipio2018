@@ -558,8 +558,8 @@ a:active {
                     </div>      
             	</form>
             </div>  	 	  	
-          </div>
-        </div>
+          </div><!-- tab content -->
+        </div><!-- panel body -->
     </div>
    </div>
   </div>

@@ -113,7 +113,7 @@ public class ControladorRequisicion extends ControladorBase {
 	
 	@ModelAttribute("beneficiarios")
 	public List<Map>getBeneficiarios(){
-		return gatewayBeneficiario.getListaBeneficiarios();
+		return (java.util.List<Map>) gatewayBeneficiario.getListaBeneficiarios();
 	}
 	
 	@ModelAttribute("unidadesmedida")

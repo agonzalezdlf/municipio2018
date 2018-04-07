@@ -113,7 +113,7 @@ public class ControladorListadoPedidos extends ControladorBase {
     }
 	
 	@ModelAttribute("beneficiarios")
-	public List<Map>getBeneficiarios(){
+	public List<Map> getBeneficiarios(){
 		return gatewayBeneficiario.getListaBeneficiarios();
 	}
 	

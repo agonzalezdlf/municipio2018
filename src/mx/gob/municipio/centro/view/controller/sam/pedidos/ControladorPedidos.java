@@ -83,7 +83,7 @@ public class ControladorPedidos extends ControladorBase {
 		modelo.put("num_contrato", requisicion.get("NUM_CONTRATO"));
 		modelo.put("cve_contrato", requisicion.get("CVE_CONTRATO"));
 		modelo.put("observa", requisicion.get("OBSERVA"));
-		
+		modelo.put("clv_benefi",gatewayBeneficiario.getBeneficiariosTodos(0));
 		
 		modelo.put("presupuesto", this.getJdbcTemplate().queryForList("SELECT ID_PROYECTO, N_PROGRAMA, '"+requisicion.get("CLV_PARTID").toString()+"' AS CLV_PARTID,  ISNULL(dbo.getAutorizado(?,?,?,?),0) AS AUTORIZADO, ISNULL(dbo.getPrecomprometido(?,?,?),0) AS PRECOMPROMETIDO, ISNULL(dbo.getComprometido(?,?,?),0) AS COMPROMETIDO, ISNULL(dbo.getEjercido(?,?,?),0) AS EJERCIDO, ISNULL(dbo.getDisponible(?,?,?),0) AS DISPONIBLE FROM CEDULA_TEC AS CT WHERE CT.ID_PROYECTO = ? ", new Object[]{mesActivo, mesActivo, requisicion.get("ID_PROYECTO"), requisicion.get("CLV_PARTID"),  mesActivo, requisicion.get("ID_PROYECTO"), requisicion.get("CLV_PARTID"),  mesActivo, requisicion.get("ID_PROYECTO"), requisicion.get("CLV_PARTID"),  mesActivo, requisicion.get("ID_PROYECTO"), requisicion.get("CLV_PARTID"),  mesActivo, requisicion.get("ID_PROYECTO"), requisicion.get("CLV_PARTID"), requisicion.get("ID_PROYECTO")}));//gatewayProyectoPartida.getPresupuesto(Long.parseLong(requisicion.get("ID_PROYECTO").toString()), "", requisicion.get("CLV_PARTID").toString(), mesActivo, this.getSesion().getIdUsuario(), 0,0) );
 		
@@ -95,12 +95,17 @@ public class ControladorPedidos extends ControladorBase {
 				modelo.put("mov", gatewayMovimientosRequisicion.getConceptos2(cveRequisicion));
 		else{
 			cveRequisicion =gatewayPedidos.getNumRequisicion(cvePedido);
+			
 			modelo.put("cve_req",cveRequisicion  );			
 			modelo.put("mov", gatewayPedidos.getConceptos(cvePedido));
 		}		
 	    return "sam/pedidos/capturarPedidos.jsp";
 	}
 	
+	@ModelAttribute("beneficiarios")
+	public List <Map> getBeneficiarios(){
+		return gatewayBeneficiario.getListaBeneficiarios();
+	}
 	public String getNombreMes(int mes){
 		String m = "";
 		switch(mes){
@@ -143,18 +148,23 @@ public class ControladorPedidos extends ControladorBase {
 	}
 	
 	/*Metodo usado para guardar el pedido*/
-	public Map guardarPedido(final  Long cve_ped,final   Long cve_req,final   String fecha,final   String contrato,final   int cve_concurso,final   String fecha_entrega,final   String cve_beneficiario,final   String condicion_pago,final   String lugar_entrega,final   String notas,final   List<Long> id_req_movtos,final   List<Double> cantidades,final   List<String> conceptos,final   List<Double> precios_unit,final   Double iva, final int tipo_iva, final Double descuento ){
+	public Map guardarPedido(final  Long cve_ped,final   Long cve_req,final   String fecha,final   String contrato,final   String fecha_entrega,final   String cve_beneficiario,final   String condicion_pago,final   String lugar_entrega,final   String notas,final   List<Long> id_req_movtos,final   List<Double> cantidades,final   List<String> conceptos,final   List<Double> precios_unit,final   Double iva, final int tipo_iva, final Double descuento ){
 		final Date fecha_ped = formatoFecha(fecha);		
+		final   int cve_concurso=0;
 		datos = new HashMap();
+		//if (datos.get("precios_unit").toString().equals(""))
+			//throw new RuntimeException("No se puede guardar el Pedido, los precios unitarios no son validos, consulte a su administrador"); 
 		try {    
-			final int cve_pers = this.getSesion().getIdUsuario();
-            this.getTransactionTemplate().execute(new TransactionCallbackWithoutResult(){
-                @Override
-                protected void   doInTransactionWithoutResult(TransactionStatus status) {	    
-                	datos = gatewayPedidos.guardarEditarPedidos(cve_ped, cve_req, fecha_ped, contrato, cve_concurso, fecha_entrega, cve_beneficiario, getSesion().getIdUsuario(), condicion_pago, lugar_entrega, notas, id_req_movtos, cantidades, conceptos, precios_unit, iva, tipo_iva, descuento, getSesion().getEjercicio(), getSesion().getIdGrupo());
-                } 
-             });
-           
+			
+		
+					final int cve_pers = this.getSesion().getIdUsuario();
+		            this.getTransactionTemplate().execute(new TransactionCallbackWithoutResult(){
+		                @Override
+		                protected void   doInTransactionWithoutResult(TransactionStatus status) {	    
+		                	datos = gatewayPedidos.guardarEditarPedidos(cve_ped, cve_req, fecha_ped, contrato, cve_concurso, fecha_entrega, cve_beneficiario, getSesion().getIdUsuario(), condicion_pago, lugar_entrega, notas, id_req_movtos, cantidades, conceptos, precios_unit, iva, tipo_iva, descuento, getSesion().getEjercicio(), getSesion().getIdGrupo());
+		                } 
+		             });
+				
             } catch (DataAccessException e) {	            	
                  throw new RuntimeException(e.getMessage(),e);
             }
@@ -224,73 +234,51 @@ public class ControladorPedidos extends ControladorBase {
             }	        
 	}
 	
-	//guardarMovimientosPedido
+
 //----------   Sincronizar los lotes de la requisicion que estan en estatus de cerrado para corregir detalles del pedido -----------------------------------------------	
-	public void moverLotes_reqaped(final List<Long> lst_id_req_movtos, final Long cve_req, final Long cve_ped ){
+	public boolean sincronizaPedidos(final List<Long> lst_id_req_movtos, final Long cve_req, final Long cve_ped,final Double iva ){
 		
+		boolean exito=false;
 		try {    
 			final int cve_pers = this.getSesion().getIdUsuario();
 			final int ejercicio = this.getSesion().getEjercicio();	
 			
+			System.out.println("El iva del pedido es: " +iva);
             this.getTransactionTemplate().execute(new TransactionCallbackWithoutResult(){
                 @Override
                 protected void  doInTransactionWithoutResult(TransactionStatus status) {
                 	
-                	int ped_cons = getJdbcTemplate().queryForInt("SELECT MAX(PED_CONS) AS N FROM SAM_PED_MOVTOS WHERE CVE_PED = ?", new Object[]{cve_ped});
+                	int ped_cons = getJdbcTemplate().queryForInt("SELECT COUNT(PED_CONS) AS N FROM SAM_PED_MOVTOS WHERE CVE_PED = ?", new Object[]{cve_ped});
                 	for (Long lotes :lst_id_req_movtos){
                 		ped_cons++;
                 		                	
-                		List<Map> RequiscMovtos = getJdbcTemplate().queryForList("SELECT * FROM SAM_REQ_MOVTOS WHERE STATUS=1 AND ID_REQ_MOVTO=?", new Object[]{lotes});
+                		List<Map<String, Object>> RequiscMovtos = getJdbcTemplate().queryForList("SELECT * FROM SAM_REQ_MOVTOS WHERE STATUS=1 AND ID_REQ_MOVTO=?", new Object[]{lotes});
                 		
-                		for(Map row: RequiscMovtos)
-            			{
+                		/*
+	                		 for (Map<String, Object> map : row) {
+	    					 	for (Map.Entry<String, Object> entry : map.entrySet()) {
+		        					String key = entry.getKey();
+		        					Object value = entry.getValue();
+	    						}
+							} 
+                	  */
+                		for(Map row: RequiscMovtos){
                 			String notas = row.get("NOTAS").toString();
-                			double cantidad = Double.parseDouble(row.get("CANTIDAD_TEMP").toString());
+                			double cantidad = Double.parseDouble(row.get("CANTIDAD").toString());
                 			double precio_uni = Double.parseDouble( row.get("PRECIO_EST").toString());
                 			Integer statusx = 0;
                 			gatewayPedidos.moverLotesReqaPed(lotes, cve_req, cve_pers, cve_ped,ped_cons, ejercicio,cantidad,precio_uni,statusx,notas);
-            			}//Long id_req_movto,Long cve_req, int cve_pers, Long cve_ped, int ped_cons, int ejercicio, int statusx,Double cantidad, Double preio_uni,String notas
-                		
-                		System.out.println("El lote de la requisicion es: " +lotes);
-                	}
-                	
-                	//id_ped_movto, $('#CVE_PED').attr('value'), cve_requisicion, $('#txtdescuento').attr('value')
-                	
-                	List <Long> movrequisic = getJdbcTemplate().queryForList("SELECT * FROM SAM_REQ_MOVTOS WHERE STATUS=1 AND CVE_REQ=?", new Object[]{cve_req});
-					/*
-                	List<Map> Vales = getJdbcTemplate().queryForList("SELECT V.CVE_VALE, V.NUM_VALE, M.ID_PROYECTO, M.CLV_PARTID, SUM(F.IMPORTE) AS TOTAL, dbo.getDisponibleDocumento('VAL', V.CVE_VALE, M.ID_PROYECTO, M.CLV_PARTID) AS DISPONIBLE "+
-																				"FROM "+
-																				"	SAM_FACTURA_DETALLE AS M "+
-																				"	INNER JOIN SAM_FACTURAS_VALES AS F ON (F.CVE_FACTURA = M.CVE_FACTURA) " +
-																				"	INNER JOIN SAM_VALES_EX AS V ON (V.CVE_VALE = F.CVE_VALE) "+
-																				"WHERE	"+
-																				"	M.CVE_FACTURA = ? "+
-																				"GROUP BY "+
-																				"	V.CVE_VALE, V.NUM_VALE, M.ID_PROYECTO, M.CLV_PARTID", new Object[]{cve_factura});
-            			for(Map row: Vales)
-            			{
-            				if(Double.parseDouble(row.get("TOTAL").toString()) > Double.parseDouble(row.get("DISPONIBLE").toString()))
-            					throw new RuntimeException("No se puede cerrar la factura, se excede el disponible en Programa y Partida del Vale: "+row.get("NUM_VALE").toString());
             			}
-                	
-                	
-                	for ( Long IDS :movrequisic){
-                		
-                		//
-                		
-                		
-                	}*/
-            
-                	//Actualizar con el nuevo total de lotes
-                	//gatewayPedidos.actualizarTotalesPedido(cve_ped, 0D, (Double) getJdbcTemplate().queryForObject("SELECT DESCUENTO FROM SAM_PEDIDOS_EX WHERE CVE_PED = ?", new Object[]{cve_ped}, Double.class));
-                	//gatewayPedidos.actualizarTotalesPedido(cve_ped, 0D, (Double) getJdbcTemplate().queryForObject("SELECT DESCUENTO FROM SAM_PEDIDOS_EX WHERE CVE_PED = ?", new Object[]{cve_ped}, Double.class));
-                	//getJdbcTemplate().update("UPDATE SAM_PED_MOVTOS SET PED_CONS = (SELECT SAM_REQ_MOVTOS.REQ_CONS FROM SAM_REQ_MOVTOS WHERE SAM_REQ_MOVTOS.ID_REQ_MOVTO = SAM_PED_MOVTOS.ID_REQ_MOVTO) WHERE CVE_PED = ?", new Object[]{cve_ped});
-                } 
+                	}
+                                  
+                } ;
+            	
              });
-           
+            exito=true;
             } catch (DataAccessException e) {            	                    
                  throw new RuntimeException(e.getMessage(),e);
-            }	        
+            }	  
+		return exito;
 	}
 	
 
@@ -396,10 +384,7 @@ public class ControladorPedidos extends ControladorBase {
 		gatewayPedidos.eliminarConceptoAjustePedido(id_sam_mod_comp);
 	}
 
-	@ModelAttribute("beneficiarios")
-	public List<Map>getBeneficiarios(){
-		return gatewayBeneficiario.getListaBeneficiarios();
-	}
+	
 	
 	
 }

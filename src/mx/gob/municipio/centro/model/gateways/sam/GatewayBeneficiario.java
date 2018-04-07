@@ -22,8 +22,37 @@ public class GatewayBeneficiario<lst_Beneficiarios> extends BaseGateway {
 	    return this.getJdbcTemplate().queryForList("SELECT CLV_BENEFI, NCOMERCIA, RFC, TIPOBENEFI  FROM CAT_BENEFI WHERE STATUS = 1 ORDER BY NCOMERCIA ASC");		
 	}
 	
+	public Map<String, String> getBeneficiariosTodos2(Integer tipo) {
+		String sql="";
+		
+		return (Map<String, String>) this.getJdbcTemplate().queryForList("SELECT CLV_BENEFI, NCOMERCIA, RFC, TIPOBENEFI  FROM CAT_BENEFI WHERE STATUS = 1 ORDER BY NCOMERCIA ASC");
+		
+	}
+	
 	public List<Map> getListaBeneficiarios(){		
 		  return this.getJdbcTemplate().queryForList("SELECT CLV_BENEFI, NCOMERCIA, RFC, TIPOBENEFI  FROM CAT_BENEFI WHERE STATUS = 1 ORDER BY NCOMERCIA ASC");		
+	}
+	
+	@SuppressWarnings("unchecked")
+	public Map<String, String> getBeneficiario(Long idBeneficiario) {
+		// TODO Auto-generated method stub
+		//private static Map<String, String> contactMap = new HashMap<String, String>();
+		if(idBeneficiario!=0)
+			return this.getJdbcTemplate().queryForMap("SELECT     A.CLV_BENEFI, A.CLV_BNCSUC, A.NCOMERCIA, A.BENEFICIAR, A.BENEFICIA2, A.RFC, A.CURP, A.TIPOBENEFI, A.DOMIFISCAL, A.CIUDAD, A.ESTADO, "+ 
+					  " A.CODIGOPOST, A.TELEFONOS, A.COLONIA, A.NUM_CTA, A.TIPO_CTA, A.CLAVE_PADRE, A.ID_BENEFICIARIO, A.VIGENCIA, A.STATUS, A.CLABE, A.FECHA_ALTA, A.FECHA_BAJA,  "+
+	                  " B.BANCO, B.SUCURSAL, B.PLAZA, "+
+	                  " (SELECT NCOMERCIA FROM CAT_BENEFI WHERE CLV_BENEFI=A.CLAVE_PADRE  ) BENEFICIARIO "+
+	                  " FROM        CAT_BENEFI AS A LEFT OUTER JOIN SAM_CAT_BNCSUC  B ON A.CLV_BNCSUC = B.CLV_BNCSUC WHERE  A.ID_BENEFICIARIO =  ?", new Object []{idBeneficiario});
+		else
+			return null;
+	}
+	
+	@SuppressWarnings("unchecked")
+	public Map<String, String> getListaBeneficiarios5() {
+		String sql="SELECT CLV_BENEFI, NCOMERCIA, RFC, TIPOBENEFI  FROM CAT_BENEFI WHERE STATUS = 1 ORDER BY NCOMERCIA ASC";
+		
+		return (Map<String, String>) this.getJdbcTemplate().queryForList(sql);
+		
 	}
 	
 	public List<Map> getShortVendor(){		
@@ -56,16 +85,7 @@ public class GatewayBeneficiario<lst_Beneficiarios> extends BaseGateway {
 	    return this.getJdbcTemplate().queryForList(sql);		
 	}
 
-	public  Map    getBeneficiario(Long idBeneficiario){
-		if(idBeneficiario!=0)
-			return this.getJdbcTemplate().queryForMap("SELECT     A.CLV_BENEFI, A.CLV_BNCSUC, A.NCOMERCIA, A.BENEFICIAR, A.BENEFICIA2, A.RFC, A.CURP, A.TIPOBENEFI, A.DOMIFISCAL, A.CIUDAD, A.ESTADO, "+ 
-					  " A.CODIGOPOST, A.TELEFONOS, A.COLONIA, A.NUM_CTA, A.TIPO_CTA, A.CLAVE_PADRE, A.ID_BENEFICIARIO, A.VIGENCIA, A.STATUS, A.CLABE, A.FECHA_ALTA, A.FECHA_BAJA,  "+
-	                  " B.BANCO, B.SUCURSAL, B.PLAZA, "+
-	                  " (SELECT NCOMERCIA FROM CAT_BENEFI WHERE CLV_BENEFI=A.CLAVE_PADRE  ) BENEFICIARIO "+
-	                  " FROM        CAT_BENEFI AS A LEFT OUTER JOIN SAM_CAT_BNCSUC  B ON A.CLV_BNCSUC = B.CLV_BNCSUC WHERE  A.ID_BENEFICIARIO =  ?", new Object []{idBeneficiario});
-		else
-			return null;
-	}
+
 	
 	public  String    getBeneficiario2(Long idBeneficiario){
 		if(idBeneficiario==0L) 
@@ -150,7 +170,7 @@ public class GatewayBeneficiario<lst_Beneficiarios> extends BaseGateway {
 
 
 	
-	public List<lst_Beneficiarios> simulaSearchResult(String ncomercia){
+	public List<Map> simulaSearchResult(String ncomercia){
 		
 		List <Map> lst_Beneficiarios = getJdbcTemplate().queryForList("SELECT CLV_BENEFI, NCOMERCIA, RFC, TIPOBENEFI  FROM CAT_BENEFI WHERE STATUS = 1 ORDER BY NCOMERCIA ASC");
 		//List <Map> result = new ArrayList<Map>();
@@ -163,10 +183,13 @@ public class GatewayBeneficiario<lst_Beneficiarios> extends BaseGateway {
 				lst_Beneficiarios.add(row);
 			}
 		}
-		return (List<lst_Beneficiarios>) lst_Beneficiarios;
+		System.out.println("Lista de Beneficiarios: " +lst_Beneficiarios);
+		return lst_Beneficiarios;
 		
 	}
-	
-	
+
+		
+
+		
 	
 }

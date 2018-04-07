@@ -130,7 +130,7 @@ public class ControladorListadoOrdenesDePago extends ControladorBase {
 		
 	@ModelAttribute("beneficiarios")
 	public List<Map>getBeneficiarios(){
-		return gatewayBeneficiario.getListaBeneficiarios();
+		return (List<Map>) gatewayBeneficiario.getListaBeneficiarios();
 	}
 	
 	public List <Map>getListadoOrdenes(String unidad, String  estatus , String fechaInicial, String fechaFinal , String clv_benefi, Integer ejercicio, String tipoGasto, Integer idUsuario, String verUnidad, String tipo, String numop, String numped, boolean privilegio, String capitulo){

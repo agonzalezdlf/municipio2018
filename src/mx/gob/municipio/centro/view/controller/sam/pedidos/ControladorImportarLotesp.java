@@ -38,7 +38,7 @@ public class ControladorImportarLotesp extends ControladorBase {
 	}
 	
 	@RequestMapping(method = {RequestMethod.GET , RequestMethod.POST} )   
-	public String  requestGetControlador( Map modelo, HttpServletRequest request ) {
+	public String  requestGetControlador( Map<String, Object> modelo, HttpServletRequest request ) {
 		Long cve_req = (request.getParameter("cve_req")==null) ? 0L: Long.parseLong(request.getParameter("cve_req").toString());
 		String unidad = request.getParameter("idUnidad");
 		String  num_req = request.getParameter("num_req");
@@ -54,7 +54,8 @@ public class ControladorImportarLotesp extends ControladorBase {
 		modelo.put("num_req", num_req);
 		modelo.put("accion", request.getParameter("accion"));
 		modelo.put("cve_req", cve_req);
-		
+		//movimientos
+		@SuppressWarnings({ "unchecked", "rawtypes" })
 		List <Map> lst = this.getJdbcTemplate().queryForList("SELECT "+ 
 					"C.CVE_CONTRATO,"+
 					"C.ID_PROYECTO,"+
@@ -63,17 +64,18 @@ public class ControladorImportarLotesp extends ControladorBase {
 					"C.NUM_REQ,   "+
 					"C.CVE_REQ, "+
 					"C.OBSERVA , "+
-					"isnull ( (select sum (cantidad * precio_est ) from SAM_REQ_MOVTOS where cve_req=C.cve_req  ),0) IMPORTE "+
+					"isnull ( (select sum (cantidad * precio_est ) from SAM_REQ_MOVTOS where cve_req=C.cve_req AND STATUS=1  ),0) IMPORTE "+
 					"FROM "+
-					"	SAM_REQUISIC AS C INNER JOIN CEDULA_TEC AS CT ON (CT.ID_PROYECTO = C.ID_PROYECTO) WHERE C.STATUS IN("+status+") AND C.TIPO IN(1, 7) AND C.NUM_REQ LIKE '%"+num_req+"%'"+((unidad.toString().equals("0"))? "":" AND C.ID_DEPENDENCIA IN("+unidad+")")); 
+					"	SAM_REQUISIC AS C INNER JOIN CEDULA_TEC AS CT ON (CT.ID_PROYECTO = C.ID_PROYECTO) WHERE C.STATUS IN(1,2) AND C.TIPO IN(1, 7) AND C.NUM_REQ LIKE '%"+num_req+"%'"+((unidad.toString().equals("0"))? "":" AND C.ID_DEPENDENCIA IN("+unidad+")")); 
 		modelo.put("documentos",lst);
 		if(cve_req!=0){
-			modelo.put("movimientos", this.gatewayMovimientosRequisicion.getConceptos(cve_req));
+			modelo.put("movimientos", this.gatewayMovimientosRequisicion.getConceptos_sincro(cve_req));
 		}
 		
 	    return "sam/pedidos/muestraImportarp.jsp";
 	}
 	
+	@SuppressWarnings("rawtypes")
 	@ModelAttribute("unidadesAdmiva")
     public List<Map> getUnidades(){
     	return gatewayUnidadAdm.getUnidadAdmTodos();	

@@ -121,7 +121,7 @@ public class ControladorListadoRequisiciones extends ControladorBase {
 	}
 	@ModelAttribute("beneficiarios")
 	public List<Map>getBeneficiarios(){
-		return gatewayBeneficiario.getListaBeneficiarios();
+		return (List<Map>) gatewayBeneficiario.getListaBeneficiarios();
 	}
 	
 	@ModelAttribute("tipodeGasto")

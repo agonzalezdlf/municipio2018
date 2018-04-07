@@ -24,6 +24,8 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 @Controller
 @RequestMapping("/sam/vales/cap_vale.action")
@@ -89,7 +91,15 @@ public class ControladorVales extends ControladorBase {
 	
 	@ModelAttribute("beneficiarios")
 	public List<Map>getBeneficiarios(){
-		return gatewayBeneficiario.getListaBeneficiarios();
+		return (List<Map>) gatewayBeneficiario.getListaBeneficiarios();
+	}
+	
+	@SuppressWarnings({ "unchecked", "rawtypes" })
+	@RequestMapping(value="/getBeneficiarios",method = RequestMethod.GET)
+	public @ResponseBody
+	List<Map>lstBeneficiarios(@RequestParam String ncomercia ){
+		return gatewayBeneficiario.simulaSearchResult(ncomercia);
+		
 	}
 	
 	public List<Map> getTiposVales(Integer idUsuario ){

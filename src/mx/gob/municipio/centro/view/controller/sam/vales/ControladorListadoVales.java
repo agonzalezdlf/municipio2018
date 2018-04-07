@@ -111,17 +111,22 @@ public class ControladorListadoVales extends ControladorBase {
 	/*procedimiento para realizar el cerrado de los vales*/
 	public List cerrarVale(final List<Long> vales) {               
 		 List resultado =(List)this.getTransactionTemplate().execute(new TransactionCallback(){
-	    			@Override
+	    			@SuppressWarnings("unchecked")
+					@Override
 					public Object doInTransaction(TransactionStatus arg0) {
+						@SuppressWarnings("rawtypes")
 						List resultados = new ArrayList();
 	                	for (Long idVale :vales) {
 	                		boolean cerrar = false;
-	                		Map result = new HashMap<String,String>();
-	                		Map vale = gatewayVales.getVale(idVale);	                		
+	                		@SuppressWarnings("rawtypes")
+							Map result = new HashMap<String,String>();
+	                		@SuppressWarnings("rawtypes")
+							Map vale = gatewayVales.getVale(idVale);	                		
 	                		result.put("DATO", vale.get("NUM_VALE"));
 	                		int periodo = Integer.parseInt(vale.get("MES").toString());
-	                		List <Map> mov = gatewayVales.getDetallesVales(idVale);
-	                		for(Map row: mov){
+	                		@SuppressWarnings("rawtypes")
+							List <Map> mov = gatewayVales.getDetallesVales(idVale);
+	                		for(@SuppressWarnings("rawtypes") Map row: mov){
 	                			
 	                			int idproyecto = 0;
 	                			String partida =  "";
@@ -144,7 +149,8 @@ public class ControladorListadoVales extends ControladorBase {
 	                			else
 	                			{    			                		
 			                		/* Modificado aqui Israel 29/02/2012 validar compromiso del vale*/
-			                		Map m = getJdbcTemplate().queryForMap("SELECT ID_PROYECTO, N_PROGRAMA, '"+partida+"' AS CLV_PARTID,  ISNULL(dbo.getAutorizado(?,?,?,?),0) AS AUTORIZADO, ISNULL(dbo.getPrecomprometido(?,?,?),0) AS PRECOMPROMETIDO, ISNULL(dbo.getComprometido(?,?,?),0) AS COMPROMETIDO, ISNULL(dbo.getEjercido(?,?,?),0) AS EJERCIDO, ISNULL(dbo.getDisponible(?,?,?),0) AS DISPONIBLE FROM CEDULA_TEC AS CT WHERE CT.ID_PROYECTO = ? ", new Object[]{periodo, periodo, idproyecto, partida, periodo, idproyecto, partida,  periodo, idproyecto, partida, periodo, idproyecto, partida, periodo, idproyecto, partida, idproyecto});
+			                		@SuppressWarnings("rawtypes")
+									Map m = getJdbcTemplate().queryForMap("SELECT ID_PROYECTO, N_PROGRAMA, '"+partida+"' AS CLV_PARTID,  ISNULL(dbo.getAutorizado(?,?,?,?),0) AS AUTORIZADO, ISNULL(dbo.getPrecomprometido(?,?,?),0) AS PRECOMPROMETIDO, ISNULL(dbo.getComprometido(?,?,?),0) AS COMPROMETIDO, ISNULL(dbo.getEjercido(?,?,?),0) AS EJERCIDO, ISNULL(dbo.getDisponible(?,?,?),0) AS DISPONIBLE FROM CEDULA_TEC AS CT WHERE CT.ID_PROYECTO = ? ", new Object[]{periodo, periodo, idproyecto, partida, periodo, idproyecto, partida,  periodo, idproyecto, partida, periodo, idproyecto, partida, periodo, idproyecto, partida, idproyecto});
 			                		
 	                				
 	                			    importe =  (BigDecimal)row.get("IMPORTE");	
