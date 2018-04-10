@@ -40,7 +40,8 @@ public class ControladorReporteTransferencias extends ControladorBase {
 	public String requestGetControlador(Map modelo, HttpServletRequest request, HttpServletResponse response) {
 		String idUnidad=request.getParameter("cbUnidad")==null ?this.getSesion().getClaveUnidad() : request.getParameter("cbUnidad");
 		Integer tipogasto = request.getParameter("cbotipogasto") != null ? Integer.parseInt(request.getParameter("cbotipogasto")): 0;
-		Integer tipoAdecuacion = request.getParameter("cboadecuacion")!= null ? Integer.parseInt(request.getParameter("cboadecuacion")): 0;
+		//Integer tipoAdecuacion = request.getParameter("cboadecuacion")!= null ? Integer.parseInt(request.getParameter("cboadecuacion")): 0;
+		String tipoAdecuacion = request.getParameter("cboadecuacion")==null ? Integer.toString(0): this.arrayToString(request.getParameterValues("cboadecuacion"),",");
 		//String idpartida = request.getParameter("txtpartida")!= null ? request.getParameter("txtpartida"): "";
 		//Integer clv_capitulo = request.getParameter("cbocapitulo")!= null ? Integer.parseInt(!request.getParameter("cbocapitulo").toString().equals("") ? request.getParameter("cbocapitulo").toString(): "0"): 0;
 		Integer NumMesAct = request.getParameter("cbomes")!= null ? Integer.parseInt(!request.getParameter("cbomes").toString().equals("") ? request.getParameter("cbomes").toString(): "0"): 0;
