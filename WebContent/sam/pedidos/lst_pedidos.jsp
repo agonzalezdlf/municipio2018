@@ -9,15 +9,27 @@
 <title>Listado de Pedidos</title>
 <meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/>
 <link rel="stylesheet" href="../../include/css/estilosam.css" type="text/css">
-<link rel="stylesheet" href="../../include/js/componentes/jquery.alerts.css" type="text/css">
-<link type="text/css" href="../../include/js/utilsJquery/jquery-ui-1.7.1.custom.css" rel="stylesheet" />	
-<script type="text/javascript" src="../../include/js/jquery-1.8.3.min.js"></script>
-<script type="text/javascript" src="../../include/js/toolSam.js"></script>
+<link rel="stylesheet" href="../../include/js/componentes_BACK/jalert_2018.css" type="text/css">
+<link type="text/css" href="../../include/js/utilsJquery/jquery-ui-1.7.1.custom.css" rel="stylesheet" /> 
+<script type="text/javascript" src="../../include/js/utilsJquery/jquery-ui-1.7.1.custom.min.js"></script>
+
+	 <script type="text/javascript" src="../../include/js/jquery-1.7.2.min.js"></script> 
+<script type="text/javascript" src="../../include/js/autocomplete/jquery.autocomplete.js"></script>
+<link rel="stylesheet" href="../../include/js/autocomplete/jquery.autocomplete.css" type="text/css" />	
+
+
+<!-- 
+	 
+	 <script type="text/javascript" src="../../include/js/jquery-1.8.3.min.js"></script>
+	 <script type="text/javascript" src="../../include/js/utilsJquery/jquery-ui-1.7.1.custom.min.js"></script>
+-->	
+
+<script type="text/javascript" src="../../include/js/toolSam_olds.js?x=<%=System.currentTimeMillis()%>"></script>
 <script type="text/javascript" src="lst_pedidos.js?x=<%=System.currentTimeMillis()%>"> </script>
-<script type="text/javascript" src="../../include/js/componentes/jquery.alerts.js"></script>
-<script type="text/javascript" src="../../include/js/utilsJquery/jquery-ui-1.7.1.custom.min.js"></script>
+<script type="text/javascript" src="../../include/js/componentes_BACK/jalert_2018.js"></script>
+
 <script type="text/javascript" src="../../dwr/interface/controladorPedidos.js"> </script>
-<script type="text/javascript" src="../../include/js/utilsJquery/jquery-ui-1.7.1.custom.min.js"></script>
+
 <script type="text/javascript" src="../../include/js/autocomplete/jquery.autocomplete.js"></script>
 <script type="text/javascript" src="../../include/js/autocomplete/autompleteVarios.js"></script>
 <script type="text/javascript" src="../../dwr/interface/autocompleteDiversosRemoto.js"> </script>
@@ -44,6 +56,8 @@ a:hover {
 a:active {
 	text-decoration: none;
 }
+
+
 -->
 </style></head>
 <body>
@@ -130,6 +144,12 @@ a:active {
   <tr >
     <th height="25" >Beneficiario:<td><input type="text" id="txtprestadorservicio" name="txtprestadorservicio" class="input" style="width:445px" value="<c:out value='${txtprestadorservicio}'/>"/>
       <input type="hidden" id="CVE_BENEFI" name="CVE_BENEFI" value="<c:out value='${CVE_BENEFI}'/>" /></td>
+    <td >&nbsp;</td>
+    <td >&nbsp;</td>
+    </tr>
+     <tr >
+  <th height="25" >Beneficiario Search:<td><input type="text" id="w-input-search" name="w-input-search" class="input" style="width:445px" value=""/>
+      
     <td >&nbsp;</td>
     <td >&nbsp;</td>
     </tr>

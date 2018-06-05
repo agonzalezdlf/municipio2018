@@ -23,6 +23,14 @@
 <link rel="stylesheet" href="../../include/css/css/css3-buttons.css" type="text/css" media="screen">
 <link rel="stylesheet" href="../../include/css/tiptip.css" type="text/css"  media="screen">
 <script src="../../include/css/jquery.tiptip.js"></script>
+
+<script type="text/javascript" src="../../include/js/bootstrap-3.3.7.js"></script>
+<script type="text/javascript" src="../../include/js/sweetalert2.js"></script>
+
+<link rel="stylesheet" href="../../include/css/bootstrap-3.3.7.css" type="text/css">
+<link rel="stylesheet" href="../../include/css/bootstrap2.css" type="text/css"/>
+<link rel="stylesheet" href="../../include/css/sweetalert2.css" type="text/css">
+
 </head>
 <body>
   <table width="95%" align="center"><tr><td><h1>Consulta de salidas</h1></td></tr></table>  

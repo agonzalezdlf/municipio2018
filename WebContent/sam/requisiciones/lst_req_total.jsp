@@ -168,6 +168,10 @@ a:active {
                 </c:forEach>
              </select>
       </div> 
+      <div class="col-md-4 col-md-offset-3">
+      	<input type="checkbox" name="verUnidad" id="verUnidad" value="1" <c:if test='${verUnidad==1}'>  checked </c:if>>
+      	<label style="width:300px;" for="verUnidad">&nbsp; Incluir documentos de  la Unidad</label>
+      </div>
 	</div>
 	<div class="form-group">
 	      <label class="control-label col-sm-1" for="email">Proyecto:</label>

@@ -238,7 +238,7 @@ public class ControladorListadoVales extends ControladorBase {
 	                	for (Long idVale :vales) {
 	                		gatewayVales.actualizarEstatusVale( idVale, gatewayVales.getEstatusPagado(), getSesion().getEjercicio(), getSesion().getIdUsuario());
 	                		getJdbcTemplate().update("insert into vales  (vale, clv_benefi, ID_RECURSO, tipo_vale, fe_vale, notas, vale_impor, descontado) " +
-	                								 " select num_vale,clv_benefi,ID_RECURSO,tipo,fecha,justif,(SELECT ISNULL(SUM(V.IMPORTE),0) FROM SAM_MOV_VALES AS V WHERE V.CVE_VALE = ?) AS importe,0 from SAM_VALES_EX where cve_vale=?", new Object []{idVale,idVale});
+	                								 " select num_vale,clv_benefi,ID_RECURSO,tipo,fecha,LEFT(JUSTIF,250),(SELECT ISNULL(SUM(V.IMPORTE),0) FROM SAM_MOV_VALES AS V WHERE V.CVE_VALE = ?) AS importe,0 from SAM_VALES_EX where cve_vale=?", new Object []{idVale,idVale});
 	                	}
 	                		
 	                } });

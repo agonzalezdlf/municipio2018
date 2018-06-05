@@ -11,7 +11,7 @@ Fecha      : 26/10/2009
 
 
 $(document).ready(function() {
-	
+
 	$('#btnGrabar').on('click', function(){
 		guardar();
 	});
@@ -22,7 +22,7 @@ $(document).ready(function() {
 	
 	$('#tipo').on('change', function(){
 		pintarTablaDetalles();
-		// alert( this.value );
+		
 	});
 });
 
@@ -32,7 +32,7 @@ function limpiar(){
 	 $('#estatus').prop('checked',true);			 
 	 $('#clave').val('');
 }
-
+/*
 function guardar(){	
 	
 	var error="";
@@ -44,18 +44,52 @@ function guardar(){
 	if (!$('#estatus').prop('checked'))	
 	   estatus='INACTIVO';	
 	ShowDelay('Guardando grupo','');
-    controladorGruposRemoto.guardarGrupo($('#clave').val(),$('#descripcion').val(),estatus,$('#tipo').val(),{
-			 callback:function(items) {				 
-	  			 CloseDelay("Grupo guardado con éxito", 2000, function(){pintarTablaDetalles();});
- 		     }	
-								,errorHandler:function(errorString, exception) { 
-								   swal("Fallo la operacion:<br>Error::"+errorString+"-message::"+exception.message+"-JavaClass::"+exception.javaClassName+".<br>Consulte a su administrador");    
-								}
-			});		}else swal(error,titulo);	
-			
+	
+	swal({
+		  title: 'Es seguro?',
+		  text: '¿Confirma que desea guardar la informacion del beneficiario?',
+		  type: 'warning',
+		  showCancelButton: true,
+		  confirmButtonText: 'Sí, gaurdar!',
+		  cancelButtonText: 'No, abortar!'
+		}).then((result) => {
+		  if (result.value  ) {
+			 
+			  swal({
+				  title: 'Guardando',
+				  type: 'success',
+				  timer: 4000,
+				  onOpen: () => {
+				    swal.showLoading()
+				  }
+				}).then((result) => {
+				  if (
+				   
+				    result.dismiss === swal.DismissReason.timer
+				  ) {
+				  
+					  controladorGruposRemoto.guardarGrupo($('#clave').val(),$('#descripcion').val(),estatus,$('#tipo').val(),{
+							 callback:function(items) {
+								 pintarTablaDetalles();
+								 swal("Good job!", "Beneficiario Guardado con éxito!", "success");
+								 cerrarmodal();
+								 limpiar();
+							},errorHandler:function(errorString, exception) { 
+								//swal('',errorString, 'error'); 
+								swal('',"Fallo la operacion:<br>Error::"+errorString+"-message::"+exception.message+"-JavaClass::"+exception.javaClassName+".<br>Consulte a su administrador",'warning');
+							}
+						});	
+				   
+				  }
+				})
+		  
+		  } else if (result.dismiss === swal.DismissReason.cancel) {
+		    swal('Cancelado','El beneficiario no se guardo','error');
+		  }
+		})
 }
-
-
+}
+*/
 
  function pintarTablaDetalles() {
 	quitRow("detallesTabla");
@@ -72,14 +106,9 @@ function guardar(){
  		     	pintaTabla( "detallesTabla", i+1 ,this.ID_GRUPO_CONFIG,this.GRUPO_CONFIG,this.ESTATUS,this.TIPO);
  		     	
  		     	
-        }); 	
+            }); 	
             swal.closeModal();
-			
-			//limpiar();
-            //swal.hideLoading(); 
-            //swal.disableLoading ()
-        } 					   				
-        ,
+		},
         errorHandler:function(errorString, exception) { 
            swal("Fallo la operacion:<br>Error::"+errorString+"-message::"+exception.message+"-JavaClass::"+exception.javaClassName+".<br>Consulte a su administrador");      
         }
@@ -111,12 +140,54 @@ function guardar(){
 		 $('#tipo').val(tipo);
  }
 
+  
 
   function eliminar(){
 	  var checkRetenciones = [];
      $('input[name=claves]:checked').each(function() {checkRetenciones.push($(this).val());	 });	 
 	 if (checkRetenciones.length > 0 ) {
+		 
 		 swal({
+			  title: 'Es seguro?',
+			  text: '¿Confirma que desea eliminar el grupo de firma?',
+			  type: 'warning',
+			  showCancelButton: true,
+			  confirmButtonText: 'Sí, eliminar!',
+			  cancelButtonText: 'No, abortar!'
+			}).then((result) => {
+			  if (result.value  ) {
+				 
+				  swal({
+					  title: 'Eliminando',
+					  type: 'warning',
+					  timer: 4000,
+					  onOpen: () => {
+					    swal.showLoading()
+					  }
+					}).then((result) => {
+					  if (result.dismiss === swal.DismissReason.timer) {
+						  controladorGruposRemoto.eliminarGrupo(checkRetenciones, {
+								callback:function(items) {
+								
+									swal("Good job!", "Grupo eliminado con éxito!", "success");
+									pintarTablaDetalles();
+								}	
+								,errorHandler:function(errorString, exception) { 
+									swal('',"Fallo la operacion:<br>Error::"+errorString+"-message::"+exception.message+"-JavaClass::"+exception.javaClassName+".<br>Consulte a su administrador",'warning');
+								}
+							});	
+					   
+					  }
+					})
+			  
+			  } else if (result.dismiss === swal.DismissReason.cancel) {
+				  swal('Cancelado','El beneficiario no se guardo','error')
+			  }
+			})
+	 } else 
+		    swal('','Es necesario que seleccione un elemento de la lista','error');
+		 
+		 /*swal({
 			  title: 'Estas seguro?',
 			  text: "El cambio no podra revertirse!",
 			  type: 'warning',
@@ -136,42 +207,20 @@ function guardar(){
 				} 					   				
 				,
 				errorHandler:function(errorString, exception) { 
-				jError("Fallo la operacion:<br>Error::"+errorString+"-message::"+exception.message+"-JavaClass::"+exception.javaClassName+".<br>Consulte a su administrador");    
+				swal('',"Fallo la operacion:<br>Error::"+errorString+"-message::"+exception.message+"-JavaClass::"+exception.javaClassName+".<br>Consulte a su administrador",'warning');    
 				}
 			});
 		
 
 			}
 			}, function (dismiss) {
-			  // dismiss can be 'cancel', 'overlay',
-			  // 'close', and 'timer'
-			  if (dismiss === 'cancel') {
-			    swal(
-			      'Abortado',
-			      'Tu requisicion no fue modificada :)',
-			      'error'
-			    )
-			  }
+				  
+				  if (dismiss === 'cancel') {
+				    swal( 'Abortado','Tu requisicion no fue modificada :)', 'error')
+				  }
 			})
-		/*	
-		 jConfirm('¿Confirma que desea eliminar el grupo?','Confirmar', function(r){
-			 	if(r){
-						ShowDelay('Eliminando el grupo','');
-						controladorGruposRemoto.eliminarGrupo(checkRetenciones, {
-							callback:function(items) {
-							   CloseDelay("Grupo eliminado con éxito", 2000, function(){pintarTablaDetalles();});
-							   
-							} 					   				
-							,
-							errorHandler:function(errorString, exception) { 
-							jError("Fallo la operacion:<br>Error::"+errorString+"-message::"+exception.message+"-JavaClass::"+exception.javaClassName+".<br>Consulte a su administrador");    
-							}
-						});
-					}
-		})
-		*/	 
-	 } else 
-	    swal('','Es necesario que seleccione un elemento de la lista','error');
+*/
+
 			
 			
 	 }

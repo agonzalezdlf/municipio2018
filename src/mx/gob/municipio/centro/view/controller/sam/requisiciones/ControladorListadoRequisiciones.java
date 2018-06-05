@@ -61,7 +61,7 @@ public class ControladorListadoRequisiciones extends ControladorBase {
 		String listadoReq=request.getParameter("txtlistado");
 		String proyecto=request.getParameter("txtproyecto");
 		String partida=request.getParameter("txtpartida");
-	
+		
 		String clv_benefi= request.getParameter("cboSearch");
 		String beneficiario=request.getParameter("cboSearch");//beneficiario
 		

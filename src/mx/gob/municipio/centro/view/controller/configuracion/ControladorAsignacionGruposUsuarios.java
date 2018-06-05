@@ -46,7 +46,7 @@ public class ControladorAsignacionGruposUsuarios  extends ControladorBase {
 	    return "sam/configuracion/configuracion_grupos_usuarios.jsp";
 	}
 	
-	public List<Map> getUsuariosPorUnidad(String org_id){
+	public List<Map<String,Object>> getUsuariosPorUnidad(String org_id){
 		return this.gatewayUsuarios.getUsuariosUnidad(org_id);
 	}
 	

@@ -2,6 +2,10 @@ var guardado = false;
 var folio_salida = 0;
 
 $(document).ready(function() {
+	
+	//$('img[name=imgsalida]').click(function(event){alert('clic en la imagen')});
+	//$('#imgsalida').click(function(event){alert('clic en la imagen 2')});
+	
   var imagen="../../imagenes/cal.gif";	
   var formatFecha="dd/mm/yy";	
   $('#cmdbuscar').click(function(event){iniciarBusqueda();});
@@ -33,6 +37,7 @@ function cargaraAlmacenes(idDependencia) {
  }
 
 function crearSalida(id_entrada){
+	
 	var id_salida = 0;
 	document.location='salidas.action?id_entrada='+id_entrada+'&id_salida='+id_salida;
 	//jWindow('<iframe width="700" height="500" name="salidasAlmacen" id="salidasAlmacen" frameborder="0" src="salidas.action?id_entrada='+id_entrada+'&id_salida='+id_salida+'"></iframe>','Nueva Salida de Almacen', '','',0);

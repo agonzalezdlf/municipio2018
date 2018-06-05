@@ -205,7 +205,7 @@ function Redirect(id_entrada){
 /*funcion para cerrar el documento*/
 function cerrarDocumento(){
 	if(cont==0) { jError('Imposible cerrar la entrada si no se han cargado por lo menos un lote de Pedido','Error'); return false;}
-	jConfirm('�Confirma que desea cerrar la entrada de almacen actual?','Cerrar', function(r){
+	jConfirm('¿Confirma que desea cerrar la entrada de almacen actual?','Cerrar', function(r){
 				if(r){
 						  controladorEntradasDocumentosRemoto.cerrarEntradaDocumento($('#ID_ENTRADA').attr('value'),{
 						  callback:function(items){ 	    
@@ -392,7 +392,7 @@ function __regresaPedido(num, id, id_proyecto, programa, clv_partid, clv_benefi,
 function guardarDocumento(){
 	var v = validar();
 	if(v) return false;
-	jConfirm('�Confirma que desea guardar el documento?','Guardar documento', function(r){
+	jConfirm('¿Confirma que desea guardar el documento?','Guardar documento', function(r){
 				if(r){
 						var id_entrada = $('#ID_ENTRADA').attr('value');
 						var id_almacen = $('#cboalmacen').attr('value');

@@ -1,10 +1,11 @@
  function llenarTablaPrivilegios() {	 
 	quitRow( "detallesListas" );
-	var sistema= $('#sistemas' ).attr('value');
-	var rol= $('#roles' ).attr('value');
+	var sistema= $('#sistemas' ).val();
+	var rol= $('#roles' ).val();
 	if (sistema!="" && rol!="") {	
 	var anterior="";
 	ShowDelay('Cargando lista de privilegios','');
+	
 	controladorRolesPrivilegiosRemoto.buscarPrivilegiosRoles(rol,sistema,  {
         callback:function(items) { 		
          for (var i=0; i<items.length; i++ )  {			
@@ -21,7 +22,7 @@
         } 			
 		$('#filaBoton').show();
 	    $('#filaPrivilegio').show();
-		//_closeDelay();
+		
         } 					   				
         ,
         errorHandler:function(errorString, exception) { 
@@ -57,9 +58,9 @@
 
 function guardarDato(){			
     var error="";
-	var rol= $('#roles' ).attr('value');
+	var rol= $('#roles' ).val();
 	var lista=checkboxSeleccionadosPrivilegios();
-		ShowDelay('Guardando lista de privilegios','');
+		//ShowDelay('Guardando lista de privilegios','');
 	    controladorRolesPrivilegiosRemoto.guardarPrivilegios(lista,rol,{
 			 callback:function(items) {
 				 setTimeout(function() {
@@ -67,8 +68,8 @@ function guardarDato(){
 			            		function() { quitRow( "detallesListas" );
 			 				   $('#filaBoton').hide();
 							   $('#filaPrivilegio').hide();
-							   $('#roles' ).attr('value','');
-							   $('#sistemas' ).attr('value','');	
+							   $('#roles' ).val('');
+							   $('#sistemas' ).val('');	
 			            		}, 1000)
 			        });
  	  		  /* CloseDelay("Privilegios guardados con éxito",2000, function(){
@@ -83,7 +84,7 @@ function guardarDato(){
 			   
  		     }	
 								,errorHandler:function(errorString, exception) { 
-								   swal('',"Fallo la operacion:<br>Error::"+errorString+"-message::"+exception.message+"-JavaClass::"+exception.javaClassName+".<br>Consulte a su administrador",'error');    
+								   swal('',"Fallo la operacion:<br>Error::"+errorString+"-message::"+exception.message+"-JavaClass::"+exception.javaClassName+".<br>Consulte a su administrador",'warning');    
 								}
 			});
 
@@ -101,9 +102,9 @@ function checkboxSeleccionadosPrivilegios( ) {
 	if (checkbox.length > 0 ) {		
 	 for( var i=0; i < checkboxLength; i++ ){
 	     var vidPrivi = checkbox[i].value;
-		 var vidPriviRol= $('#idPrivilegio_'+vidPrivi).attr('value');		 
+		 var vidPriviRol= $('#idPrivilegio_'+vidPrivi).val();		 
 		 var vchecado=0;
-		 if ($('#idPrivilegio_'+vidPrivi).attr('checked'))
+		 if ($('#idPrivilegio_'+vidPrivi).prop('checked'))
 		   vchecado=1;
 		 var map = {idPrivi: vidPrivi, idPriviRol: vidPriviRol, checado:vchecado};
 	     if(vidPriviRol!='' || vchecado == 1) {
@@ -114,9 +115,9 @@ function checkboxSeleccionadosPrivilegios( ) {
 	}
 	else {	   
 		 var vidPrivi = checkbox.value;
-		 var vidPriviRol= $('#idPrivilegio_'+vidPrivi).attr('value');		 
+		 var vidPriviRol= $('#idPrivilegio_'+vidPrivi).val();		 
 		  var vchecado=0;
-		 if ($('#idPrivilegio_'+vidPrivi).attr('checked'))
+		 if ($('#idPrivilegio_'+vidPrivi).prop('checked'))
 		   vchecado=1;
 		 var map = {idPrivi: vidPrivi, idPriviRol: vidPriviRol, checado:vchecado};
  	     if(vidPriviRol!='' || vchecado == 1) 

@@ -49,16 +49,16 @@ public class ControladorListadoEntradasDocumentos extends ControladorBaseAlmacen
 	}
 	
 	@SuppressWarnings("unchecked")
-	@RequestMapping(method = RequestMethod.GET)    
+	@RequestMapping(method = {RequestMethod.GET,RequestMethod.POST})   
 	public String  requestGetControlador( Map modelo, HttpServletRequest request ) {
+		
 		boolean privilegio = getPrivilegioEn(this.getSesion().getIdUsuario(), 117 );
 		
 		modelo.put("id_entrada", (request.getParameter("id_entrada")==null ? 0: request.getParameter("id_entrada")));
 		modelo.put("cbodependencia", request.getParameter("cbodependencia")==null ? 0: request.getParameter("cbodependencia"));
 		modelo.put("id_almacen", request.getParameter("id_almacen")==null ? 0: request.getParameter("id_almacen"));
 		modelo.put("id_tipo_documento", request.getParameter("id_tipo_documento")==null ? 0: request.getParameter("id_tipo_documento"));
-		modelo.put("id_proveedor", request.getParameter("id_proveedor")==null ? 0: request.getParameter("id_proveedor"));
-		modelo.put("proveedor", gatewayBeneficiario.getBeneficiario2(Long.parseLong(modelo.get("id_proveedor").toString())));
+		modelo.put("id_proveedor", request.getParameter("cboproveedor")==null ? "0": request.getParameter("cboproveedor"));
 		modelo.put("id_pedido", request.getParameter("id_pedido")==null ? "": request.getParameter("id_pedido"));
 		modelo.put("fechaInicial", request.getParameter("fechaInicial")==null ? "": request.getParameter("fechaInicial"));
 		modelo.put("fechaFinal", request.getParameter("fechaFinal")==null ? "": request.getParameter("fechaFinal"));
@@ -66,7 +66,7 @@ public class ControladorListadoEntradasDocumentos extends ControladorBaseAlmacen
 		modelo.put("partida", request.getParameter("partida")==null ? "": request.getParameter("partida"));
 		modelo.put("num_documento", request.getParameter("num_documento")==null ? "": request.getParameter("num_documento"));
 		modelo.put("folio", request.getParameter("folio")==null ? "": request.getParameter("folio"));
-		
+				
 		if(privilegio){
 			if(request.getParameter("cbodependencia")==null)
 				modelo.put("cbodependencia",0);
@@ -86,6 +86,7 @@ public class ControladorListadoEntradasDocumentos extends ControladorBaseAlmacen
 		if(!modelo.get("cbodependencia").toString().equals("0")){
 			modelo.put("almacenes", getAlmacenes(Long.parseLong(modelo.get("cbodependencia").toString())));
 		}
+		
 		
 		modelo.put("listadoDocumentos", this.gatewayEntradasDocumentos.getListadoDocumentos(modelo));
 	    return "almacen/consultas/lst_entradas.jsp";
@@ -110,10 +111,14 @@ public class ControladorListadoEntradasDocumentos extends ControladorBaseAlmacen
     	return gatewayUnidadAdm.getUnidadAdmTodos();	
     }
 	
-	//@ModelAttribute("listadoDocumentos")
+	@SuppressWarnings("unchecked")
+	@ModelAttribute("beneficiarios")
+	public List<Map<String, Object>>getBeneficiarios(){
+		return (List<Map<String, Object>>) gatewayBeneficiario.getListaBeneficiarios();
+	}
 	
 	
-	public void cancelarDocumento(Long id_entrada){
+	public void cancelarDocumento(Long id_entrada){ //Cancelacion individual del listado de entradas
 		this.gatewayEntradasDocumentos.cancelarEntradaDocumento(id_entrada, this.getSesion().getIdUsuario());
 	}
 	
@@ -121,7 +126,7 @@ public class ControladorListadoEntradasDocumentos extends ControladorBaseAlmacen
 		this.gatewayEntradasDocumentos.aperturarEntradas(id_entrada);
 	}
 	
-	public void cancelarEntrada(Long[] id_entrada){
+	public void cancelarEntrada(Long[] id_entrada){//Cancelacion por boton desde la seleccion por checkbox del listado de entradas
 		this.gatewayEntradasDocumentos.cancelarEntradas(id_entrada);
 	}
 	

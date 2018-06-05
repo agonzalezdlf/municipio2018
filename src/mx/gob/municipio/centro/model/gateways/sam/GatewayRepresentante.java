@@ -78,7 +78,7 @@ public class GatewayRepresentante extends BaseGateway {
 		
 		
 
-		public Long guardaRepresentantes(String tipo,String clv_benefi, String unidad, String titular,String representante, Date fecha_bajar,  String rfc ){
+		public Long guardaRepresentantes(String tipo,String clv_benefi, String unidad, String titular,String representante,Date fecha_altar, Date fecha_bajar,  String rfc ){
 			
 			try
 			{
@@ -90,21 +90,18 @@ public class GatewayRepresentante extends BaseGateway {
 				
 				if (tipo.equals("PM"))
 				{
-					this.getJdbcTemplate().update("INSERT INTO dbo.CAT_BENEFI_REPRES (CLV_BENEFI, ID_DEPENDENCIA, TITULAR, REPRE_LEGAL, FECHA_ALTAR, RFCR) " +
-							"VALUES (?,?,?,?,?,?)", new Object[]{clv_benefi,null,null,representante,new Date(),rfc});
+					this.getJdbcTemplate().update("INSERT INTO dbo.CAT_BENEFI_REPRES (CLV_BENEFI, ID_DEPENDENCIA, TITULAR, REPRE_LEGAL, FECHA_ALTAR,FECHA_BAJA, RFCR) " +
+							"VALUES (?,?,?,?,?,?,?)", new Object[]{clv_benefi,null,null,representante,fecha_altar,fecha_bajar,rfc});
 					return cveBeneficiario;
 				}else
-					this.getJdbcTemplate().update("INSERT INTO dbo.CAT_BENEFI_REPRES (CLV_BENEFI, ID_DEPENDENCIA, TITULAR, REPRE_LEGAL, FECHA_ALTAR, RFCR) " +
-							"VALUES (?,?,?,?,?,?)", new Object[]{clv_benefi,unidad,titular,null,new Date(),rfc});
+					this.getJdbcTemplate().update("INSERT INTO dbo.CAT_BENEFI_REPRES (CLV_BENEFI, ID_DEPENDENCIA, TITULAR, REPRE_LEGAL, FECHA_ALTAR,FECHA_BAJA, RFCR) " +
+							"VALUES (?,?,?,?,?,?,?)", new Object[]{clv_benefi,unidad,titular,null,fecha_altar,fecha_bajar,rfc});
 					return cveBeneficiario;
 			}
 			catch(Exception e){
 				throw new RuntimeException(e.getMessage(),e);
 			}
 			
-			/*this.getJdbcTemplate().update("INSERT INTO dbo.CAT_BENEFI_REPRES (CLV_BENEFI, ID_DEPENDENCIA, TITULAR, REPRE_LEGAL, FECHA_ALTAR, FECHA_BAJA, RFCR) " +
-					"VALUES (?,?,?,?,?,?,?)", new Object[]{clv_benefi,unidad,titular,representante,new Date(),fecha_bajar,rfc});
-			throw new RuntimeException("Guardado con exito");*/
 			
 		}
 }

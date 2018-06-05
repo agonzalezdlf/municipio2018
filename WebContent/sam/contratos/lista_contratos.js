@@ -8,7 +8,7 @@ $(document).ready(function() {
   $('#cmdbuscar').click(function(event){getContratos();})
   $('[id=Cancelarcontra]').click(function(event){cancelarContrato();});
   
-  getBeneficiarios('txtprestadorservicio','CLV_BENEFI','');
+  //getBeneficiarios('txtprestadorservicio','CLV_BENEFI','');
 	$('#ui-datepicker-div').hide();
 });
 

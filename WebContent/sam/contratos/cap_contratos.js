@@ -12,12 +12,13 @@ $(document).ready(function() {
 		return false;
 	});
 	
-	getBeneficiarios('txtbeneficiario','CLV_BENEFI','');
+	//getBeneficiarios('txtbeneficiario','CLV_BENEFI','');
 	$('.tiptip a.button, .tiptip button').tipTip();
 	$("#txtfechainicial").datepicker({showOn: 'button', buttonImage:"../../imagenes/cal.gif" , buttonImageOnly: true,dateFormat: "dd/mm/yy"});
 	$("#txtfechatermino").datepicker({showOn: 'button', buttonImage:"../../imagenes/cal.gif" , buttonImageOnly: true,dateFormat: "dd/mm/yy"});
 	$('#cmdguardar').click(function (event){guardaContrato();});
 	$('#cmdcerrar').click(function (event){cierraContrato();});
+	$('#cmdcerrar').addClass("btn_disable");
 	$('#cmdnuevoconcepto').click( function(event){nuevoConcepto();});
 	$('#cmdnuevo').click(function(event){nuevoContrato();});
 	$('#cmdagregar').click( function(event){agregarConcepto();});
@@ -26,7 +27,7 @@ $(document).ready(function() {
 	 //Configura los tabuladores
 	 $('#img_presupuesto').click(function(event){muestraPresupuesto();});
 	 $('#txtproyecto').blur(function(event){__getPresupuesto($('#ID_PROYECTO').attr('value'),$('#txtproyecto').attr('value'),$('#txtpartida').attr('value'), $('#cbomes').attr('value'),  'txtpresupuesto','txtdisponible','');});
-	 $('#txtpartida').blur(function(event){__getPresupuesto($('#ID_PROYECTO').attr('value'), $('#txtproyecto').attr('value'),$('#txtpartida').attr('value'), $('#cbomes').attr('value'),  'txtpresupuesto','txtdisponible','');});
+	 $('#txtpartida').focus(function(event){__getPresupuesto($('#ID_PROYECTO').attr('value'),$('#txtproyecto').attr('value'),$('#txtpartida').attr('value'), $('#cbomes').attr('value'),  'txtpresupuesto','txtdisponible','');});
 	
 	 $('#tabuladores').tabs();
 	 $('#tabuladores').tabs('enable',0);
@@ -42,26 +43,32 @@ $(document).ready(function() {
 	 $('#cbotipocontrato').change(function(event){ValidarTipoContrato();});
 	 ValidarTipoContrato();
 	 
-	 
+	
 });
 function mostrarcerrar(){
 	cmdcerrar.style.display = '';
 }
 
-/****************Para ocultar un boton cuando no exista movimientos en el detalle de la tabla maestra****************************/
+/****************Para ocultar un boton cerrar si no exista movimientos en el detalle de la tabla maestra****************************/
 function tabladetalles(){
 	var numFilas = $('#listaConceptos > tbody > tr').length;
-	
+	var nFilas = $("#listaConceptos tr").length;
+	var filas = $("#listaConceptos tbody tr").length;
+	var yea=document.getElementById("listaConceptos").rows.length;
+	var rowCount = $('#listaConceptos tr:last').index();
+		
 	if (numFilas< 1){
-		//alert ( "hay filas en la tabla!!" );
-		//document.getElementById('#tbotones > tr > td > cmdcerrar').style.display = 'block';
-		alert('El numero de movientos es: ' + numFilas);
-		cmdcerrar.style.visibility  = 'visible'; 
+				cmdcerrar.style.visibility  = 'visible'; 
+				$('#cmdcerrar').removeClass("btn_disable");
+				/*console.log('1 El numero de movientos es: ' + numFilas);
+				console.info('1 El numero de movientos es: ' + nFilas);
+				console.info('1 El numero de movientos es: ' + filas);
+				console.info('1 El numero de movientos es: ' + yea);*/
 	}else
 		{
-		cmdcerrar.style.display = 'none'; // No ocupa espacio hidden
-		alert('El numero de movientos es: ' + numFilas);
-		//cmdcerrar.style.visibility  = 'hidden'; // No se ve
+			cmdcerrar.style.display = 'none'; // No ocupa espacio hidden
+			
+			
 		}
 }
 
@@ -183,6 +190,7 @@ function agregarConcepto(){
 				CloseDelay('Concepto guardado con exito');
 				getConceptos();
 				nuevoConcepto();
+				
 		} 					   				
 		,
 		errorHandler:function(errorString, exception) { 
@@ -215,27 +223,61 @@ function cierraContrato(){
 	if(!cerrar) {swal('','Es necesario que exista al menos un concepto de contrato para realizar esta operación','warning'); return false;}
 	
 	var cve_contrato = $('#CVE_CONTRATO').attr('value');
-	jConfirm('¿Confirma que desea cerrar Contrato?', 'Confirmar', function (r){
-				if(r){
-					ShowDelay('Cerrando contrato','');
-					ControladorContratosRemoto.cerrarContrato(cve_contrato,{
-										callback:function(items){
+	
+	swal({
+		  title: 'Es seguro?',
+		  text: '¿Confirma que desea cerrar el contrato?',
+		  type: 'warning',
+		  showCancelButton: true,
+		  confirmButtonText: 'Sí, Cerrar!',
+		  cancelButtonText: 'No, abortar!'
+		}).then((result) => {
+		  if (result.value  ) {
+			  
+				ShowDelay('Cerrando contrato','');
+				ControladorContratosRemoto.cerrarContrato(cve_contrato,{
+							callback:function(items){
+											/*
 											if(getHTML(items)=="") {
 												CloseDelay('Contrato cerrado con éxito', 2000, function(){
 														$('#cmdcerrar').attr('disabled', true);
 														 getReporteContrato($('#CVE_CONTRATO').attr('value'));
 														 document.location='lista_contratos.action';
 													});
-											}
+											}*/
+								swal({
+									  title: 'Cerrando',
+									  type: 'success',
+									  timer: 4000,
+									  onOpen: () => {
+									    swal.showLoading()
+									  }
+									}).then((result) => {
+									  if ( result.dismiss === swal.DismissReason.timer  ) {
+										  swal("Contrato cerrado con éxito!");
+										    $('#cmdcerrar').attr('disabled', true);
+											//getReporteContrato($('#CVE_CONTRATO').attr('value'));
+											document.location='lista_contratos.action'; 
+									   
+									  }
+									})
 									}
 									,
 								errorHandler:function(errorString, exception) { 
-									jError(errorString, 'Error');   
+									swal('',errorString, 'error');   
 									return false;
 								}
 					});
-				}
-			});
+				
+		  } else if (result.dismiss === swal.DismissReason.cancel) {
+		    swal(
+		      'Cancelado',
+		      'Proceso abortado con exito!',
+		      'error'
+		    )
+		  }
+		})
+		
 }
 
 function guardaContrato(){
@@ -252,6 +294,7 @@ function guardaContrato(){
 					callback:function(items){
 							$('#CVE_CONTRATO').attr('value',items);
 							$('#tabuladores').tabs('enable',1);
+							
 							getConceptos();
 							subirArchivo();
 							//CloseDelay('Contrato guardado con exito');
@@ -369,15 +412,19 @@ function getConceptos(){
 						   		if(items.length>0) {
 									$('#cbotipocontrato').attr('disabled', true);
 									$('#tipoGasto').attr('disabled', true);
-									$('#cmdcerrar').attr('disabled', false);
 									$('#tabuladores').tabs('enable',1);
+									$('#cmdcerrar').attr('disabled', false);
+									
 									cerrar = true;
+									tabladetalles();
 								}
 								else{
+									
 									$('#cbotipocontrato').attr('disabled', false);
 									$('#tipoGasto').attr('disabled', false);
 									$('#cmdcerrar').attr('disabled', true);
 									cerrar = false;
+									
 								}
 						   		jQuery.each(items,function(i){
 										pintarDetalles('listaConceptos', this);
@@ -404,16 +451,24 @@ function eliminarConcepto()
 {
 	 //if($('#CVE_DOC').attr('value')!=''&&$('#CVE_DOC').attr('value')!='0') {jAlert('No se pueden eliminar los conceptos que se agregan a travez de un documento externo','Advertencia'); return false;}
 	 var checkMovimientos = [];
+	 
      $('input[name=chkConcepto]:checked').each(function() { checkMovimientos.push($(this).val());});	
 	 if (checkMovimientos.length>0){
-		jConfirm('Â¿Confirma que desea eliminar los conceptos del Contrato?','Confirmar', function(r){
+		jConfirm('¿Confirma que desea eliminar los conceptos del Contrato?','Confirmar', function(r){
 				if(r){
+						var numFilas = $('#listaConceptos > tbody > tr').length;
 						ShowDelay('Eliminando concepto','');
 						ControladorContratosRemoto.eliminarConceptos($('#CVE_CONTRATO').attr('value'), checkMovimientos, {
 							callback:function(items) {
-								nuevoConcepto(); 		
+								
+								if (items< 1){
+										$('#cmdcerrar').addClass("btn_disable");
+									
+								}
+								nuevoConcepto(); 	
 								getConceptos();
-								CloseDelay('Conceptos eliminados con Ã©xito');	
+								CloseDelay('Conceptos eliminados con éxito');	
+								
 						} 					   				
 						,
 						errorHandler:function(errorString, exception) { 
@@ -424,7 +479,7 @@ function eliminarConcepto()
 	   });
 	 } 
 	else 
-	    swal('Es necesario que seleccione por lo menos un concepto del listado', 'Advertencia');
+	    swal('','Es necesario que seleccione por lo menos un concepto del listado', 'info');
 }
 
 function nuevoConcepto()

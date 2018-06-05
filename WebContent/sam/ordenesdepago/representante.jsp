@@ -9,8 +9,9 @@
 
 <script type="text/javascript" src="../../include/js/jquery-2.1.3.min.js"></script>
 <script type="text/javascript" src="../../include/js/bootstrap-3.3.7.js"></script>
-<script type="text/javascript" src="../../include/js/sweetalert2.js"></script>
-
+<link rel="stylesheet" href="../../include/js/sweetalert2/7.0/sweetalert2.min.css" type="text/css">
+<script type="text/javascript" src="../../include/js/sweetalert2/7.0/sweetalert2.all.js"></script>
+<script type="text/javascript" src="../../include/js/sweetalert2/7.0/core-js-2.4.1.js"></script>
 
 <script type="text/javascript" src="../../include/css/bootstrap-datetimepicker-master/js/moment-with-locales-2.9.0.js"></script>
 <link rel="stylesheet" href="../../include/css/bootstrap-datetimepicker-master/css/bootstrap-datetimepicker-4.15.35.css" type="text/css">
@@ -25,7 +26,7 @@
 <script type="text/javascript" src="representante.js?x=<%=System.currentTimeMillis()%>"></script>
 <script type="text/javascript" src="../../include/js/toolSam.js"></script>
 <link rel="stylesheet" href="../../include/css/bootstrap-3.3.7.css" type="text/css">
-<link rel="stylesheet" href="../../include/css/sweetalert2.css" type="text/css">
+
 <link rel="stylesheet" href="../../include/css/style-tabs.css" type="text/css"/>
 
 <body leftmargin="0" topmargin="0" marginwidth="0" marginheight="0" >
@@ -38,7 +39,7 @@
 	 	 	<ul class="nav nav-tabs responsive" id="tabsBeneficiariosPane" name="tabsBeneficiariosPane">
                 <li class="active"><a href="#fragment-general" data-toggle="tab">Beneficiario</a></li>
                 <li><a href="#fragment-representante" data-toggle="tab">Representante</a></li>
-                <li><a href="#fragment-fiscal" data-toggle="tab">Domicilio</a></li>
+                <!-- <li><a href="#fragment-fiscal" data-toggle="tab">Domicilio</a></li> -->
              </ul>
 	 	 </div>
 	 	 
@@ -101,7 +102,7 @@
 			                      <div class="form-group">
 			                        <div class="control-label col-sm-3 ">Titular:</div>
 			                        <div class="col-sm-3 form-group">
-			                        	<input name="responsable" type="text" class="form-control" id="responsable" value="<c:out value='${beneficiario.BENEFICIAR}'/>" style="width:350px" maxlength="100" onBlur="upperCase(this)" />
+			                        	<input name="responsable" type="text" class="form-control" id="responsable" onBlur="upperCase(this)" value="<c:out value='${beneficiario.BENEFICIAR}'/>" style="width:350px" maxlength="100" onBlur="upperCase(this)" />
 			                        </div>
 			                      </div>
 			                    </div>
@@ -112,7 +113,7 @@
 			                      <div class="form-group">
 			                        <div class="control-label col-sm-3 ">Representante Legal:</div>
 			                        <div class="col-sm-3 form-group">
-			                        	<input name="replegal" type="text" class="form-control" id="replegal" value="<c:out value='${beneficiario.BENEFICIAR}'/>" style="width:350px" maxlength="100" onBlur="upperCase(this)" />
+			                        	<input name="replegal" type="text" class="form-control" id="replegal" onBlur="upperCase(this)" value="<c:out value='${beneficiario.BENEFICIAR}'/>" style="width:350px" maxlength="100" onBlur="upperCase(this)" />
 			                        </div>
 			                      </div>
 			                    </div>
@@ -122,8 +123,22 @@
 		                      <div class="form-group">
 		                        <div class="control-label col-sm-3 ">*R. F. C. :</div>
 		                        <div class="col-sm-3 form-group">
-		                        	<input name="rfc" type="text" class="form-control" id="rfc" value="<c:out value='${beneficiario.RFC}'/>"  maxlength="15"  style="width:150px" onBlur="upperCase(this)" />
+		                        	<input name="rfc" type="text" class="form-control" id="rfc" value="<c:out value='${beneficiario.RFC}'/>"  onBlur="upperCase(this)" maxlength="15"  style="width:150px" onBlur="upperCase(this)" />
         							<input type="hidden" name="idProveedor" id="idProveedor" value="<c:out value='${id}'/>">
+		                        </div>
+		                      </div>
+		                    </div>
+		                    <!-- Fecha alta  -->
+		                    <div class="row">
+		                      <div class="form-group">
+		                        <div class="control-label col-sm-3 ">Fecha de alta:</div>
+		                        <div class="col-sm-3 form-group">
+		                        	 <div class="input-group date">
+			                              <input name="fecha_altar" type="text" class="form-control" id="fecha_altar" value="" style="width:100%" maxlength="10"/>
+			                              <span class="input-group-addon">
+			                                <span class="glyphicon glyphicon-calendar"></span>
+			                              </span>
+			                          </div>
 		                        </div>
 		                      </div>
 		                    </div>

@@ -220,7 +220,7 @@ a:active {
                 <button name="cmdnuevo" id="cmdnuevo" type="button" class="button red middle"><span class="label" style="width:100px">Nuevo</span></button>
               </div>
             </div></td>
-            <td width="130"><button name="cmdcerrar" id="cmdcerrar" <c:if test='${factura.CVE_FACTURA==NULL}'>disabled</c:if> type="button" class="button red middle"><span class="label" style="width:100px">Cerrar</span></button></td>
+            <td width="130"><button name="cmdcerrar" disabled="disabled" id="cmdcerrar" type="button" class="button red middle"><span class="label" style="width:100px">Cerrar</span></button></td>
             <td width="130"><button name="cmdguardar" id="cmdguardar" type="button" class="button blue middle"><span class="label" style="width:100px">Guardar</span></button></td>
           </tr>
         </table></td>
@@ -284,7 +284,7 @@ a:active {
                 <input type="hidden" id="ID_PROYECTO" value="0"/>
                 </td>
                 <th width="6%">*Partida:</th>
-                <td width="22%"><input name="txtpartida" type="text" class="input" id="txtpartida"  value='' size="20" maxlength="4"  >
+                <td width="22%"><input name="txtpartida" type="text" class="input" id="txtpartida"  value='' size="20" maxlength="5"  >
                 <img src="../../imagenes/search_16.png" alt="Mostrar presupuesto" name="img_presupuesto" onclick="muestraPresupuesto()"  id="img_presupuesto" style="cursor:pointer" align="absmiddle"/></td>
                 <td>&nbsp;</td>
               </tr>

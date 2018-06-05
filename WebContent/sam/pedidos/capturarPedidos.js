@@ -70,20 +70,7 @@ $(document).ready(function() {
 		getTotales();
 	});
 	
-	$('#w-input-search').autocomplete({
-		serviceUrl: '${pageContext.request.contextPatch}/getListaBeneficiarios',
-		paramName: "NCOMERCIA",
-		delimiter: ",",
-		transformResult: function (response ){
-				
-			return {
-				suggestions: $.map($.parseJSON(response), function(item){
-					return {value:item.NCOMERCIA, data:item.CLV_BENEFI};
-				})
-			};
-				
-		}
-	});
+
 	
 });
 
@@ -259,19 +246,14 @@ function cerrarPedido(){
 		    )
 		  }
 		})
-		/*
-	jConfirm('¿Confirma que desea cerrar el pedido?', 'Confirmar', function (r){
-				if(r){
-					_cerrarPedido($('#CVE_PED').val(), $('#txtiva').val());
-				}
-			});*/
+		
 }
 
 /*Metodo interno para el cierra del pedido*/
 function _cerrarPedido(cve_ped, iva){
 	//ShowDelay('Cerrando pedido','');
 	//swal({title:'Cerrando pedido',text:'demo',width:400,timer:1000});
-	alert('Entro aqui _cerrarPedido');
+
 	controladorPedidos.cerrarPedido(cve_ped, $('#TIPO_REQ').val(), iva,{
 						callback:function(items){
 							swal({

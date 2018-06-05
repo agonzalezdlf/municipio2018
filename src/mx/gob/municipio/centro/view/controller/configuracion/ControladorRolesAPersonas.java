@@ -67,7 +67,7 @@ public class ControladorRolesAPersonas extends ControladorBase  {
 	        }
 	   }
 	   
-	   public List<Map> getUsuariosUnidad(String idUnidad) {
+	   public List<Map<String,Object>> getUsuariosUnidad(String idUnidad) {
 		  return  gatewayUsuarios.getUsuariosUnidad(idUnidad);
 	   }
 }

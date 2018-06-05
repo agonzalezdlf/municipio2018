@@ -192,6 +192,10 @@ table.listas
 	
 }
 /*ESTILOS PARA LOS CUADROS DE TEXTO Y BOTONES*/
+disable{
+	opacity: .5;
+    cursor: not-allowed;
+}
 .input
 {
 	font-family:Tahoma, Geneva, sans-serif; 
@@ -279,4 +283,7 @@ table.listas
    border: 1px solid #ccc;
    height: 26px;
 }
-
+.btn_disable{
+	opacity: 0.4;
+	cursor:	not-allowed; 
+}

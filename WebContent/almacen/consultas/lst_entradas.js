@@ -2,12 +2,29 @@ $(document).ready(function() {
   var imagen="../../imagenes/cal.gif";	
   var formatFecha="dd/mm/yy";	
   $('#cmdbuscar').click(function(event){iniciarBusqueda();});
-  $("#txtfechaInicial").datepicker({showOn: 'button', buttonImage:imagen , buttonImageOnly: true,dateFormat: formatFecha});  
-  $("#txtfechaFinal").datepicker({showOn: 'button', buttonImage: imagen, buttonImageOnly: true,dateFormat: formatFecha}); 
+ 
   $('#cbodependencia').change(function (event){cargaraAlmacenes($('#cbodependencia').val());});
   $('#cmdAperturar').click(function(event){aperturarEntradas();});
   $('#cmdcancelar').click(function(event){cancelarEntradas();});
-  getBeneficiarios('txtbeneficiario','ID_PROVEEDOR');
+  //getBeneficiarios('txtbeneficiario','ID_PROVEEDOR');
+  
+	//Inicializa el componente para los pedidos y fechas
+  	$('.selectpicker').selectpicker();
+	
+//----------- Filtrado por fechas -------------------
+	$('#txtfechaInicial').datetimepicker({
+		format: 'DD/MM/YYYY'
+	});
+	$('#txtfechaFinal').datetimepicker({
+		format: 'DD/MM/YYYY',
+	    useCurrent: false //Important! See issue #1075
+	});
+	$("#txtfechaInicial").on("dp.change", function (e) {
+	    $('#txtfechaFinal').data("DateTimePicker").minDate(e.date);
+	});
+	$("#txtfechaFinal").on("dp.change", function (e) {
+	    $('#txtfechaFinal').data("DateTimePicker").maxDate(e.date);
+	});
 });
 
 function validarEntrada(idEntrada){
@@ -55,7 +72,7 @@ function aperturarEntradas(){
 }
 
 
-function cancelarEntradas(){
+function cancelarEntradas(){ //Por boton Cancelar, en el listado de entradas..
 	var checkClaves = [];
      $('input[name=chkentradas]:checked').each(function() { checkClaves.push($(this).val());});	
 	 if (checkClaves.length>0){
@@ -82,9 +99,12 @@ function cancelarEntradas(){
 
 
 function iniciarBusqueda(){
-	if($('#txtbeneficiario').attr('value')=='') $('#ID_PROVEEDOR').attr('value', '0');
-	if($('#txtfechaInicial').attr('value')!=''&&$('#txtfechaFinal').attr('value')==''||$('#txtfechaFinal').attr('value')!=''&&$('#txtfechaInicial').attr('value')=='') {jAlert('El rango de fecha seleccioando para la busqueda no es valido', 'Advertencia'); return false;}
-	var s = '?cbodependencia='+$('#cbodependencia').attr('value')+'&id_almacen='+$('#cboalmacen').attr('value')+"&fechaInicial="+$('#txtfechaInicial').attr('value')+"&fechaFinal="+$('#txtfechaFinal').attr('value')+"&id_tipo_documento="+$('#cbotipodocumento').attr('value')+"&id_proveedor="+$('#ID_PROVEEDOR').attr('value')+"&id_pedido="+$('#txtpedido').attr('value')+"&proyecto="+$('#txtproyecto').attr('value')+"&partida="+$('#txtpartida').attr('value')+"&num_documento="+$('#txtdocumento').attr('value')+"&folio="+$('#txtfolio').attr('value');
+	//if($('#cboprestadorservicio').selectpicker('val')=='');
+	pedido=$('#txtpedido').val();
+	id_proveedor=$('#cboproveedor').selectpicker('val');
+	
+	//if($('#txtfechaInicial').val()!=''&&$('#txtfechaFinal').val()==''||$('#txtfechaFinal').val()!=''&&$('#txtfechaInicial').val()=='') {jAlert('El rango de fecha seleccioando para la busqueda no es valido', 'Advertencia'); return false;}
+	var s = '?cbodependencia='+$('#cbodependencia').selectpicker('val')+'&id_almacen='+$('#cboalmacen').val()+"&fechaInicial="+$('#txtfechaInicial').val()+"&fechaFinal="+$('#txtfechaFinal').val()+"&id_tipo_documento="+$('#cbotipodocumento').val()+"&cboproveedor="+id_proveedor+"&id_pedido="+pedido+"&proyecto="+$('#txtproyecto').val()+"&partida="+$('#txtpartida').val()+"&num_documento="+$('#txtdocumento').val()+"&folio="+$('#txtfolio').val();
 	document.location = s;
 }
 

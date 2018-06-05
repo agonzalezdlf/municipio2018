@@ -182,8 +182,9 @@ a:active {
     <td align="center">[<c:out value='${item.ID_PROYECTO}'/>] <c:out value='${item.N_PROGRAMA}'/>/<c:out value='${item.PARTIDA}'/></td>
     <td align="center"><c:if test='${item.FECHA_CIERRE==NULL}'>EDICION</c:if><c:if test='${item.FECHA_CIERRE!=NULL}'><c:out value='${item.STATUS_DESC}'/></c:if></td>
     <td align="center"><img style="cursor:pointer" src="../../imagenes/pdf.gif" title="Ver Documento" border="0" width="14" height="16" onClick="getReporteEntrada(<c:out value='${item.ID_ENTRADA}'/>)">
-    &nbsp;<img src="../../imagenes/report_go.png" title="Crear Salida" style="cursor:pointer" onClick="crearSalida(<c:out value='${item.ID_ENTRADA}'/>)">
+    &nbsp;<c:if test="${item.E!=''}"><img src="../../imagenes/report_go.png" id="imgsalida" name="imgsalida" title="Crear Salida" style="cursor:pointer" onClick="crearSalida(<c:out value='${item.ID_ENTRADA}'/>)"></c:if>
     </td>
+   
   </tr>
   <c:set var="cont" value="${cont+1}"/> 
   </c:forEach>

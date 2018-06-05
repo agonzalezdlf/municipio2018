@@ -574,10 +574,18 @@ public class GatewayEntradasDocumentos extends BaseGatewayAlmacen {
 	                protected void   doInTransactionWithoutResult(TransactionStatus status) {	
 	                	Vector vectorInventario = new Vector();
 						Vector vectorDetalle = new Vector();
+						
 						for(Long idEntrada: id_entradas){
-								if(getJdbcTemplate().queryForInt("SELECT COUNT(*) FROM SALIDAS WHERE ID_ENTRADA =? AND STATUS=1", new Object[]{idEntrada})>0)
+							
+								boolean result = false;
+								
+								String sql = "SELECT COUNT(*) FROM SALIDAS WHERE ID_ENTRADA =? AND STATUS=1";
+								//int count = (int) getJdbcTemplate().queryForObject(sql, new Object[] { idEntrada }, Integer.class);
+								
+								if ((int)getJdbcTemplate().queryForObject(sql, new Object[]{idEntrada},Integer.class)>0)
 									throw new RuntimeException("La entrada que desea cancelar se encuentra relacionada a una salida, no se puede cancelar");
 								else{
+									@SuppressWarnings("rawtypes")
 									Map entrada = getEntradaDocumento(idEntrada);
 									List <Map> conceptos = getConceptos(idEntrada);
 									
@@ -612,19 +620,23 @@ public class GatewayEntradasDocumentos extends BaseGatewayAlmacen {
 		this.getJdbcTemplate().update("UPDATE ENTRADAS SET FECHA_OFICIAL =? WHERE ID_ENTRADA =?", new Object[]{m.get("FECHA_DOCUMENTO"),idEntrada});
 	}
 
+	@SuppressWarnings("unchecked")
 	public List<Map> getListadoDocumentos(Map parametros){
+		
 		String sql = "SELECT ENTRADAS.*, (VPROYECTO.N_PROGRAMA + ' ' + CONVERT(varchar , ENTRADAS.ID_PROYECTO) + ' / ' + ENTRADAS.PARTIDA) AS PROGRAMA_PARTIDA, VPROYECTO.N_PROGRAMA, SAM_PEDIDOS_EX.CVE_PED, SAM_PEDIDOS_EX.NUM_PED, CONVERT(varchar(10), ENTRADAS.FECHA,103) AS FECHA_CREACION, (CASE ENTRADAS.STATUS WHEN 1 THEN 'CERRADO' WHEN 0 THEN 'CANCELADO' END) AS STATUS_DESC, CAT_BENEFI.NCOMERCIA FROM ENTRADAS LEFT JOIN CAT_BENEFI ON (CAT_BENEFI.CLV_BENEFI = ENTRADAS.ID_PROVEEDOR) INNER JOIN VPROYECTO ON (VPROYECTO.ID_PROYECTO = ENTRADAS.ID_PROYECTO) LEFT JOIN SAM_PEDIDOS_EX ON (SAM_PEDIDOS_EX.CVE_PED = ENTRADAS.ID_PEDIDO) ";
 		String clausulas = "WHERE ENTRADAS.STATUS IN (0,1)";
+			
+		
 		if(!parametros.get("cbodependencia").toString().equals("0")) clausulas += " AND ENTRADAS.ID_DEPENDENCIA =:cbodependencia";
 		if(!parametros.get("id_almacen").toString().equals("0")) clausulas += " AND ENTRADAS.ID_ALMACEN =:id_almacen";
 		if(!parametros.get("id_tipo_documento").toString().equals("0")) clausulas += " AND ENTRADAS.ID_TIPO_DOCUMENTO =:id_tipo_documento";
-		if(!parametros.get("id_proveedor").toString().equals("0")) clausulas += " AND ENTRADAS.ID_PROVEEDOR =:id_proveedor";
+		if(!parametros.get("id_proveedor").toString().equals("0")) clausulas += " AND ENTRADAS.ID_PROVEEDOR ='" + parametros.get("id_proveedor").toString() + "' ";
 		if(!parametros.get("id_pedido").toString().equals("")) clausulas += " AND ENTRADAS.ID_PEDIDO =:id_pedido";
 		if(!parametros.get("fechaInicial").toString().equals("")&&!parametros.get("fechaFinal").toString().equals("")) clausulas += " AND convert(datetime,convert(varchar(10), ENTRADAS.FECHA ,103),103) BETWEEN :fechaInicial AND :fechaFinal";
 		if(!parametros.get("proyecto").toString().equals("")) clausulas += " AND ENTRADAS.PROYECTO =:proyecto";
 		if(!parametros.get("partida").toString().equals("")) clausulas += " AND ENTRADAS.PARTIDA =:partida";
 		if(!parametros.get("num_documento").toString().equals("")) clausulas += " AND ENTRADAS.DOCUMENTO =:num_documento";
 		if(!parametros.get("folio").toString().equals("")) clausulas += " AND ENTRADAS.FOLIO =:folio";
-		return this.getNamedJdbcTemplate().queryForList(sql+clausulas+" ORDER BY ENTRADAS.FOLIO ASC", parametros);
+		return this.getNamedJdbcTemplate().queryForList(sql + clausulas + " ORDER BY ENTRADAS.FOLIO ASC", parametros);
 	}
 }

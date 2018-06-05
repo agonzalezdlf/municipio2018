@@ -6,10 +6,8 @@
 package mx.gob.municipio.centro.model.gateways.sam;
 
 import java.sql.Connection;
-import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -23,7 +21,6 @@ import org.springframework.jdbc.support.rowset.SqlRowSet;
 import org.springframework.security.providers.encoding.Md5PasswordEncoder;
 
 import mx.gob.municipio.centro.model.bases.BaseGateway;
-import mx.gob.municipio.centro.view.seguridad.UserDetailsService;
 
 public class GatewayUsuarios extends BaseGateway {
 	private static Logger log = Logger.getLogger(GatewayUsuarios.class.getName());
@@ -31,15 +28,18 @@ public class GatewayUsuarios extends BaseGateway {
 		
 	}
 	
-	public List<Map>getUsuariosActivoTodos(){		
+	@SuppressWarnings("unchecked")
+	public List<Map<String,Object>>getUsuariosActivoTodos(){		
 	  return this.getJdbcTemplate().queryForList("SELECT     b.CVE_PERS, a.APE_PAT, a.APE_MAT, a.NOMBRE ,'('+b.LOGIN + ') ' + a.NOMBRE+' '+a.APE_PAT +' '+a.APE_MAT  NOMBRE_COMPLETO "+
 	  		" FROM SAM_PERSONAS  a INNER JOIN  SAM_USUARIOS_EX b ON a.CVE_PERS = b.CVE_PERS where b.ACTIVO='S' ORDER BY NOMBRE_COMPLETO ");		
 	}
 	
-	public List<Map>getUsuariosUnidad(String idUnidad){		
+	@SuppressWarnings("unchecked")
+	public List<Map<String,Object>>getUsuariosUnidad(String idUnidad){		
 		  return this.getJdbcTemplate().queryForList("SELECT     b.CVE_PERS , '('+b.LOGIN + ') ' + a.NOMBRE+' '+a.APE_PAT +' '+a.APE_MAT  NOMBRE_COMPLETO "+
 		  		" FROM SAM_PERSONAS  a INNER JOIN  SAM_USUARIOS_EX b ON a.CVE_PERS = b.CVE_PERS INNER JOIN  SAM_TRABAJADOR c ON  a.CVE_PERS = c.CVE_PERS  where c.ID_DEPENDENCIA=? AND b.ACTIVO='S' ORDER BY NOMBRE_COMPLETO ", new Object []{idUnidad});		
 		}
+	@SuppressWarnings("rawtypes")
 	public Map getUsuarioLogin(String usuario){
 		  return this.getJdbcTemplate().queryForMap("SELECT     dbo.SAM_TRABAJADOR.ID_DEPENDENCIA, dbo.CAT_DEPENDENCIAS.DEPENDENCIA, dbo.CAT_DEPENDENCIAS.CLV_UNIADM, dbo.SAM_USUARIOS_EX.CVE_PERS, " +
 													"           dbo.SAM_USUARIOS_EX.LOGIN, dbo.SAM_USUARIOS_EX.PASSWD, dbo.SAM_USUARIOS_EX.ACTIVO, dbo.SAM_USUARIOS_EX.EXCLUSIVO,  dbo.SAM_PERSONAS.TRATAMIENTO+ ' '+dbo.SAM_PERSONAS.NOMBRE+' '+dbo.SAM_PERSONAS.APE_PAT +' ' +dbo.SAM_PERSONAS.APE_MAT  as NOMBRE_COMPLETO, "+  
@@ -54,6 +54,7 @@ public class GatewayUsuarios extends BaseGateway {
 	public boolean cambiarPassword(String passwordAnterior ,String  passwordNuevo, int cve_pers ){
 		log.debug("Intentendo cambiar el password");
 		Md5PasswordEncoder a = new Md5PasswordEncoder();
+		@SuppressWarnings("unused")
 		Md5PasswordEncoder b = new Md5PasswordEncoder();
 		String pasEncriptadoAnterior = a.encodePassword(passwordAnterior, null );
 		String pasEncriptadoNuevo = a.encodePassword(passwordNuevo, null );
@@ -67,8 +68,8 @@ public class GatewayUsuarios extends BaseGateway {
 		return false;
 	}
 		
-	@SuppressWarnings("unchecked")
-	public List<Map>getPersonasPorEjemplo(String nombre, String aPaterno, String aMaterno ){
+	@SuppressWarnings({ "unchecked", "rawtypes" })
+	public List<Map<String,Object>>getPersonasPorEjemplo(String nombre, String aPaterno, String aMaterno ){
 		
 		Map parametros = new HashMap();
 		parametros.put("nombre","%"+nombre+"%");
@@ -160,6 +161,7 @@ public class GatewayUsuarios extends BaseGateway {
 					, new Object[]{idUnidad,idPersona});
 		}
 		
+		@SuppressWarnings("rawtypes")
 		public List getTrabajadoresUnidad(String unidad) {
 			return this.getJdbcTemplate().queryForList("SELECT  b.CVE_PERS , ' ( '+b.LOGIN + ' )  ' +  a.NOMBRE+' '+a.APE_PAT +' '+a.APE_MAT  NOMBRE_COMPLETO, d.DEPENDENCIA, d.ID AS ID_DEPENDENCIA   FROM SAM_PERSONAS  a "+ 
 																"INNER JOIN  SAM_USUARIOS_EX b ON (b.CVE_PERS = a.CVE_PERS) "+
@@ -213,6 +215,7 @@ public class GatewayUsuarios extends BaseGateway {
 			}	
 		
 		
+		@SuppressWarnings("rawtypes")
 		public List getMenuPrivilegiosUsuario(Integer idUsuario, Integer idSistema){		
 			  return this.getJdbcTemplate().queryForList("SELECT distinct D.PRI_DESCRIPCION PRIVILEGIO, C.MOD_DESCRIPCION,C.IMAGEN , D.URL,C.ORDEN ORDEN_MODULO ,D.ORDEN ORDEN_PRIVILEGIO "+
 					  	" FROM SAM_ROL_PRIVILEGIO a  INNER JOIN "+ 
@@ -226,6 +229,7 @@ public class GatewayUsuarios extends BaseGateway {
 			}
 		
 		
+		@SuppressWarnings("rawtypes")
 		public List getPermisosSistemas(Integer idUsuario){		
 			  return this.getJdbcTemplate().queryForList("SELECT distinct E.ID_SISTEMA , E.SIS_DESCRIPCION   "+
 					  	" FROM SAM_ROL_PRIVILEGIO a  INNER JOIN "+ 

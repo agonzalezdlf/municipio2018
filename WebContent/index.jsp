@@ -14,17 +14,10 @@
     <meta http-equiv="imagetoolbar" content="no">
     <meta name="resource-type" content="document">
     <meta name="keywords" content="">
-    <meta name="description" content=""><title> Municipio 2017 | Login</title>
-    <!--  
-    <link href="include/css/print.css" rel="stylesheet" type="text/css" media="print" title="printonly">
-    <link href="include/css/general.css" rel="stylesheet" type="text/css" media="screen, projection">
-    <link href="include/css/estilosam.css" rel="stylesheet" type="text/css">
-    <link rel="stylesheet" href="include/css/css/css3-buttons.css" type="text/css" media="screen">
-    <link rel="stylesheet" href="include/css/tiptip.css" type="text/css"  media="screen">
-    -->
+    <meta name="description" content=""><title> Municipio 2018 | Login</title>
+   
     <link href="include/css/bootstrap.css" rel="stylesheet" type="text/css">
- 	<!--  <link href="include/css/estilosam2.css" rel="stylesheet" type="text/css"> -->
-    <link rel="stylesheet" href="include/js/componentes/jquery.alerts.css" type="text/css">
+ 	<link rel="stylesheet" href="include/js/componentes/jquery.alerts.css" type="text/css">
     <script type="text/javascript" src="include/js/jquery-1.3.2.min.js"></script>
     <script src="include/css/jquery.tiptip.js"></script>
     <script type="text/javascript" src="include/js/componentes/jquery.alerts.js"></script>

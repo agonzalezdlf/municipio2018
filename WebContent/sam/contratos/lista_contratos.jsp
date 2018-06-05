@@ -6,7 +6,7 @@
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
-<title>Listado de Pedidos</title>
+<title>Listado de Contratos</title>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
 <link rel="stylesheet" href="../../include/css/bootstrap-3.3.7.css" type="text/css"/>
 <link rel="stylesheet" href="../../include/css/bootstrap2.css?x=<%=System.currentTimeMillis()%>" type="text/css"/>
@@ -14,12 +14,14 @@
 <script type="text/javascript" src="../../include/js/sweetalert2.js"></script>
 
 <link rel="stylesheet" href="../../include/css/estilosam.css" type="text/css">
-<link rel="stylesheet" href="../../include/js/componentes/jquery.alerts.css" type="text/css">
+<link rel="stylesheet" href="../../include/js/componentes_BACK/jalert_2018.css" type="text/css">
+
 <link type="text/css" href="../../include/js/utilsJquery/jquery-ui-1.7.1.custom.css" rel="stylesheet" />	
 <link rel="stylesheet" href="../../include/css/sweetalert2.min.css" type="text/css">
 <script type="text/javascript" src="../../include/js/jquery-1.8.3.min.js"></script>
 <script type="text/javascript" src="lista_contratos.js?x=<%=System.currentTimeMillis()%>"> </script>
-<script type="text/javascript" src="../../include/js/componentes/jquery.alerts.js"></script>
+<script type="text/javascript" src="../../include/js/componentes_BACK/jalert_2018.js"></script>
+
 <script type="text/javascript" src="../../include/js/utilsJquery/jquery-ui-1.7.1.custom.min.js"></script>
 <script type="text/javascript" src="../../dwr/interface/controladorListadoContratosRemoto.js"> </script>
 <script type="text/javascript" src="../../dwr/interface/ControladorContratosRemoto.js"> </script>

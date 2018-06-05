@@ -255,7 +255,7 @@ a:active {
                     <div class="form-group">
                         <div class="control-label col-sm-3 ">Seleccione un Beneficiario:</div>
                         <div class="form-group col-sm-6">
-                            <select name="xBeneficiario" class="selectpicker form-control input-sm m-b" data-live-search="true" id="xBeneficiario" style="width:100%">
+                            <select name="xBeneficiario" class="selectpicker form-control input-sm m-b" data-live-search="true" id="xBeneficiario" title="Seleccione un Beneficiario..." style="width:100%">
                               <c:forEach items="${beneficiarios}" var="item" varStatus="status">
                                     <option value='<c:out value="${item.CLV_BENEFI}"/>'
                                     <c:if test='${item.CLV_BENEFI==xBeneficiario}'>selected</c:if>><c:out value='${item.NCOMERCIA}'/>

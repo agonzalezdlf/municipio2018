@@ -10,6 +10,8 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import mx.gob.municipio.centro.model.gateways.sam.GatewayBeneficiario;
 import mx.gob.municipio.centro.model.gateways.sam.GatewayPedidos;
@@ -94,6 +96,9 @@ public class ControladorListadoPedidos extends ControladorBase {
 		List <Map> lista = this.getListadoPedidos(idUnidad,estatus , modelo.get("fechaInicial").toString(), modelo.get("fechaFinal").toString(), cve_benefi, modelo.get("tipo_gto").toString(), this.getSesion().getEjercicio(), this.getSesion().getIdUsuario(), verUnidad, this.getSesion().getClaveUnidad() , numped, numreq, privilegio, modelo.get("cbocapitulo").toString(), Integer.parseInt(modelo.get("cboalmacen").toString()), cboconOP);
 		modelo.put("listadoPedidos",lista);
 		modelo.put("CONTADOR", lista.size());
+		
+		
+		
 	    return "sam/pedidos/lst_pedidos.jsp";
 	}
 	
@@ -101,6 +106,20 @@ public class ControladorListadoPedidos extends ControladorBase {
     public List<Map> getUnidades(){
     	return gatewayUnidadAdm.getUnidadAdmTodos();	
     }
+	
+	@RequestMapping(value = "/get_country_list", 
+			method = RequestMethod.GET, 
+			params="Accept=*/*")
+	public @ResponseBody List<String> getCountryList(@RequestParam("term") String ncomercia) {
+		
+				
+		List<String> countryList = gatewayBeneficiario.DummyDB(ncomercia);
+		
+	
+		//return countryList;
+		return countryList;
+	}
+
 	
 	@ModelAttribute("capitulos")
     public List<Map> getCapitulos(){

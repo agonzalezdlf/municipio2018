@@ -8,16 +8,38 @@
 <head>
 <title>Listado de Pedidos</title>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
-<link rel="stylesheet" href="../../include/css/estilosam.css" type="text/css">
-<link rel="stylesheet" href="../../include/js/componentes/jquery.alerts.css" type="text/css">
-<link type="text/css" href="../../include/js/utilsJquery/jquery-ui-1.7.1.custom.css" rel="stylesheet" />	
-<script type="text/javascript" src="../../include/js/jquery-1.3.2.min.js"></script>
-<script type="text/javascript" src="../../include/js/toolSam.js"></script>
-<script type="text/javascript" src="lista_vales.js"> </script>
-<script type="text/javascript" src="../../include/js/componentes/jquery.alerts.js"></script>
+<!-- 
+<script type="text/javascript" src="../../include/js/jquery-2.1.3.min.js?x=<%=System.currentTimeMillis()%>"></script>
+<link rel="stylesheet" href="../../include/css/bootstrap-3.3.7.css" type="text/css">
+<link rel="stylesheet" href="../../include/css/bootstrap-select.css" type="text/css">
+<link rel="stylesheet" href="../../include/css/bootstrap2.css" type="text/css">
+<script type="text/javascript" src="../../include/js/bootstrap-3.3.7.js"></script>
+<script type="text/javascript" src="../../include/js/bootstrap-select.js"></script>	
+
+<link type="text/css" href="../../include/js/utilsJquery/jquery-ui-1.7.1.custom.css" rel="stylesheet" />
 <script type="text/javascript" src="../../include/js/utilsJquery/jquery-ui-1.7.1.custom.min.js"></script>
+ -->
+
+
+<link rel="stylesheet" href="../../include/css/estilosam.css" type="text/css">
+<link rel="stylesheet" href="../../include/js/componentes_BACK/jquery.alerts.css" type="text/css">
+
+
+<script type="text/javascript" src="../../include/js/jquery-2.1.3.min.js"></script>
+
+
+<script type="text/javascript" src="../../include/js/toolSam.js"></script>
+<script type="text/javascript" src="lista_vales.js?x=<%=System.currentTimeMillis()%>"></script>
+<script type="text/javascript" src="../../include/js/componentes_BACK/jquery.alerts.js"></script>
 <script type="text/javascript" src="../../dwr/interface/controladorListadoValesRemoto.js"> </script>
 <script type="text/javascript" src="../../dwr/engine.js"></script>
+<script type="text/javascript" src="../../include/css/bootstrap-datetimepicker-master/js/moment-with-locales-2.9.0.js"></script>
+<link rel="stylesheet" href="../../include/css/bootstrap-datetimepicker-master/css/bootstrap-datetimepicker-4.15.35.css" type="text/css">
+<script type="text/javascript" src="../../include/css/bootstrap-datetimepicker-master/js/bootstrap-datetimepicker-4.15.35.js"></script>
+<link rel="stylesheet" href="../../include/js/sweetalert2/7.0/sweetalert2.min.css" type="text/css">
+<script type="text/javascript" src="../../include/js/sweetalert2/7.0/sweetalert2.all.js"></script>
+<script type="text/javascript" src="../../include/js/sweetalert2/7.0/core-js-2.4.1.js"></script>
+
 <body >
 <form  action="lista_vales_finanzas.action" method="POST" id="forma" name="forma">
 <input type="hidden" name="ejercicio" id="ejercicio" value="<c:out value='${ejercicio}'/>">
@@ -70,10 +92,12 @@
   <tr >
     <th height="25" >Por fecha de:  
     <td><strong>
-    <input name="fechaInicial" type="text" id="fechaInicial" value="${fechaInicial}" style="width:100px" maxlength="10">
+    <!--  <input name="fechaInicial" type="text" id="fechaInicial" value="${fechaInicial}" style="width:100px" maxlength="10">
+    <input placeholder="Desde" name="fechaInicial" type="text" id="fechaInicial" maxlength="10" class="form-control input-sm" value="<c:out value='${fechaInicial}'/>">
 &nbsp;Hasta &nbsp;
-<input name="fechaFinal" type="text" id="fechaFinal" value="${fechaFinal}" style="width:100px"  maxlength="10">
-    </strong></td>
+ <input name="fechaFinal" type="text" id="fechaFinal" value="${fechaFinal}" style="width:100px"  maxlength="10">
+<input placeholder="Hasta" name="fechaFinal" type="text" id="fechaFinal" class="form-control input-sm" value="<c:out value='${fechaFinal}'/>"  maxlength="10">
+   --> </strong></td>
     <td ><input  name="btnBuscar" type="button" class="botones" id="btnBuscar"   value="Buscar" onClick="getVale()" style="width:150px"></td>
     </tr>
   <tr >
@@ -101,7 +125,7 @@
 <c:set var="cont" value="${0}" />
 <c:forEach items="${vales}" var="item" varStatus="status"> 
  <tr id='f<c:out value="${cont}"/>' onMouseOver="color_over('f<c:out value="${cont}"/>')" onMouseOut="color_out('f<c:out value="${cont}"/>')">
-    <td align="center"><input type="checkbox" id="claves" name="claves" value="<c:out value='${item.CVE_VALE}'/>"/></td>
+    <td align="center"><input type="checkbox" id="chkvales" name="chkvales" value="<c:out value='${item.CVE_VALE}'/>"/></td>
     <td align="center"><c:out value='${item.NUM_VALE}'/></td>
     <td align="center"><c:out value='${item.FECHA}'/></td>
     <td><c:out value='${item.NCOMERCIA}'/></td>

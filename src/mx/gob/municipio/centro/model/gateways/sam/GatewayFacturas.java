@@ -300,11 +300,14 @@ public class GatewayFacturas extends BaseGateway {
 	            	String tipoDocto = "";
 	            	String consulta = "";
 	            	String num_docto="";
-	            	//Map num_devengo =GatewayFacturas.guardarFactura(num_factura); //getOrden(idOrden);
+	            	
+	            	//Cabecera
             		Map factura = getFactura(cve_factura);
-            		
+
+            		//Detalles
             		List<Map> movimientos = getDetalles(cve_factura);
-            				
+            			
+            		//Valida el tipo de factura
             		if(factura.get("CVE_REQ")!=null) {tipoDocto = "CVE_REQ"; consulta = "'O.S', 'O.T', 'REQ'";}
 	    			if(factura.get("CVE_PED")!=null) {tipoDocto = "CVE_PED"; consulta = "'PED'";}
 	    			if(factura.get("CVE_VALE")!=null) {tipoDocto = "CVE_VALE"; consulta = "'VAL'";}
@@ -313,10 +316,11 @@ public class GatewayFacturas extends BaseGateway {
 	    			/*Compromiso del Vale el tipo obras*/
             		BigDecimal comprobadoVale =new BigDecimal(0);
             		
+            		//Tipo 2: Obras, Tipo 6: Contrato, Tipo 9: Fondo fijo
             		if (factura.get("ID_TIPO").toString().equals("2")||factura.get("ID_TIPO").toString().equals("6")||factura.get("ID_TIPO").toString().equals("9"))
             			comprobadoVale = (BigDecimal) getJdbcTemplate().queryForObject("SELECT ISNULL(SUM(IMPORTE),0) FROM SAM_FACTURAS_VALES WHERE CVE_FACTURA =?", new Object[]{cve_factura}, BigDecimal.class);
             		
-            		//Si es de tipo Obra entonces validar validar el presupuesto de Vales
+            		//Si es de tipo Obra entonces valida el presupuesto de Vales
             		if (factura.get("ID_TIPO").toString().equals("2"))//||factura.get("ID_TIPO").toString().equals("6")||factura.get("ID_TIPO").toString().equals("9")
         			{
             			List<Map> Vales = getJdbcTemplate().queryForList("SELECT V.CVE_VALE, V.NUM_VALE, M.ID_PROYECTO, M.CLV_PARTID, SUM(F.IMPORTE) AS TOTAL, dbo.getDisponibleDocumento('VAL', V.CVE_VALE, M.ID_PROYECTO, M.CLV_PARTID) AS DISPONIBLE "+
@@ -368,6 +372,8 @@ public class GatewayFacturas extends BaseGateway {
 	            			presupuesto = true;
 	            		else if(factura.get("ID_TIPO").toString().equals("6") && presupuestoDisponible.doubleValue()>= ((BigDecimal) movimiento.get("IMPORTE")).doubleValue())
 	            			presupuesto = true;
+	            		else if(factura.get("ID_TIPO").toString().equals("1") && presupuestoDisponible.doubleValue()>= ((BigDecimal) movimiento.get("IMPORTE")).doubleValue())
+	            			presupuesto = true;
 	            		else
 	            			presupuesto = false;
 	            		
@@ -384,7 +390,7 @@ public class GatewayFacturas extends BaseGateway {
 		            			//VALIDAR SI EL IMPORTE DEL PEDIDO DEVENGADO ES EL TOTAL PARA FINIQUITAR EL PEDIDO//
 		            			if(documento.get("TIPO_DOC").toString().equals("PED")&&(presupuestoDisponible.doubleValue() - Double.parseDouble(factura.get("TOTAL").toString()))<1)
 		            				getJdbcTemplate().update("UPDATE SAM_PEDIDOS_EX SET FECHA_FINIQUITADO =?, MES_FINALIZADO=?, DIA_FINALIZADO=? WHERE CVE_PED =?", new Object[]{fecha_finalizado, fecha_finalizado.getMonth()+1, fecha_finalizado.getDay(), documento.get("CVE_DOC")});
-		            			
+		            			//Orden de Trabajo
 		            			if(documento.get("TIPO_DOC").toString().equals("O.S"))
 		            			{
 		            				int MesActual = gatewayMeses.getMesActivo(ejercicio);//PORQUE EL AÑO LO TIENE ESCRITO EN ESTA PARTE?
@@ -461,6 +467,7 @@ public class GatewayFacturas extends BaseGateway {
 	}
 
 	//Mapeo de los detalles de las facturas para cargar al seleccionar el listado de las facturas desde la op 
+	@SuppressWarnings({ "unchecked", "rawtypes" })
 	public List<Map> getDetalles(Long cve_factura){
 		return this.getJdbcTemplate().queryForList("SELECT *FROM SAM_FACTURA_DETALLE WHERE CVE_FACTURA = ?", new Object[]{cve_factura});
 	}
@@ -1748,19 +1755,19 @@ public class GatewayFacturas extends BaseGateway {
 					fecha
 				});
 			
-    		List <Map> detallesVales = getJdbcTemplate().queryForList("SELECT F.NUM_FACTURA,V.TIPO,F.CVE_PERS,F.EJERCICIO,F.FECHA,FV.CVE_FACTURA,FV.CVE_VALE,FV.ID_PROYECTO,FV.CLV_PARTID,FV.IMPORTE IMPORTE,FV.ID_MOVIMIENTO " +
-																		"FROM SAM_FACTURAS_VALES FV INNER JOIN SAM_FACTURAS F ON F.CVE_FACTURA=FV.CVE_FACTURA "+
-																		"INNER JOIN SAM_MOV_VALES MV ON MV.CVE_VALE=FV.CVE_VALE AND MV.ID_PROYECTO=FV.ID_PROYECTO AND MV.CLV_PARTID=FV.CLV_PARTID " + 
-																		"INNER JOIN SAM_VALES_EX V ON V.CVE_VALE=MV.CVE_VALE LEFT JOIN SAM_MOV_OP MOP ON MOP.CVE_FACTURA=F.CVE_FACTURA " +
-																		"WHERE V.STATUS=4 AND FV.CVE_FACTURA=? " +
-																		"GROUP BY F.NUM_FACTURA,V.TIPO,F.CVE_PERS,F.EJERCICIO,F.FECHA,FV.CVE_FACTURA,FV.CVE_VALE,FV.ID_PROYECTO,FV.CLV_PARTID,FV.IMPORTE,MV.IMPORTE,FV.ID_MOVIMIENTO", new Object[]{cve_factura});
+    		List <Map> detallesVales = getJdbcTemplate().queryForList("SELECT  F.NUM_FACTURA,V.TIPO,F.CVE_PERS,F.EJERCICIO,F.FECHA,FV.CVE_FACTURA,FV.CVE_VALE,FV.ID_PROYECTO,FV.CLV_PARTID,FV.IMPORTE IMPORTE,FV.ID_MOVIMIENTO, MV.IMPORTE-( " +
+    																  "SELECT ISNULL(SUM( FV.IMPORTE ),0.00) FROM SAM_FACTURAS_VALES FV INNER JOIN SAM_FACTURAS F ON F.CVE_FACTURA=FV.CVE_FACTURA WHERE FV.CVE_VALE=MV.CVE_VALE AND F.STATUS IN (1,3) " +
+    																  ")-(SELECT ISNULL(SUM(IMPORTE),0.00)  FROM COMP_VALES CV WHERE CV.CVE_VALE=MV.CVE_VALE AND TIPO='RL' ) IMPORTE_ANTERIOR FROM SAM_MOV_VALES MV " + 
+    																  "	INNER JOIN SAM_VALES_EX V ON V.CVE_VALE=MV.CVE_VALE INNER JOIN SAM_FACTURAS_VALES FV ON FV.CVE_VALE=V.CVE_VALE INNER JOIN SAM_FACTURAS F ON F.CVE_FACTURA=FV.CVE_FACTURA " +
+    																  " WHERE V.STATUS=4 AND FV.CVE_FACTURA=?", new Object[]{cve_factura});
     		for(Map row: detallesVales){
     			Double IMP_ANTERIOR=0d;
     			String imp;
     			Integer existe =getJdbcTemplate().queryForInt("SELECT COUNT(*) CVE_DOC FROM VT_COMPROMISOS WHERE CVE_DOC=? AND TIPO_DOC='VAL'",new Object[]{cve_vale});
     			   			
     			if (existe==0){
-    				IMP_ANTERIOR=Double.parseDouble(row.get("IMPORTE").toString());
+    				IMP_ANTERIOR=Double.parseDouble(row.get("IMPORTE_ANTERIOR").toString());
+    				System.out.println("EL IMPORTE anterior es: " +IMP_ANTERIOR );
     			}
     			else{
     				IMP_ANTERIOR = (Double) getJdbcTemplate().queryForObject("SELECT MONTO FROM VT_COMPROMISOS WHERE CVE_DOC=? AND TIPO_DOC='VAL'", new Object[]{cve_vale}, Double.class);

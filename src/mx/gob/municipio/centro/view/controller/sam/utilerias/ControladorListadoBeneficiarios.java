@@ -20,6 +20,8 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 @Controller
 @RequestMapping("/sam/utilerias/lst_proveedores.action")
@@ -48,6 +50,7 @@ public class ControladorListadoBeneficiarios extends ControladorBase {
 		String beneficiario=request.getParameter("cboprestadorservicio");//beneficiario
 		String unidad=request.getParameter("cbodependencia")==null ?this.getSesion().getClaveUnidad() : request.getParameter("cbodependencia");
 		
+		
 		modelo.put("txtprestadorservicio", ncomercia);
 		modelo.put("txtrfc", rfc);
 		modelo.put("vigencia", (vigencia.equals("on"))? "1":"0");
@@ -55,7 +58,7 @@ public class ControladorListadoBeneficiarios extends ControladorBase {
 		modelo.put("nombreUnidad",this.getSesion().getUnidad());
 		modelo.put("clv_benefi",gatewayBeneficiario.getBeneficiariosTodos(0));
 		
-		List <Map> m = gatewayBeneficiario.getListadoBeneficiarios(ncomercia, rfc, tipo, (vigencia.equals("on"))? "1":"0");
+		List <Map> m = gatewayBeneficiario.getListadoBeneficiarios(ncomercia,   rfc, tipo, (vigencia.equals("on"))? "1":"0");
 		
 		modelo.put("CONTADOR", m.size());
 		modelo.put("beneficiarios", m);
@@ -80,4 +83,10 @@ public class ControladorListadoBeneficiarios extends ControladorBase {
     	return gatewayUnidadAdm.getUnidadAdmTodos();	
     }
 	
+	@RequestMapping(value = "/get_benefi_list", method = RequestMethod.GET, params="Accept=*/*")
+	public @ResponseBody List<String> getCountryList(@RequestParam("term") String query) {
+		List<String> BenefiList = gatewayBeneficiario.getBenefiList(query);
+			
+		return BenefiList;
+	}
 }

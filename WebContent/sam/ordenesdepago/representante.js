@@ -10,6 +10,11 @@ $(document).ready(function() {
 		format: 'DD/MM/YYYY',
 	});
 
+  
+  	$('#fecha_altar').datetimepicker({
+		format: 'DD/MM/YYYY',
+	});
+  	
   	$('#tipo').on('change',function(event){//El metodo on asigna uno o mas controladores de eventos para los elementos seleccionados.
 		DatosBeneficiarios();
 	});
@@ -28,7 +33,17 @@ $(document).ready(function() {
 });
 
 function limpiar(){
-	$('.selectpicker').selectpicker('refresh');
+	//$('.selectpicker').selectpicker('deselectAll');
+	$('.selectpicker').selectpicker('val','');
+	$('#cbUnidad').selectpicker('val','');
+	$('#responsable').val('');
+	$('#replegal').val('');
+	$('#rfc').val('');
+	$('#fecha_bajar').val('');
+	$('#fecha_altar').val('');
+	$('#tipo').selectpicker('val','');
+	
+	
 }
 function DatosBeneficiarios(){
 	
@@ -76,7 +91,7 @@ function cerrar(){
 		 var replegal= $('#replegal').val();
 		 var rfc= $('#rfc').val();
 		 var fecha_bajar= $('#fecha_bajar').val();
-		 
+		 var fecha_altar= $('#fecha_altar').val();
 		 var tipo_benefi = $('#tipo').selectpicker('val');
 		 
 		 		 
@@ -94,14 +109,12 @@ function cerrar(){
 			 if ( cbUnidad=="")  {swal('Seleccione una Unidad Administrativa válida','warning'); return false;}
 			 //if ( rfc=="") {swal('','La Calle no es válida', 'warning'); return false;}
 		 }
-		 //String clv_benefi, String unidad, String titular,String representante, Date fecha_bajar,  String rfc
-		 ShowDelay('Guardando Beneficiario','');
-		 controladorRepresentanteRemoto.guardarRepresentantes(tipo_benefi,id_beneficiario,cbUnidad,titular,replegal,fecha_bajar,rfc,{
+		
+		  
+		/* 
+		controladorRepresentanteRemoto.guardarRepresentantes(tipo_benefi,id_beneficiario,cbUnidad,titular,replegal,fecha_altar,fecha_bajar,rfc,{
 					 callback:function(items) {
-						 $('#cbUnidad').val(items);
-						 $('#titular').val(items);
-						 $('#replegal').val(items);
-						 //window.parent.cambiarVariable(razonSocial);
+						
 						 swal("Good job!", "Beneficiario Guardado con éxito!", "success");
 						 CloseDelay("Beneficiario guardado con éxito", 2000, function(){
 							 limpiar();
@@ -111,27 +124,54 @@ function cerrar(){
 						 });
 		 		     }	
 					,errorHandler:function(errorString, exception) { 
-					   jError(errorString, 'Error'); 
+					   swal('',errorString, 'error'); 
 					}
-				});			
-		 
-		 limpiar();
-				 /*,{
-			 callback:function(items) {
-				 //$('#idProveedor').val(items);
-				 //window.parent.cambiarVariable(razonSocial);
-				 swal("Good job!", "Beneficiario Guardado con éxito!", "success");
-				 CloseDelay("Beneficiario guardado con éxito", 2000, function(){
-					 //limpiar();
-					
-					 //buscarBeneficiario();
-					 
-				 });
-			     }	
-			,errorHandler:function(errorString, exception) { 
-			   jError(errorString, 'Error'); 
-			}
-		}*/
-		
-		 
+		});	*/
+		 swal({
+			  title: 'Es seguro?',
+			  text: '¿Confirma que desea guardar la informacion del representante?',
+			  type: 'warning',
+			  showCancelButton: true,
+			  confirmButtonText: 'Sí, gaurdar!',
+			  cancelButtonText: 'No, abortar!'
+			}).then((result) => {
+			  if (result.value  ) {
+				 
+				  swal({
+					  title: 'Guardando',
+					  //text: 'Pedido guardado con éxito!',
+					  type: 'success',
+					  timer: 4000,
+					  onOpen: () => {
+					    swal.showLoading()
+					  }
+					}).then((result) => {
+					  if (
+					   
+					    result.dismiss === swal.DismissReason.timer
+					  ) {
+					  
+						  controladorRepresentanteRemoto.guardarRepresentantes(tipo_benefi,id_beneficiario,cbUnidad,titular,replegal,fecha_altar,fecha_bajar,rfc,{
+								 callback:function(items) {
+									 $('#id_beneficiario').val(items);
+									 //window.parent.cambiarVariable(razonSocial);
+									 swal("Good job!", "Representante Guardado con éxito!", "success");
+									 
+									 limpiar();
+									
+													
+					 		     }	
+								,errorHandler:function(errorString, exception) { 
+									swal('',errorString, 'error'); 
+								}
+							});	
+					   
+					  }
+					})
+			  
+			  } else if (result.dismiss === swal.DismissReason.cancel) {
+			    swal( 'Cancelado','El representante no se guardo','info' )
+			  }
+			})
 	}
+	

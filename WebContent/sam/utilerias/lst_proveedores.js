@@ -12,10 +12,27 @@ $(document).ready(function() {
  	$('#cmdnuevor').click(function (event){nuevoEditarRepresentante(0)});
  	//getBeneficiarios('txtprestadorservicio','CVE_BENEFI','');
  	
- 	
+ 	$('.selectpicker').selectpicker();
+  	
+    //on change function i need to control selected value
+  	$('select.selectpicker').on('change', function(){
+  		buscarBeneficiarios();
+  	});
  	
 });
 
+function buscarBeneficiarios(){
+	var selected = $('.selectpicker option:selected').val();
+	   //alert(selected);
+	$('#forma').attr('action', 'lst_proveedores.action');
+	$('#forma').submit();
+}
+/*
+function mostrartodo(){
+	alert('Entro a: ' + mostrartodo)
+	window.parent.select.selectpicker.selectpicker('refresh');
+}
+*/
 function cerrar(){
 	
 	
@@ -44,7 +61,7 @@ function compruebaVariable(){
 
 function cambiarVariable(razonSocial){
 	guardado = true;
-	$('#txtprestadorservicio').attr('value', razonSocial);
+	$('#txtprestadorservicio').val(razonSocial);
 	
 }
 
@@ -67,12 +84,10 @@ function nuevoEditarBeneficiario(idBeneficiario){
 		  confirmButtonText: 'Cerrar',
 		  showConfirmButton: false
 		})
-	
 	//jWindow('<iframe width="800" height="400" name="BENEFI" id="BENEFI" frameborder="0" src="../../sam/ordenesdepago/beneficiario.action?id='+idBeneficiario+'"></iframe>', titulo, '','',0, function(){compruebaVariable();});
-	
 }
 
-//swal2-confirm swal2-styled
+
 function nuevoEditarRepresentante(idBeneficiario){
 	var titulo = (idBeneficiario==0) ? "Nuevo representante": "Editar representante";
 	
@@ -185,7 +200,4 @@ function habilitarBeneficiario(id_beneficiario){
 		})
 }
 
-function buscarBeneficiarios(){
-	$('#forma').attr('action', 'lst_proveedores.action');
-	$('#forma').submit();
-}
+

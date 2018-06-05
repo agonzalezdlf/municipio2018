@@ -21,6 +21,7 @@
     <script type="text/javascript" src="../../include/js/otros/productos.js"></script>
     <script type="text/javascript" src="capturarPedidos.js?x=<%=System.currentTimeMillis()%>"></script>
 	<script type="text/javascript" src="../../include/js/sweetalert2/7.0/sweetalert2.all.js"></script>
+<script type="text/javascript" src="../../include/js/sweetalert2/7.0/core-js-2.4.1.js"></script>
 
 	<link rel="stylesheet" href="../../include/css/bootstrap-3.3.7.css" type="text/css">
 	<link rel="stylesheet" href="../../include/css/bootstrap2.css" type="text/css"/>
@@ -35,8 +36,7 @@
 	<!-- <link rel="stylesheet" href="../../include/js/sweetalert2/6.6.2/sweetalert2.css" type="text/css"> -->
 
 	<link rel="stylesheet" href="../../include/js/sweetalert2/7.0/sweetalert2.min.css" type="text/css">
-	<script src="https://cdnjs.cloudflare.com/ajax/libs/core-js/2.4.1/core.js"></script>
-
+	
 
 <!--  
 	<link rel="stylesheet" href="../../include/css/estilosam.css" type="text/css">

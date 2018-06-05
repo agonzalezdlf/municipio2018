@@ -25,6 +25,8 @@ import org.springframework.transaction.support.TransactionCallbackWithoutResult;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 @Controller
 @RequestMapping("/sam/ordenesdepago/beneficiario.action")
@@ -90,8 +92,8 @@ public class ControladorBeneficiario extends ControladorBase  {
 		return gatewayBeneficiario.getBeneficiariosPorEjemplo(razonSocial);
 	}
 
-	public Long guardarBeneficiario(Long clave,String razonSocial,String responsable,String responsable2,String rfc,String curp,String telefono,String tipo,String calle,String colonia,String ciudad,String estado,Integer cp,Integer idBanco,String noCuenta,String tipoCuenta,String idBeneficiarioPadre,String vigencia,String clabeb, String fecha_altab ){
-		return gatewayBeneficiario.actualizarPrincipal(clave,razonSocial,responsable,responsable2,rfc,curp,telefono,tipo,calle,colonia,ciudad,estado,cp,idBanco,noCuenta,tipoCuenta,idBeneficiarioPadre,vigencia,clabeb,fecha_altab);
+	public Long guardarBeneficiario(Long clave,String razonSocial,String responsable,String responsable2,String rfc,String curp,String telefono,String tipo,String calle,String colonia,String ciudad,String estado,Integer cp,Integer idBanco,String noCuenta,String tipoCuenta,String idBeneficiarioPadre,String vigencia,String clabeb, String fecha_altab,String fecha_bajab ){
+		return gatewayBeneficiario.actualizarPrincipal(clave,razonSocial,responsable,responsable2,rfc,curp,telefono,tipo,calle,colonia,ciudad,estado,cp,idBanco,noCuenta,tipoCuenta,idBeneficiarioPadre,vigencia,clabeb,this.formatoFecha(fecha_altab),this.formatoFecha(fecha_bajab));
 	}
 	
 	@ModelAttribute("bancos")
@@ -105,4 +107,11 @@ public class ControladorBeneficiario extends ControladorBase  {
 		return  gatewayBeneficiario.getListaBeneficiarios();
 	}
 	
+	
+	@RequestMapping(value = "/get_benefi_list", method = RequestMethod.GET, params="Accept=*/*")
+	public @ResponseBody List<String> getCountryList(@RequestParam("term") String query) {
+			List<String> BenefiList = gatewayBeneficiario.getBenefiList(query);
+			
+			return BenefiList;
+	}
 }

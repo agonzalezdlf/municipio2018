@@ -9,12 +9,10 @@
 
 <script type="text/javascript" src="../../include/js/jquery-2.1.3.min.js"></script>
 <script type="text/javascript" src="../../include/js/bootstrap-3.3.7.js"></script>
-<script type="text/javascript" src="../../include/js/sweetalert2.js"></script>
-
-<link type="text/css" href="../../include/css/black-tie/jquery-ui-1.7.3.custom.css" rel="stylesheet" />
+<link rel="stylesheet" href="../../include/js/sweetalert2/7.0/sweetalert2.min.css" type="text/css">
+<script type="text/javascript" src="../../include/js/sweetalert2/7.0/sweetalert2.all.js"></script>
+<script type="text/javascript" src="../../include/js/sweetalert2/7.0/core-js-2.4.1.js"></script>
 <link rel="stylesheet" href="../../include/css/estilosam.css" type="text/css">
-<link rel="stylesheet" href="../../include/js/componentes/jquery.alerts.css" type="text/css">	
-<link href="../../include/js/autocomplete/jquery.autocomplete.css" rel="stylesheet" type="text/css" />
 <script type="text/javascript" src="../../include/css/bootstrap-datetimepicker-master/js/moment-with-locales-2.9.0.js"></script>
 <link rel="stylesheet" href="../../include/css/bootstrap-datetimepicker-master/css/bootstrap-datetimepicker-4.15.35.css" type="text/css">
 <script type="text/javascript" src="../../include/css/bootstrap-datetimepicker-master/js/bootstrap-datetimepicker-4.15.35.js"></script>
@@ -23,29 +21,15 @@
 <script type="text/javascript" src="../../include/css/boostrap-select/dist/js/bootstrap-select.js"></script>
 
 <script type="text/javascript" src="../../include/js/jquery-impromptu.2.3.js"></script>
-<script type="text/javascript" src="../../include/js/componentes/componentes.js"></script>
 <script type="text/javascript" src="../../dwr/interface/controladorBeneficiarioRemoto.js"> </script>
-<script type="text/javascript" src="../../dwr/interface/autocompleteDiversosRemoto.js"> </script>
-<script type="text/javascript" src="../../include/js/utilsJquery/jquery-ui-1.7.1.custom.min.js"></script>
+
 <script type="text/javascript" src="../../dwr/engine.js"> </script>  
-<script type="text/javascript" src="../../include/js/componentes/jquery.alerts.js"></script>
-<script type="text/javascript" src="../../include/js/autocomplete/jquery.autocomplete.js"></script>
-<script type="text/javascript" src="../../include/js/autocomplete/autompleteVarios.js"></script>
 <script type="text/javascript" src="beneficiario.js?x=<%=System.currentTimeMillis()%>"></script>
 <script type="text/javascript" src="../../include/js/toolSam.js?x=<%=System.currentTimeMillis()%>"></script>
 <script type="text/javascript" src="../../include/js/presupuesto/presupuesto.js"></script>
-<script type="text/javascript" src="../../include/js/otros/productos.js"></script>
-<link rel="stylesheet" href="../../include/js/autocomplete/jquery.autocomplete.css" type="text/css" />
-<!--<script type="text/javascript" src="../../include/js/jquery.tabs/jquery-1.1.3.1.pack.js"></script>
-<script type="text/javascript" src="../../include/js/jquery.tabs/jquery.history_remote.pack.js"></script>
-<script type="text/javascript" src="../../include/js/jquery.tabs/jquery.tabs.pack.js"></script>-->
 <link rel="stylesheet" href="../../include/js/jquery.tabs/jquery.tabs.css" type="text/css" media="print, projection, screen">
-<!-- Additional IE/Win specific style sheet (Conditional Comments) -->
-<!--[if lte IE 7]>
-<link rel="stylesheet" href="../../include/js/jquery.tabs/jquery.tabs-ie.css" type="text/css" media="projection, screen">
-<![endif]-->
 <link rel="stylesheet" href="../../include/css/bootstrap-3.3.7.css" type="text/css">
-<link rel="stylesheet" href="../../include/css/sweetalert2.css" type="text/css">
+
 <link rel="stylesheet" href="../../include/css/style-tabs.css" type="text/css"/>
 
 <body leftmargin="0" topmargin="0" marginwidth="0" marginheight="0" >
@@ -97,7 +81,7 @@
 		                        </div>
 		                      </div>
 		                    </div>
-		                     <!-- Tipo de Beneficiario -->
+		                     <!-- Beneficiario -->
 		                    <div class="row">
 		                      <div class="form-group">
 		                        <div class="control-label col-sm-3">**Raz&oacute;n Social:</div>
@@ -112,7 +96,7 @@
 		                        <div class="control-label col-sm-3">Fecha alta:</div>
 		                        <div class="col-sm-3 form-group">
 		                        	<div class="input-group date">
-			                              <input name="fecha_altab" type="text" class="form-control" id="fecha_altab" value="" style="width:100%" maxlength="10"/>
+			                              <input name="fecha_altab" type="text" class="form-control" id="fecha_altab" value="<c:out value='${beneficiario.FECHA_ALTA}'/>" style="width:100%" maxlength="10"/>
 			                              <span class="input-group-addon">
 			                                <span class="glyphicon glyphicon-calendar"></span>
 			                              </span>
@@ -126,7 +110,7 @@
 		                        <div class="control-label col-sm-3">Fecha baja:</div>
 		                        <div class="col-sm-3 form-group">
 		                        	<div class="input-group date">
-			                              <input name="fecha_bajab" type="text" class="form-control" id="fecha_bajab" value="" style="width:100%" maxlength="10"/>
+			                              <input name="fecha_bajab" type="text" class="form-control" id="fecha_bajab" value="<c:out value='${beneficiario.FECHA_BAJA}'/>" style="width:100%" maxlength="10"/>
 			                              <span class="input-group-addon">
 			                                <span class="glyphicon glyphicon-calendar"></span>
 			                              </span>
@@ -139,7 +123,7 @@
 	 	     		<div class="tab-pane" id="fragment-representante">
 	 	     			<form class="form-horizontal">
 	 	     					                                   
-	 	     				<!-- Representante legal  -->
+	 	     				<!-- Correo electronico  -->
 	 	     				<div>
 			                    <div class="row">
 			                      <div class="form-group">
@@ -156,7 +140,7 @@
 			                      <div class="form-group">
 			                        <div class="control-label col-sm-3 ">Telefonos:</div>
 			                        <div class="col-sm-3 form-group">
-			                        	<input name="telefono" type="text" class="form-control" id="telefono" value="<c:out value='${beneficiario.TELEFONOS}'/>" style="width:350px" maxlength="100" onBlur="upperCase(this)" />
+			                        	<input name="telefono" type="text" class="form-control" id="telefono" value="<c:out value='${beneficiario.TELEFONOS}'/>" style="width:350px" onkeypress=" return keyNumbero( event );" maxlength="100" onBlur="upperCase(this)" />
 			                        </div>
 			                      </div>
 			                    </div>
@@ -234,7 +218,7 @@
 		                      <div class="form-group">
 		                        <div class="control-label col-sm-3 ">No. de Cuenta :</div>
 		                        <div class="col-sm-3 form-group">
-		                        	<input name="noCuenta" type="text" class="form-control" id="noCuenta" value="<c:out value='${beneficiario.NUM_CTA}'/>" style="width:150px" maxlength="150" onBlur="upperCase(this)" onkeypress=" return keyNumbero( event );" />						
+		                        	<input name="noCuenta" type="text" class="form-control" id="noCuenta" value="<c:out value='${beneficiario.NUM_CTA}'/>" style="width:150px" maxlength="20" onBlur="upperCase(this)" onkeypress=" return keyNumbero( event );" />						
 		                        </div>
 		                      </div>
 		                    </div>
@@ -243,7 +227,7 @@
 		                      <div class="form-group">
 		                        <div class="control-label col-sm-3 ">Clabe :</div>
 		                        <div class="col-sm-3 form-group">
-		                        	<input name="clabeb" type="text" class="form-control" id="clabeb" value="<c:out value='${beneficiario.CLABE}'/>" style="width:150px" maxlength="150" onBlur="upperCase(this)" onkeypress=" return keyNumbero( event );" />						
+		                        	<input name="clabeb" type="text" class="form-control" id="clabeb" value="<c:out value='${beneficiario.CLABE}'/>" style="width:150px" maxlength="18" onBlur="upperCase(this)" onkeypress=" return keyNumbero( event );" />						
 		                        </div>
 		                      </div>
 		                    </div>

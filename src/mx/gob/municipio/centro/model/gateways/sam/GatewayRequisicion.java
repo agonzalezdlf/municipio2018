@@ -241,6 +241,7 @@ public class GatewayRequisicion  extends BaseGateway {
 		parametros.put("cve_pers", idUsuario);
 		parametros.put("tipogto", tipogto);
 		parametros.put("beneficiario", beneficiario);
+		parametros.put("1", verUnidad);
 		
 		String sql = "";
 		
@@ -259,16 +260,18 @@ public class GatewayRequisicion  extends BaseGateway {
 		
 		if (verUnidad==null&&!privilegio)
 			sql+= " AND R.CVE_PERS=:cve_pers ";
+		
 		if(verUnidad!=null&&!privilegio)
 			sql+= " AND (R.CVE_PERS=:cve_pers OR R.ID_DEPENDENCIA=:unidad) ";
 		
 		if (verUnidad==null&&privilegio&&!unidad.equals("0"))
 			sql+= " AND (R.ID_DEPENDENCIA=:unidad) ";
+		/*
 		if (verUnidad==null&&privilegio&&!unidad.equals("0"))
-			sql+= "AND (R.ID_DEPENDENCIA=:unidad)";
+			sql+= "AND (R.ID_DEPENDENCIA=:unidad)";*/
+		
 		if(verUnidad!=null&&privilegio&&unidad.equals("0"))
 			sql+= " AND (R.CVE_PERS=:cve_pers OR R.ID_DEPENDENCIA=:unidad)";
-
 			
 		if(numreq!=null&&!numreq.equals("")){
 			sql+= " AND R.NUM_REQ LIKE '%"+numreq+"%'";

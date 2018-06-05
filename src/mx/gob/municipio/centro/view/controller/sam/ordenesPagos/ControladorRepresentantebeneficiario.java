@@ -53,17 +53,17 @@ public class ControladorRepresentantebeneficiario extends ControladorBase {
 		//Integer unidad = request.getParameter("cbodependencia")== null ? Integer.parseInt(request.getParameter("cbodependencia")): 0;
 		String responsable= request.getParameter("responsable")== null ? request.getParameter("responsable"): "";
 		String rfc=request.getParameter("rfc");
-		String fecha_bajar= request.getParameter("fecha_bajar")== null ? request.getParameter("fecha_bajar"): "";
-		String representante= request.getParameter("replegal")== null ? request.getParameter("replegal"): "";
+		//String fecha_bajar= request.getParameter("fecha_bajar")== null ? request.getParameter("fecha_bajar"): "";
+		//String representante= request.getParameter("replegal")== null ? request.getParameter("replegal"): "";
 		
 				
 		modelo.put("nombreUnidad",this.getSesion().getUnidad());
 		modelo.put("clv_benefi",gatewayBeneficiario.getBeneficiariosTodos(0));
 		modelo.put("responsable", responsable);
 		modelo.put("rfc", rfc);
-		modelo.put("fecha_bajar", fecha_bajar);
-		modelo.put("replegal", representante);
-		modelo.put("fecha", fecha);
+		//modelo.put("fecha_bajar", fecha_bajar);
+		//modelo.put("replegal", representante);
+		//modelo.put("fecha", fecha);
 		//id_beneficiario,cbUnidad,responsable,replegal,rfc
 		
 		//modelo.put("clv_representante",gatewayRepresentante.getRepresentante(0));
@@ -74,8 +74,8 @@ public class ControladorRepresentantebeneficiario extends ControladorBase {
 		
 	}
 	
-		public Long guardarRepresentantes (String tipo, String clv_benefi, String unidad, String titular,String representante, Date fecha_bajar,  String rfc){
-		return gatewayRepresentante.guardaRepresentantes(tipo, clv_benefi, titular,unidad,representante,fecha_bajar,rfc);
+		public Long guardarRepresentantes (String tipo, String clv_benefi, String unidad, String titular,String representante,String fecha_altar, String fecha_bajar,  String rfc){
+		return gatewayRepresentante.guardaRepresentantes(tipo, clv_benefi,unidad, titular,representante,this.formatoFecha(fecha_altar),this.formatoFecha(fecha_bajar),rfc);
 	}
 	
 	

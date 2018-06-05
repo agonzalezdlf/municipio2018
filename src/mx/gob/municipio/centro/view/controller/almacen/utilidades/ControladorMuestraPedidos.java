@@ -33,17 +33,40 @@ public class ControladorMuestraPedidos extends ControladorBaseAlmacen {
 	    return "almacen/consultas/muestra_pedidos.jsp";
 	}
 	
+	/*
+	  public List<Map> getRequisicionesUnidadPorEjemplo(String unidad , String  estatus,String fechaInicial,String fechaFinal,Integer ejercicio, Integer tipo, String  verUnidad, String numreq, String proyecto, String clv_partid, String tipogto,  String beneficiario, boolean privilegio, String cboconOP, String listadoReq){
+    	return  gatewayRequisicion.getListaDeRequisicionesPorEjemplo(unidad, estatus, this.formatoFecha(fechaInicial), this.formatoFecha(fechaFinal), ejercicio, tipo, verUnidad, numreq, this.getSesion().getIdUsuario(), this.getSesion().getClaveUnidad(), proyecto, clv_partid, tipogto, beneficiario, privilegio, cboconOP, listadoReq);	
+    }
+	 */
 	
-	
-	@SuppressWarnings({ "unchecked", "rawtypes" })
 	public List<Map> getListaPedidos(int idDependencia){
+		return this.getJdbcTemplate().queryForList("SELECT  DISTINCT SAM_PEDIDOS_EX.CVE_PED, "+
+																"NUM_PED,  "+
+																"SAM_PEDIDOS_EX.CVE_REQ, "+ 
+																"SAM_REQUISIC.ID_PROYECTO, "+ 
+																"CEDULA_TEC.N_PROGRAMA,  "+
+																"SAM_REQUISIC.CLV_PARTID,  "+
+																"SAM_PEDIDOS_EX.CLV_BENEFI,  "+
+																"CAT_BENEFI.NCOMERCIA,  "+
+																"SAM_REQUISIC.ID_DEPENDENCIA,  "+
+																"CAT_DEPENDENCIAS.DEPENDENCIA,  "+
+																"TOTAL,  "+
+																"NOTAS,  "+
+																"convert(varchar(10), FECHA_PED ,103) FECHA_PED  "+
+																"FROM SAM_PEDIDOS_EX  "+
+																"INNER JOIN SAM_PED_MOVTOS PM ON PM.CVE_PED=SAM_PEDIDOS_EX.CVE_PED " +
+																"INNER JOIN SAM_REQUISIC ON (SAM_REQUISIC.CVE_REQ = SAM_PEDIDOS_EX.CVE_REQ)  "+
+																"INNER JOIN CEDULA_TEC ON (CEDULA_TEC.ID_PROYECTO=SAM_REQUISIC.ID_PROYECTO)  "+
+																"INNER JOIN CAT_BENEFI ON (CAT_BENEFI.CLV_BENEFI=SAM_PEDIDOS_EX.CLV_BENEFI)  "+
+																"INNER JOIN SAM_PED_MOVTOS ON (SAM_PED_MOVTOS.CVE_PED=SAM_PEDIDOS_EX.CVE_PED) "+
+																"INNER JOIN CAT_DEPENDENCIAS ON (CAT_DEPENDENCIAS.ID = SAM_REQUISIC.ID_DEPENDENCIA)  "+
+																"WHERE SAM_PEDIDOS_EX.STATUS IN(1,4,5) AND PM.STATUS IN (1) AND CAT_DEPENDENCIAS.ID = ? ORDER BY CVE_PED ASC", new Object[]{idDependencia});
 		
-		
+		/*
 		List<Map> LstPedidos = new ArrayList<Map>(); 
 		
-		//List<Map> LstPedidos = new ArrayList();
-		
-		List<Map> Pedidos = this.getJdbcTemplate().queryForList("SELECT  DISTINCT SAM_PEDIDOS_EX.CVE_PED, "+
+			
+		List<Map<String, Object>> Pedidos = this.getJdbcTemplate().queryForList("SELECT  DISTINCT SAM_PEDIDOS_EX.CVE_PED, "+
 																"NUM_PED,  "+
 																"SAM_PEDIDOS_EX.CVE_REQ, "+ 
 																"SAM_REQUISIC.ID_PROYECTO, "+ 
@@ -76,9 +99,10 @@ public class ControladorMuestraPedidos extends ControladorBaseAlmacen {
 																	"),0)POR_RECIBIR " +
 																	"FROM SAM_PED_MOVTOS PM " +
 																	"INNER JOIN SAM_PEDIDOS_EX P ON P.CVE_PED=PM.CVE_PED " +
-																	"WHERE PM.CVE_PED =?", new Object[]{Pedido.get("CVE_PED")});
+																	"WHERE PM.CVE_PED =? ORDER BY PM.CVE_PED", new Object[]{Pedido.get("CVE_PED")});
 			
 			for(Map detalleped: MPedido){
+				
 				Double finiquita = Double.parseDouble(detalleped.get("POR_RECIBIR").toString());		
 			
 				//Lotes incompleto por lo que se mostrara el pedido
@@ -86,11 +110,12 @@ public class ControladorMuestraPedidos extends ControladorBaseAlmacen {
 					LstPedidos.addAll(Pedidos);
 			}
 		}
-		System.out.println("Lista de pedidos pedidos por entradas.. " +LstPedidos);;
 		log.config("Listado de Pedidos" + LstPedidos );
+		System.out.println("Lista de pedidos pedidos por entradas.. " +LstPedidos);;
+		
 		return LstPedidos;
 	    
-		
+	*/	
 	}
 	
 

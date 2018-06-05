@@ -9,8 +9,8 @@
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
 <link rel="stylesheet" href="../../include/css/estilosam.css" type="text/css">
     <link rel="stylesheet" href="../../include/js/componentes/jquery.alerts.css" type="text/css">
-      <link rel="stylesheet" href="../../include/css/sweetalert2.min.css" type="text/css">
-      <link rel="stylesheet" href="../../include/css/bootstrap-3.3.7.css" type="text/css">
+      <link rel="stylesheet" href="../../include/js/sweetalert2/7.0/sweetalert2.min.css" type="text/css">
+      
 	<script type="text/javascript" src="../../include/js/jquery-1.3.2.min.js"></script>
     <script type="text/javascript" src="../../include/js/jquery-impromptu.2.3.js"></script>
     <script type="text/javascript" src="../../include/js/jquery.form.js"></script>
@@ -23,31 +23,30 @@
     <script type="text/javascript" src="../../dwr/engine.js"> </script>
     <script type="text/javascript" src="../../include/js/jquery-ui-1.7.3.custom.min.js"></script>
     
-    <script type="text/javascript" src="../../include/js/bootstrap-3.3.7.js"></script>
+   
     
     <script type="text/javascript" src="../../include/js/jquery.maxlength.js"></script>
     <script type="text/javascript" src="../../include/js/jquery.bestupper.min.js"></script>
     <script type="text/javascript" src="../../include/js/toolSam.js?x=<%=System.currentTimeMillis()%>"></script>
     <script type="text/javascript" src="../../include/js/presupuesto/presupuesto.js?x=<%=System.currentTimeMillis()%>"></script>
     <script type="text/javascript" src="../../include/js/otros/productos.js"></script>
-     <script type="text/javascript" src="../../include/js/sweetalert2.min.js"></script>
+    <script type="text/javascript" src="../../include/js/sweetalert2/7.0/sweetalert2.all.js"></script>
     <script type="text/javascript" src="cap_contratos.js?x=<%=System.currentTimeMillis()%>"></script>
-    <script type="text/javascript" src="../../include/js/sweetalert2.js"></script>
     <link rel="stylesheet" href="../../include/css/css/css3-buttons.css" type="text/css" media="screen">
     <link rel="stylesheet" href="../../include/css/tiptip.css" type="text/css"  media="screen">
     <script src="../../include/css/jquery.tiptip.js"></script>
 
     <link rel="stylesheet" href="../../include/css/black-tie/jquery-ui-1.7.3.custom.css" type="text/css" />
     <link rel="stylesheet" href="../../include/js/autocomplete/jquery.autocomplete.css" type="text/css" />
-    <!--<script type="text/javascript" src="../../include/js/jquery.tabs/jquery-1.1.3.1.pack.js"></script>
-    <script type="text/javascript" src="../../include/js/jquery.tabs/jquery.history_remote.pack.js"></script>
-    <script type="text/javascript" src="../../include/js/jquery.tabs/jquery.tabs.pack.js"></script>-->
     <link rel="stylesheet" href="../../include/js/jquery.tabs/jquery.tabs.css" type="text/css" media="print, projection, screen">
+   	<!--
    	<link rel="stylesheet" href="../../include/css/boostrap-select/dist/css/bootstrap-select.css" type="text/css">
-	<script type="text/javascript" src="../../include/css/boostrap-select/dist/js/bootstrap-select.js"></script>
+	<script type="text/javascript" src="../../include/css/boostrap-select/dist/js/bootstrap-select.js"></script> 
 	<script type="text/javascript" src="../../include/css/bootstrap-datetimepicker-master/js/moment-with-locales-2.9.0.js"></script>
 	<link rel="stylesheet" href="../../include/css/bootstrap-datetimepicker-master/css/bootstrap-datetimepicker-4.15.35.css" type="text/css">
 	<script type="text/javascript" src="../../include/css/bootstrap-datetimepicker-master/js/bootstrap-datetimepicker-4.15.35.js"></script>
+   	 -->
+	
     <!-- Additional IE/Win specific style sheet (Conditional Comments) -->
     <!--[if lte IE 7]>
     <link rel="stylesheet" href="../../include/js/jquery.tabs/jquery.tabs-ie.css" type="text/css" media="projection, screen">
@@ -67,6 +66,10 @@ a:hover {
 }
 a:active {
 	text-decoration: none;
+}
+.disable{
+	opacity: .5;
+    cursor: not-allowed;
 }
     </style>
 <title>Contratos - Captura de Contrato</title>

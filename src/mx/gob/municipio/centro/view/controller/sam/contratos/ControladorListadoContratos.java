@@ -39,10 +39,12 @@ public class ControladorListadoContratos extends ControladorBase {
 		// TODO Auto-generated method stub
 
 	}
+	public final static  int VER_TODAS_LAS_UNIDADES = 25;
 	
 	@SuppressWarnings("unchecked") 
 	@RequestMapping(method = {RequestMethod.GET,RequestMethod.POST})  
 	public String  requestGetControlador( Map modelo, HttpServletRequest request) {
+		boolean privilegio = this.getPrivilegioEn(this.getSesion().getIdUsuario(), VER_TODAS_LAS_UNIDADES);
 		String unidad=request.getParameter("cbodependencia")==null ? this.getSesion().getClaveUnidad() : request.getParameter("cbodependencia");
 		String estatus=request.getParameter("status")==null ? Integer.toString(gatewayContratos.CON_STATUS_EDICION): this.arrayToString(request.getParameterValues("status"),",");
 		String tipoGasto=request.getParameter("cbotipogasto");

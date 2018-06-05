@@ -59,7 +59,7 @@ function getVale(){
      $('input[name=status]:checked').each(function() {checkStatus.push($(this).val());});	 
 	 var error="";
 	 var titulo ="Error de validacion";
-	 if (checkStatus.length==0 )   error="Debe de seleccionar un Estatus de Pedido <br>";
+	 if (checkStatus.length==0 )   error="Debe de seleccionar un Estatus de Vales <br>";
 	 if ($('#fechaInicial').attr('value')=="" && $('#fechaFinal').attr('value')!="" || $('#fechaInicial').attr('value')!="" && $('#fechaFinal').attr('value')=="")  error+="El rango de fechas no es valido<br>";
 	if (error=="")
 		$("#forma").submit();
@@ -190,9 +190,51 @@ function rechazarVale(){
  }
   
  function aplicarVale(){
+	 
 	  var checkVales = [];
-	  $('input[name=chkvales]:checked').each(function() {checkVales.push($(this).val());	 });
+	  $('input[name=chkvales]:checked').each(function() {checkVales.push($(this).val());});
 	 if (checkVales.length > 0 ) { 
+		 
+		 swal({
+			  title: 'Es seguro?',
+			  text: '¿Confirma que desea Ejercer el Vale para su pago?',
+			  type: 'warning',
+			  showCancelButton: true,
+			  confirmButtonText: 'Sí, Ejercer!',
+			  cancelButtonText: 'No, abortar!'
+			}).then((result) => {
+			  if (result.value  ) {
+				  controladorListadoValesRemoto.aplicarVale(checkVales, {
+						callback:function(items) {
+							
+							swal({
+								  title: 'Aplicando',
+								  //text: 'Pedido guardado con éxito!',
+								  type: 'success',
+								  timer: 4000,
+								  onOpen: () => {
+								    swal.showLoading()
+								  }
+								}).then((result) => {
+								  if ( result.dismiss === swal.DismissReason.timer  ) {
+									  swal("Vale aplicado con éxito!");
+									  $('#forma').submit();
+								   
+								  }
+								})
+						   //CloseDelay('El proceso se realizo satisfactoriamente', 2000,function(){ $('#forma').submit(); });
+						} ,
+						errorHandler:function(errorString, exception) { 
+							jError("Fallo la operacion:<br>Error::"+errorString+"-message::"+exception.message+"-JavaClass::"+exception.javaClassName+".<br>Consulte a su administrador");    
+							}
+							}); 	
+			  // For more information about handling dismissals please visit
+			  // https://sweetalert2.github.io/#handling-dismissals
+			  } else if (result.dismiss === swal.DismissReason.cancel) {
+			    swal('Cancelado','El vale no se ejercio','error')
+			  }
+			})
+		 /*
 		jConfirm('¿Confirma que desea Ejercer el Vale para su pago?','Confirmar', function(r){
 		if(r){
 			   controladorListadoValesRemoto.aplicarVale(checkVales, {
@@ -206,9 +248,9 @@ function rechazarVale(){
 				}); 
 			
 		}
-		});
+		});*/
 	 } else 
-				jAlert("Es necesario seleccionar por lo menos un elemento del listad", "Advertencia");
+				swal('',"Es necesario seleccionar por lo menos un elemento del listado", "warning");
  }
  
  function desAplicarVale(){

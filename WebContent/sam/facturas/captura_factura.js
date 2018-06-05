@@ -1,11 +1,12 @@
 /*
-Autor: ISC. Israel de la Cruz Hernandez
-Version: 1.0
-Date: 11-01-2013
+Autor: ISC. Israel de la Cruz Hernandez & ISC. Abraham Gonzalez
+Version: 2.0
+Date: 17-05-2018
 Update: 
 */
 
 var entraVale =0;
+var cerrar = false; 
 
 $(document).ready(function(){
 	var options = { 
@@ -25,8 +26,10 @@ $(document).ready(function(){
 	 $('#cmdGuardarRetencion').click(function (event){guardarRetencion();}); 
 	 //$('#cbotipoFactura').change(function(event){tipoFacturasDeductivas();});
 	 $('#cmdnuevo').click(function(event){document.location='captura_factura.action';});
-	 $('#cmdcerrar').attr('disabled', true);
+	 
 	 $('#cmdcerrar').click(function(event){cerrarDocumento();});
+	 $('#cmdcerrar').addClass("btn_disable");
+	 
 	 $('#img_movimiento').click(function(event){muestraTiposDocumento();});
 	 $('#img_detele').click(function(event){deleteDocumento();});
 	 $('#cmdguardar').click(function (event){guardarFactura();});
@@ -39,7 +42,7 @@ $(document).ready(function(){
 	 
 	 $('#cmdnuevoconcepto').click(function (event){limpiarDetalles();});
 	 $('#txtproyecto').blur(function(event){__getPresupuesto($('#ID_PROYECTO').attr('value'),$('#txtproyecto').attr('value'),$('#txtpartida').attr('value'), $('#cbomes').attr('value'),  'txtpresupuesto','txtdisponible','');});
-	 $('#txtpartida').blur(function(event){__getPresupuesto($('#ID_PROYECTO').attr('value'), $('#txtproyecto').attr('value'),$('#txtpartida').attr('value'), $('#cbomes').attr('value'),  'txtpresupuesto','txtdisponible','');});
+	 $('#txtpartida').focus(function(event){__getPresupuesto($('#ID_PROYECTO').attr('value'), $('#txtproyecto').attr('value'),$('#txtpartida').attr('value'), $('#cbomes').attr('value'),  'txtpresupuesto','txtdisponible','');});
 	 $('#img_presupuesto').click(function(event){muestraPresupuesto();});
 	 getBeneficiarios('txtprestadorservicio','CLV_BENEFI',$('#tipoBeneficiario').attr('value'));
 	 
@@ -56,7 +59,6 @@ $(document).ready(function(){
 		 $('#tr_file').show();
 
 		 
-		 $('#cmdcerrar').attr('disabled', false);
 		 if($('#cbotipodocumento').val()=='1')
 		 {
 		 	cargarBeneficiarioyPresupuestoOSOT($('#CLV_BENEFI').val(), $('#CVE_DOC').val());
@@ -90,6 +92,29 @@ $(document).ready(function(){
 	$('#tr_Programa').hide();
 	$('#tr_PresupuestoLibre').hide();
 });
+
+
+
+/****************Para ocultar un boton cerrar si no exista movimientos en el detalle de la tabla maestra****************************/
+function mostrarcerrar(){
+	cmdcerrar.style.display = '';
+}
+
+function tabladetalles(){
+	var numFilas=0;
+	var numFilas = $('#listaDetalles > tbody > tr').length;
+			
+	if (numFilas< 1){
+
+				//cmdcerrar.style.visibility  = 'visible'; 
+				$('#cmdcerrar').removeClass("btn_disable");
+	}else
+		{
+			//cmdcerrar.style.display = 'none'; // No ocupa espacio hidden
+			$('#cmdcerrar').addClass("btn_disable");	
+		}
+}
+
 
 function obtenerProyectoPartida()
 {
@@ -180,6 +205,15 @@ function muestraPresupuesto(){
  {
 	  controladorFacturasRemoto.getDetallesFactura($('#CVE_FACTURA').val(), {
         callback:function(items) { 
+        	if(items.length>0) {
+				cerrar = true;
+				tabladetalles();
+				$('#cmdcerrar').removeClass("btn_disable");
+				$('#cmdcerrar').attr('disabled', false);
+			}else{
+				cerrar = false;
+				$('#cmdcerrar').attr('disabled', true);
+			}
 			quitRow("listaDetalles");
 			$('#TOTAL_CONCEPTOS').val(0);
 			var total = 0;
@@ -220,6 +254,9 @@ function muestraPresupuesto(){
 			 if(r){
 				 controladorFacturasRemoto.eliminarDetalles($('#CVE_FACTURA').val(), checkDetalles, {
         			callback:function(items) { 
+        				if (items< 1){
+							$('#cmdcerrar').addClass("btn_disable");
+        				}
 						mostrarDetalles();
 					},
 					errorHandler:function(errorString, exception) { 
@@ -1013,7 +1050,6 @@ function guardarFactura()
 					  callback:function(items){
 							$('#CVE_FACTURA').attr('value',items);
 							subirArchivo();
-							$('#cmdcerrar').attr('disabled', false);
 							desabilitarControles();;	
 							$('#tabuladores').tabs('enable',1);
 							tipoFacturasDeductivas();
@@ -1054,6 +1090,9 @@ function cargarDetallePresupuestalDoc(cve_factura)
 
 /*funcion para cerrar el documento*/
 function cerrarDocumento(){
+	
+	if(!cerrar) {swal('','Es necesario que exista al menos un concepto de contrato para realizar esta operación','warning'); return false;}
+	
 	if($('#TOTAL_CONCEPTOS').val()=='0') {
 			swal('','No se puede cerrar la factura si no existe por lo menos un lote en el detalle','error'); 
 		return false;

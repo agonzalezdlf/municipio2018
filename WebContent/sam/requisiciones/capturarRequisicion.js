@@ -70,11 +70,7 @@ $(document).ready(function() {
 	/*funciones*/
 	 if($('#CVE_REQ').val()==0) tipoRequisiciones();
 	 /*
-	  	public String getBeneficiario(String cve_benefi){
-			return (String) this.getJdbcTemplate().queryForObject("SELECT NCOMERCIA FROM CAT_BENEFI WHERE CLV_BENEFI = ?", new Object[]{cve_benefi}, String.class);
-		} 
-	 */
-	 
+		 
 	 //getBeneficiarios('txtprestadorservicio','CVE_BENEFI',$('#tipoBeneficiario').val());//
 	 //getUnidad_Medidas('txtunidadmedida','CVE_UNIDAD_MEDIDA');
 	 

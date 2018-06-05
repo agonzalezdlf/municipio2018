@@ -3,12 +3,44 @@ $(document).ready(function() {
   $('.tiptip a.button, .tiptip button').tipTip();
   var imagen="../../imagenes/cal.gif";	
   var formatFecha="dd/mm/yy";	
-  $("#fechaInicial").datepicker({showOn: 'button', buttonImage:imagen , buttonImageOnly: true,dateFormat: formatFecha});  
-  $("#fechaFinal").datepicker({showOn: 'button', buttonImage: imagen, buttonImageOnly: true,dateFormat: formatFecha});  
+  //$("#fechaInicial").datepicker({showOn: 'button', buttonImage:imagen , buttonImageOnly: true,dateFormat: formatFecha});  
+  //$("#fechaFinal").datepicker({showOn: 'button', buttonImage: imagen, buttonImageOnly: true,dateFormat: formatFecha});  
   //getBeneficiarios('txtprestadorservicio','CVE_BENEFI','');  
    $('#cmdpdf').click(function (event){mostrarOpcionPDF();});  
    
    $('#ui-datepicker-div').hide(); 
+   
+   /*
+	$('#w-input-search').autocomplete({
+		serviceUrl: '${pageContext.request.contextPatch}/getListaBeneficiarios',
+		paramName: "NCOMERCIA",
+		delimiter: ",",
+		transformResult: function (response ){
+				
+			return {
+				suggestions: $.map($.parseJSON(response), function(item){
+					return {value:item.NCOMERCIA, data:item.CLV_BENEFI};
+				})
+			};
+				
+		}
+	});*/
+   
+   $('#autocomplete').autocomplete({
+	    paramName: 'searchString',
+	    transformResult: function(response) {
+	        return {
+	            suggestions: $.map(response.myData, function(dataItem) {
+	                return { value: dataItem.valueField, data: dataItem.dataField };
+	            })
+	        };
+	    }
+	})
+   
+   $( "#w-input-search" ).autocomplete({
+	   	
+		source: '${pageContext.request.contextPath}/get_country_list.html'
+	});
 });
 
 function reembolsos(cve_ped, modulo){

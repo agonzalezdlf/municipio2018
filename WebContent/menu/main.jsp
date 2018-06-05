@@ -59,10 +59,12 @@ if (blimgcursor_cuant>0)
 setTimeout("blinvis_img()", blimgcursor_cuant*1000)
 //]]>
 TERMINA CODIGO DE FESTEJO*/
+
 -->
+
 </script>
 <style type="text/css"> 
-        @import url("../../include/css/calendar/calendar-win2k-cold-1.css"); 
+    
     a:link {
 	color: #00F;
 	text-decoration: none;
@@ -79,7 +81,7 @@ a:active {
 }
 
     </style>
-<script language="javascript">
+<script>
 <!--
 function MuestraVideos(){
 	html = '<table width="528" border="0" cellspacing="0" cellpadding="0">'+

@@ -74,7 +74,7 @@ public class AutocompleteDiversos  extends ControladorBase  {
 		return gatewayBancos.getBancosTodos();
 	}
 	
-	public List<Map> getPersonas(){
+	public List<Map<String,Object>> getPersonas(){
 		return gatewayUsuarios.getPersonasPorEjemplo("", "", "");
 	}
 	
