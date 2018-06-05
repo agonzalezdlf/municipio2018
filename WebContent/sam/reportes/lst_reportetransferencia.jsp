@@ -114,12 +114,15 @@ a:active {
 	 	<div class="form-group">
 	      <label class="control-label col-sm-2">Tipo de adecuación:</label>
 		  <div class="col-sm-3">
-				<select name="cboadecuacion" id="cboadecuacion" class="selectpicker form-control input-sm m-b" data-live-search="true">
-						<option value="0" <c:if test="${0==tipoAdecuacion}"> selected </c:if>> [Todas las opciones]</option>
-						<option value="1" <c:if test="${1==tipoAdecuacion}"> selected </c:if>>AMPLIACIONES</option>
-						<option value="2" <c:if test="${2==tipoAdecuacion}"> selected </c:if>>REDUCCIONES</option>
-						<option value="3" <c:if test="${3==tipoAdecuacion}"> selected </c:if>>TRANSFERENCIAS</option>
-						
+				<select name="cboadecuacion" id="cboadecuacion" class="selectpicker form-control input-sm m-b" data-live-search="true" multiple>
+					<optgroup label="">
+						<option value="0" <c:if test = "${fn:contains(tipoAdecuacion, '0')}"> selected </c:if>> [Todas las opciones]</option>
+					</optgroup>
+					<optgroup label="">
+						<option value="1" <c:if test = "${fn:contains(tipoAdecuacion, '1')}"> selected </c:if>>AMPLIACIONES</option>
+						<option value="2" <c:if test = "${fn:contains(tipoAdecuacion, '2')}"> selected </c:if>>REDUCCIONES</option>
+						<option value="3" <c:if test = "${fn:contains(tipoAdecuacion, '3')}"> selected </c:if>>TRANSFERENCIAS</option>
+					</optgroup>
 				  </select>
 	      </div>
 	      
@@ -184,7 +187,11 @@ a:active {
 					<c:if test="${item.ID_PROYECTO != id_proyecto}">
 						<!-- SE CONSTRUYE LA CABECERA DEL PROYECTO-->
 						<tr>
-							<td align="center" style="border-right:none"></td>
+							<td align="center" style="border-right:none">
+								<c:if test="${mes == item.MES_APROBACION}">
+									<div style="margin-top: 4px;"><span class="label label-success">Nuevo</span></div>
+								</c:if>
+							</td>
 							<td align="left" colspan="5" style="border-right:none"><strong>(<c:if test="${item.K_PROYECTO_T != null}"><c:out value='${item.K_PROYECTO_T}'/></c:if><c:if test="${item.K_PROYECTO_T == null}"><c:out value='${item.ID_PROYECTO}'/></c:if>) <c:out value='${item.PROYECTO}'/></strong></td>	
 						</tr>
 					</c:if>

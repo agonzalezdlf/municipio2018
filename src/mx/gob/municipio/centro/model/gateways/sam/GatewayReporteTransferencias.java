@@ -30,6 +30,7 @@ private static Logger log = Logger.getLogger(GatewayReporteTransferencias.class.
 		Date fecha = new Date();
 		Calendar cal = Calendar.getInstance();
 		cal.setTime(fecha);
+		String adecuacion = "";
 		int ejercicio = cal.get(Calendar.YEAR);
 		int mesActual = gatewayMeses.getMesActivo(ejercicio);
 		String sql = "SELECT * FROM VT_SAM_ADECUACIONES WHERE 0 = 0 ";
@@ -40,6 +41,7 @@ private static Logger log = Logger.getLogger(GatewayReporteTransferencias.class.
 		if(!modelo.get("idtipogasto").toString().equals("0"))
 			sql += " AND ID_RECURSO = :idtipogasto ";
 		
+		/*
 		//AMPLIACIONES
 		if(modelo.get("tipoAdecuacion").toString().equals("1"))
 			sql += " AND TIPO = 'AMPLIACION LIQUIDA' ";
@@ -51,6 +53,24 @@ private static Logger log = Logger.getLogger(GatewayReporteTransferencias.class.
 		//TRANSFERENCIA
 		if(modelo.get("tipoAdecuacion").toString().equals("3"))
 			sql += " AND TIPO = 'TRANSFERENCIA' ";
+			*/
+		
+		if (modelo.get("tipoAdecuacion").toString().contains("0")) //STATUS = TODOS
+			sql += " AND TIPO IN('AMPLIACION LIQUIDA','REDUCCION LIQUIDA','TRANSFERENCIA') ";
+		else if (modelo.get("tipoAdecuacion").toString().equals("1"))
+			sql += " AND TIPO IN('AMPLIACION LIQUIDA') ";
+		else if (modelo.get("tipoAdecuacion").toString().equals("2"))
+			sql += " AND TIPO IN('REDUCCION LIQUIDA') ";
+		else if (modelo.get("tipoAdecuacion").toString().equals("3"))
+			sql += " AND TIPO IN('TRANSFERENCIA') ";
+		else if (modelo.get("tipoAdecuacion").toString().equals("1,2"))
+			sql += " AND TIPO IN('AMPLIACION LIQUIDA','REDUCCION LIQUIDA') ";
+		else if (modelo.get("tipoAdecuacion").toString().equals("1,3"))
+			sql += " AND TIPO IN('AMPLIACION LIQUIDA','TRANSFERENCIA') ";
+		else if (modelo.get("tipoAdecuacion").toString().equals("2,1"))
+			sql += " AND TIPO IN('REDUCCION LIQUIDA','AMPLIACION LIQUIDA') ";
+		else if (modelo.get("tipoAdecuacion").toString().equals("2,3"))
+			sql += " AND TIPO IN('REDUCCION LIQUIDA','TRANSFERENCIA') ";
 		/*
 		if(modelo.get("idUnidad")!=null)
 			if(!modelo.get("idUnidad").toString().equals("0"))

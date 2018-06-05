@@ -1,3 +1,4 @@
+var banadecuacion = false;
 $(document).ready(function(){
 	$('#cmdBuscar').on('click', function(){
 		Buscar();
@@ -7,6 +8,38 @@ $(document).ready(function(){
 		//Calcular();
 		//GeneraExcel();
 	});
+
+	$('#cboadecuacion').on('changed.bs.select', function (e) {
+        var selected = $(this).find("option:selected").val();
+        var StatusArray = ($(this).selectpicker('val') != null ? $(this).selectpicker('val').toString().split(',') : []);
+
+        if (StatusArray.indexOf("0") != -1) {
+            if (!banadecuacion) {
+                $(this).find('option[value=0]').prop('selected', false).removeAttr('selected');
+                $(this).selectpicker('refresh');
+                banadecuacion = true;
+            }
+            else {
+                $(this).selectpicker('deselectAll');
+                $(this).find('option[value=0]').prop('selected', true);
+                $(this).selectpicker('refresh');
+                banadecuacion = false;
+            }
+        }
+        else {
+            if (StatusArray.indexOf("0") == -1) //No se encontro 0
+            {
+                $(this).find('option[value=0]').prop('selected', false).removeAttr('selected');
+                $(this).selectpicker('refresh');
+            }
+            else //0 Encontrado
+            {
+                $(this).selectpicker('deselectAll');
+                $(this).find('option[value=0]').prop('selected', true);
+                $(this).selectpicker('refresh');
+            }
+        }
+});
 
 	Calcular();
 });
